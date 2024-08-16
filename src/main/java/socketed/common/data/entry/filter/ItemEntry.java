@@ -1,4 +1,4 @@
-package socketed.common.data.entry;
+package socketed.common.data.entry.filter;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -9,18 +9,20 @@ import org.apache.logging.log4j.Level;
 import com.google.gson.annotations.SerializedName;
 import socketed.Socketed;
 
-public class ItemEntry {
+public class ItemEntry extends FilterEntry {
+
+    public static final String FILTER_NAME = "Item";
 
     @SerializedName("Item Name")
     private final String name;
+
     @SerializedName("Item Metadata")
     private final int metadata;
+
     @SerializedName("Strict Metadata")
     private final boolean strict;
 
     private transient ItemStack stack;
-    private transient boolean parsed;
-    private transient boolean valid;
 
     public ItemEntry(String name) {
         this(name, OreDictionary.WILDCARD_VALUE, false);
@@ -30,6 +32,7 @@ public class ItemEntry {
         this.name = name;
         this.metadata = meta;
         this.strict = strict;
+        this.type = FILTER_NAME;
     }
 
     public ItemStack getItemStack() {
@@ -37,18 +40,15 @@ public class ItemEntry {
         return this.stack;
     }
 
+    @Override
     public boolean matches(ItemStack input) {
         if(!this.isValid()) return false;
         if(input == null || input.isEmpty()) return false;
         return this.stack.getItem().equals(input.getItem()) && (!this.strict || this.stack.getMetadata() == input.getMetadata());
     }
 
-    public boolean isValid() {
-        if(!this.parsed) this.validate();
-        return this.valid;
-    }
-
-    private void validate() {
+    @Override
+    protected void validate() {
         this.valid = false;
         if(this.name == null || this.name.trim().isEmpty()) Socketed.LOGGER.log(Level.WARN, "Invalid Item entry, name null or empty");
         else {

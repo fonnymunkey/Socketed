@@ -4,9 +4,16 @@ import com.google.common.io.Files;
 import com.google.gson.*;
 import org.apache.logging.log4j.Level;
 import socketed.Socketed;
-import socketed.common.data.DefaultCustomConfig;
 import socketed.common.data.EffectGroup;
 import socketed.common.data.RecipientGroup;
+import socketed.common.data.entry.effect.*;
+import socketed.common.data.entry.effect.activatable.IActivationType;
+import socketed.common.data.entry.effect.activatable.PotionEntry;
+import socketed.common.data.entry.effect.activatable.SocketedActivationTypes;
+import socketed.common.data.entry.filter.FilterDeserializer;
+import socketed.common.data.entry.filter.FilterEntry;
+import socketed.common.data.entry.filter.ItemEntry;
+import socketed.common.data.entry.filter.OreEntry;
 
 import javax.annotation.Nullable;
 import java.io.File;
@@ -20,6 +27,19 @@ public class CustomConfig {
 
     private static File recipientsFolder;
     private static File effectsFolder;
+
+    public static final Map<String, Class<? extends FilterEntry>> filterDeserializerMap = new HashMap<>();
+    public static final Map<String, Class<? extends EffectEntry>> effectDeserializerMap = new HashMap<>();
+    public static final Map<String, Class<? extends IActivationType>> activationDeserializerMap = new HashMap<>();
+
+    static {
+        filterDeserializerMap.put(ItemEntry.FILTER_NAME, ItemEntry.class);
+        filterDeserializerMap.put(OreEntry.FILTER_NAME, OreEntry.class);
+        effectDeserializerMap.put(AttributeEntry.FILTER_NAME, AttributeEntry.class);
+        effectDeserializerMap.put(PotionEntry.FILTER_NAME, PotionEntry.class);
+        activationDeserializerMap.put(Socketed.MODID, SocketedActivationTypes .class);
+        //activationDeserializerMap.put("<ExampleMod.MODID>", ExampleModActivationTypes.class);
+    }
 
     public static void preInit(File file) {
         File modFolder = new File(file, Socketed.MODID);
@@ -35,13 +55,11 @@ public class CustomConfig {
         if(!recipientsFolder.exists() || !recipientsFolder.isDirectory()) {
             if(!recipientsFolder.mkdir()) {
                 Socketed.LOGGER.log(Level.ERROR, "Could not create recipients configuration folder");
-                return;
             }
         }
         if(!effectsFolder.exists() || !effectsFolder.isDirectory()) {
             if(!effectsFolder.mkdir()) {
                 Socketed.LOGGER.log(Level.ERROR, "Could not create effects configuration folder");
-                return;
             }
         }
     }
@@ -69,6 +87,7 @@ public class CustomConfig {
     }
 
     private static void initDefaultRecipients() {
+        Socketed.LOGGER.log(Level.INFO, "Initializing default Socketed recipient configs");
         Map<String, RecipientGroup> defaultData = DefaultCustomConfig.getDefaultRecipients();
         for(Map.Entry<String, RecipientGroup> entry : defaultData.entrySet()) {
             try {
@@ -92,6 +111,7 @@ public class CustomConfig {
     }
 
     private static void initDefaultEffects() {
+        Socketed.LOGGER.log(Level.INFO, "Initializing default Socketed effect configs");
         Map<String, EffectGroup> defaultData = DefaultCustomConfig.getDefaultEffects();
         for(Map.Entry<String, EffectGroup> entry : defaultData.entrySet()) {
             try {
@@ -124,7 +144,12 @@ public class CustomConfig {
         }
 
         try {
-            Gson gson = new Gson();
+            FilterDeserializer filterDeserializer = new FilterDeserializer();
+            for(Map.Entry<String, Class<? extends FilterEntry>> entry : filterDeserializerMap.entrySet()) {
+                filterDeserializer.registerType(entry.getKey(), entry.getValue());
+            }
+            Gson gson = new GsonBuilder().registerTypeAdapter(FilterEntry.class, filterDeserializer).create();
+
             File[] files = recipientsFolder.listFiles();
             if(files == null) {
                 Socketed.LOGGER.log(Level.ERROR, "Failed to load recipient config, folder is invalid");
@@ -182,7 +207,19 @@ public class CustomConfig {
         }
 
         try {
-            Gson gson = new Gson();
+            FilterDeserializer filterDeserializer = new FilterDeserializer();
+            for(Map.Entry<String, Class<? extends FilterEntry>> entry : filterDeserializerMap.entrySet()) {
+                filterDeserializer.registerType(entry.getKey(), entry.getValue());
+            }
+            EffectDeserializer effectDeserializer = new EffectDeserializer();
+            for(Map.Entry<String, Class<? extends EffectEntry>> entry : effectDeserializerMap.entrySet()) {
+                effectDeserializer.registerType(entry.getKey(), entry.getValue());
+            }
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(FilterEntry.class, filterDeserializer)
+                    .registerTypeAdapter(EffectEntry.class, effectDeserializer)
+                    .create();
+
             File[] files = effectsFolder.listFiles();
             if(files == null) {
                 Socketed.LOGGER.log(Level.ERROR, "Failed to load effect config, folder is invalid");
@@ -225,6 +262,7 @@ public class CustomConfig {
     }
 
     @Nullable
+    @SuppressWarnings("UnstableApiUsage")
     private static JsonElement getJson(File file) {
         if(file == null || !file.exists()) {
             Socketed.LOGGER.log(Level.WARN, "Failed to load socketed config file, file does not exist");
@@ -236,7 +274,6 @@ public class CustomConfig {
                 Socketed.LOGGER.log(Level.WARN, "Failed to load socketed config file, no permission to read the file: " + file.getName());
                 return null;
             }
-
             String fileString = Files.toString(file, Charset.defaultCharset());
             return new JsonParser().parse(fileString);
         }

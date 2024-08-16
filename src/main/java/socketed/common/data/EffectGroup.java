@@ -6,9 +6,8 @@ import net.minecraft.util.text.TextFormatting;
 import org.apache.logging.log4j.Level;
 import socketed.Socketed;
 import socketed.common.config.CustomConfig;
-import socketed.common.data.entry.EffectEntry;
-import socketed.common.data.entry.ItemEntry;
-import socketed.common.data.entry.OreEntry;
+import socketed.common.data.entry.effect.EffectEntry;
+import socketed.common.data.entry.filter.FilterEntry;
 
 import java.util.Collections;
 import java.util.List;
@@ -25,26 +24,19 @@ public class EffectGroup {
     private final List<String> recipientEntries;
     @SerializedName("Effect Entries")
     private final List<EffectEntry> effectEntries;
-    @SerializedName("Item Entries")
-    private final List<ItemEntry> itemEntries;
-    @SerializedName("Ore Dictionary Entries")
-    private final List<OreEntry> oreEntries;
+    @SerializedName("Filter Entries")
+    private final List<FilterEntry> filterEntries;
 
     private transient boolean parsed;
     private transient boolean valid;
 
-    public EffectGroup(String name, String display, TextFormatting clr, List<String> groups, List<EffectEntry> effects, List<ItemEntry> items) {
-        this(name, display, clr, groups, effects, items, Collections.emptyList());
-    }
-
-    public EffectGroup(String name, String display, TextFormatting clr, List<String> groups, List<EffectEntry> effects, List<ItemEntry> items, List<OreEntry> ores) {
+    public EffectGroup(String name, String display, TextFormatting clr, List<String> groups, List<EffectEntry> effects, List<FilterEntry> filters) {
         this.name = name;
         this.displayName = display;
         this.color = clr;
         this.recipientEntries = groups;
         this.effectEntries = effects;
-        this.itemEntries = items;
-        this.oreEntries = ores;
+        this.filterEntries = filters;
     }
 
     public String getName() {
@@ -72,23 +64,15 @@ public class EffectGroup {
         return this.effectEntries;
     }
 
-    public List<ItemEntry> getItemEntries() {
-        if(this.itemEntries == null || !this.isValid()) return Collections.emptyList();
-        return this.itemEntries;
-    }
-
-    public List<OreEntry> getOreEntries() {
-        if(this.oreEntries == null || !this.isValid()) return Collections.emptyList();
-        return this.oreEntries;
+    public List<FilterEntry> getFilterEntries() {
+        if(this.filterEntries == null || !this.isValid()) return Collections.emptyList();
+        return this.filterEntries;
     }
 
     public boolean matches(ItemStack input) {
         if(!this.isValid()) return false;
         if(input == null || input.isEmpty()) return false;
-        for(ItemEntry entry : this.getItemEntries()) {
-            if(entry.matches(input)) return true;
-        }
-        for(OreEntry entry : this.getOreEntries()) {
+        for(FilterEntry entry : this.getFilterEntries()) {
             if(entry.matches(input)) return true;
         }
         return false;
@@ -127,20 +111,15 @@ public class EffectGroup {
 
             int validEntries = 0;
             int totalEntries = 0;
-            List<ItemEntry> entries1 = this.itemEntries;
-            if(entries1 != null) {
-                for(ItemEntry entry : entries1) {
+
+            List<FilterEntry> entries = this.filterEntries;
+            if(entries != null) {
+                for(FilterEntry entry : entries) {
                     totalEntries++;
                     if(entry.isValid()) validEntries++;
                 }
             }
-            List<OreEntry> entries2 = this.oreEntries;
-            if(entries2 != null) {
-                for(OreEntry entry : entries2) {
-                    totalEntries++;
-                    if(entry.isValid()) validEntries++;
-                }
-            }
+
             Socketed.LOGGER.log(Level.INFO,
                     "Effect Group Validating, Name: " + this.name +
                             ", Display Name: " + this.displayName +

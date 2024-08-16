@@ -1,4 +1,4 @@
-package socketed.common.data.entry;
+package socketed.common.data.entry.filter;
 
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.item.ItemStack;
@@ -7,15 +7,15 @@ import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.Level;
 import socketed.Socketed;
 
-public class OreEntry {
+public class OreEntry extends FilterEntry {
+
+    public static final String FILTER_NAME = "Ore Dictionary";
 
     @SerializedName("Ore Dictionary Name")
     private final String name;
+
     @SerializedName("Strict Metadata")
     private final boolean strict;
-
-    private transient boolean parsed;
-    private transient boolean valid;
 
     public OreEntry(String name) {
         this(name, false);
@@ -24,6 +24,7 @@ public class OreEntry {
     public OreEntry(String name, boolean strict) {
         this.name = name;
         this.strict = strict;
+        this.type = FILTER_NAME;
     }
 
     public String getName() {
@@ -31,6 +32,7 @@ public class OreEntry {
         return this.name.trim();
     }
 
+    @Override
     public boolean matches(ItemStack input) {
         if(!this.isValid()) return false;
         if(input == null || input.isEmpty()) return false;
@@ -43,12 +45,8 @@ public class OreEntry {
         return false;
     }
 
-    public boolean isValid() {
-        if(!this.parsed) this.validate();
-        return this.valid;
-    }
-
-    private void validate() {
+    @Override
+    protected void validate() {
         this.valid = false;
         if(this.name == null || this.name.trim().isEmpty()) Socketed.LOGGER.log(Level.WARN, "Invalid Ore Dictionary entry, name null or empty");
         else if(!OreDictionary.doesOreNameExist(this.name.trim())) Socketed.LOGGER.log(Level.WARN, "Invalid Ore Dictionary entry, " + this.name.trim() + ", does not exist");
