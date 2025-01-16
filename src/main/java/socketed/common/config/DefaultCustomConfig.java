@@ -4,11 +4,11 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.text.TextFormatting;
-import socketed.common.data.EffectGroup;
+import socketed.common.data.GemType;
 import socketed.common.data.RecipientGroup;
-import socketed.common.data.entry.effect.AttributeEntry;
-import socketed.common.data.entry.effect.activatable.PotionEntry;
-import socketed.common.data.entry.effect.activatable.SocketedActivationTypes;
+import socketed.common.data.entry.effect.AttributeGemEffect;
+import socketed.common.data.entry.effect.activatable.PotionGemEffect;
+import socketed.common.data.entry.effect.activatable.EnumActivationTypes;
 import socketed.common.data.entry.filter.ItemEntry;
 import socketed.common.data.entry.filter.OreEntry;
 
@@ -73,42 +73,42 @@ public abstract class DefaultCustomConfig {
         return map;
     }
 
-    public static Map<String, EffectGroup> getDefaultEffects() {
-        Map<String, EffectGroup> map = new HashMap<>();
+    public static Map<String, GemType> getDefaultGemEffects() {
+        Map<String, GemType> map = new HashMap<>();
 
-        map.put("obsidian_damage", new EffectGroup("obsidian_damage", "socketed.tooltip.default.obsidian_damage", TextFormatting.DARK_PURPLE,
+        map.put("obsidian_damage", new GemType("obsidian_damage", "socketed.tooltip.default.obsidian_damage", TextFormatting.DARK_PURPLE,
                 Arrays.asList(
                         "diamond_pickaxe",
                         "diamond_sword"),
-                Collections.singletonList(new AttributeEntry("obsidian_damage", SharedMonsterAttributes.ATTACK_DAMAGE.getName(), 3, 0)),
+                Collections.singletonList(new AttributeGemEffect("obsidian_damage", SharedMonsterAttributes.ATTACK_DAMAGE.getName(), 3, 0)),
                 Collections.singletonList(new OreEntry("obsidian"))));
 
-        map.put("diamond_damage", new EffectGroup("diamond_damage", "socketed.tooltip.default.diamond_damage", TextFormatting.AQUA,
+        map.put("diamond_damage", new GemType("diamond_damage", "socketed.tooltip.default.diamond_damage", TextFormatting.AQUA,
                 Arrays.asList(
                         "metal_pickaxe",
                         "metal_sword"),
-                Collections.singletonList(new AttributeEntry("diamond_damage", SharedMonsterAttributes.ATTACK_DAMAGE.getName(), 2, 0)),
+                Collections.singletonList(new AttributeGemEffect("diamond_damage", SharedMonsterAttributes.ATTACK_DAMAGE.getName(), 2, 0)),
                 Collections.singletonList(new OreEntry("gemDiamond"))));
 
-        map.put("stone_damage", new EffectGroup("stone_damage", "socketed.tooltip.default.stone_damage", TextFormatting.GRAY,
+        map.put("stone_damage", new GemType("stone_damage", "socketed.tooltip.default.stone_damage", TextFormatting.GRAY,
                 Arrays.asList(
                         "pickaxe",
                         "sword"),
-                Collections.singletonList(new AttributeEntry("stone_damage", SharedMonsterAttributes.ATTACK_DAMAGE.getName(), 1, 0)),
+                Collections.singletonList(new AttributeGemEffect("stone_damage", SharedMonsterAttributes.ATTACK_DAMAGE.getName(), 1, 0)),
                 Arrays.asList(
                         new OreEntry("stone"),
                         new OreEntry("cobblestone"))));
 
-        map.put("sticky", new EffectGroup("sticky", "socketed.tooltip.default.sticky", TextFormatting.DARK_GREEN,
+        map.put("sticky", new GemType("sticky", "socketed.tooltip.default.sticky", TextFormatting.DARK_GREEN,
                 Arrays.asList(
                         "diamond_armor",
                         "iron_armor",
                         "gold_armor",
                         "leather_armor"),
-                Collections.singletonList(new PotionEntry(MobEffects.SLOWNESS.getRegistryName().toString(), 0, 60, SocketedActivationTypes.PASSIVE)),
+                Collections.singletonList(new PotionGemEffect(MobEffects.SLOWNESS.getRegistryName().toString(), 0, 60, EnumActivationTypes.PASSIVE)),
                 Collections.singletonList(new OreEntry("slimeball"))));
 
-        map.put("lucky", new EffectGroup("lucky", "socketed.tooltip.default.lucky", TextFormatting.GREEN,
+        map.put("lucky", new GemType("lucky", "socketed.tooltip.default.lucky", TextFormatting.GREEN,
                 Arrays.asList(
                         "diamond_armor",
                         "iron_armor",
@@ -116,24 +116,24 @@ public abstract class DefaultCustomConfig {
                         "leather_armor",
                         "pickaxe",
                         "sword"),
-                Collections.singletonList(new AttributeEntry("lucky", SharedMonsterAttributes.LUCK.getName(), 2, 0)),
+                Collections.singletonList(new AttributeGemEffect("lucky", SharedMonsterAttributes.LUCK.getName(), 2, 0)),
                 Collections.singletonList(new OreEntry("gemEmerald"))));
 
-        map.put("streamlined", new EffectGroup("streamlined", "socketed.tooltip.default.streamlined", TextFormatting.AQUA,
+        map.put("streamlined", new GemType("streamlined", "socketed.tooltip.default.streamlined", TextFormatting.AQUA,
                 Arrays.asList(
                         "diamond_armor",
                         "iron_armor",
                         "gold_armor",
                         "leather_armor"),
-                Collections.singletonList(new AttributeEntry("streamlined", EntityLivingBase.SWIM_SPEED.getName(), 0.1, 1)),
+                Collections.singletonList(new AttributeGemEffect("streamlined", EntityLivingBase.SWIM_SPEED.getName(), 0.1, 1)),
                 Collections.singletonList(new OreEntry("gemPrismarine"))));
 
-        map.put("diamond_defense", new EffectGroup("diamond_defense", "socketed.tooltip.default.diamond_defense", TextFormatting.AQUA,
+        map.put("diamond_defense", new GemType("diamond_defense", "socketed.tooltip.default.diamond_defense", TextFormatting.AQUA,
                 Arrays.asList(
                         "diamond_armor",
                         "iron_armor",
                         "gold_armor"),
-                Collections.singletonList(new AttributeEntry("diamond_defense", SharedMonsterAttributes.ARMOR.getName(), 2, 0)),
+                Collections.singletonList(new AttributeGemEffect("diamond_defense", SharedMonsterAttributes.ARMOR.getName(), 2, 0)),
                 Collections.singletonList(new OreEntry("gemDiamond"))));
 
         return map;

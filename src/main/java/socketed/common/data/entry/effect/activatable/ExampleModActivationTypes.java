@@ -1,5 +1,5 @@
-package socketed.common.data.entry.effect.activatable;
-/*
+/*package socketed.common.data.entry.effect.activatable;
+
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -9,7 +9,7 @@ public enum ExampleModActivationTypes implements IActivationType {
     EXAMPLE_NAME {
         //Do periodic effect with different requirements, timing, etc
         @Override
-        public void triggerOnSecondEffect(ActivatableEntry entry, EntityPlayer player) { }
+        public void triggerOnSecondEffect(ActivatableGemEffect entry, EntityPlayer player) { }
         //Lang key for tooltip translating (return empty to skip tooltip)
         @Override
         public String getKey() { return "example_name"; }

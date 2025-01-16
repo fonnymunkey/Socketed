@@ -4,12 +4,12 @@ import com.google.common.io.Files;
 import com.google.gson.*;
 import org.apache.logging.log4j.Level;
 import socketed.Socketed;
-import socketed.common.data.EffectGroup;
+import socketed.common.data.GemType;
 import socketed.common.data.RecipientGroup;
 import socketed.common.data.entry.effect.*;
 import socketed.common.data.entry.effect.activatable.IActivationType;
-import socketed.common.data.entry.effect.activatable.PotionEntry;
-import socketed.common.data.entry.effect.activatable.SocketedActivationTypes;
+import socketed.common.data.entry.effect.activatable.PotionGemEffect;
+import socketed.common.data.entry.effect.activatable.EnumActivationTypes;
 import socketed.common.data.entry.filter.FilterDeserializer;
 import socketed.common.data.entry.filter.FilterEntry;
 import socketed.common.data.entry.filter.ItemEntry;
@@ -23,21 +23,21 @@ import java.util.*;
 
 public class CustomConfig {
     private static final Map<String, RecipientGroup> recipientDataMap = new HashMap<>();
-    private static final Map<String, EffectGroup> effectDataMap = new HashMap<>();
+    private static final Map<String, GemType> gemEffectsDataMap = new HashMap<>();
 
     private static File recipientsFolder;
-    private static File effectsFolder;
+    private static File gemEffectsFolder;
 
     public static final Map<String, Class<? extends FilterEntry>> filterDeserializerMap = new HashMap<>();
-    public static final Map<String, Class<? extends EffectEntry>> effectDeserializerMap = new HashMap<>();
+    public static final Map<String, Class<? extends GenericGemEffect>> gemEffectDeserializerMap = new HashMap<>();
     public static final Map<String, Class<? extends IActivationType>> activationDeserializerMap = new HashMap<>();
 
     static {
         filterDeserializerMap.put(ItemEntry.FILTER_NAME, ItemEntry.class);
         filterDeserializerMap.put(OreEntry.FILTER_NAME, OreEntry.class);
-        effectDeserializerMap.put(AttributeEntry.FILTER_NAME, AttributeEntry.class);
-        effectDeserializerMap.put(PotionEntry.FILTER_NAME, PotionEntry.class);
-        activationDeserializerMap.put(Socketed.MODID, SocketedActivationTypes .class);
+        gemEffectDeserializerMap.put(AttributeGemEffect.FILTER_NAME, AttributeGemEffect.class);
+        gemEffectDeserializerMap.put(PotionGemEffect.FILTER_NAME, PotionGemEffect.class);
+        activationDeserializerMap.put(Socketed.MODID, EnumActivationTypes.class);
         //activationDeserializerMap.put("<ExampleMod.MODID>", ExampleModActivationTypes.class);
     }
 
@@ -51,14 +51,14 @@ public class CustomConfig {
         }
 
         recipientsFolder = new File(modFolder, "recipients");
-        effectsFolder = new File(modFolder, "effects");
+        gemEffectsFolder = new File(modFolder, "effects");
         if(!recipientsFolder.exists() || !recipientsFolder.isDirectory()) {
             if(!recipientsFolder.mkdir()) {
                 Socketed.LOGGER.log(Level.ERROR, "Could not create recipients configuration folder");
             }
         }
-        if(!effectsFolder.exists() || !effectsFolder.isDirectory()) {
-            if(!effectsFolder.mkdir()) {
+        if(!gemEffectsFolder.exists() || !gemEffectsFolder.isDirectory()) {
+            if(!gemEffectsFolder.mkdir()) {
                 Socketed.LOGGER.log(Level.ERROR, "Could not create effects configuration folder");
             }
         }
@@ -66,24 +66,24 @@ public class CustomConfig {
 
     public static void postInit(){
         loadRecipientData();
-        loadEffectData();
+        loadGemEffectData();
     }
 
     public static Map<String, RecipientGroup> getRecipientData() {
         return recipientDataMap;
     }
 
-    public static Map<String, EffectGroup> getEffectData() {
-        return effectDataMap;
+    public static Map<String, GemType> getEffectData() {
+        return gemEffectsDataMap;
     }
 
     public static void refreshAllData() {
         Socketed.LOGGER.log(Level.INFO, "Clearing existing Socketed data");
         recipientDataMap.clear();
-        effectDataMap.clear();
+        gemEffectsDataMap.clear();
         Socketed.LOGGER.log(Level.INFO, "Loading new Socketed data");
         loadRecipientData();
-        loadEffectData();
+        loadGemEffectData();
     }
 
     private static void initDefaultRecipients() {
@@ -110,17 +110,17 @@ public class CustomConfig {
         }
     }
 
-    private static void initDefaultEffects() {
-        Socketed.LOGGER.log(Level.INFO, "Initializing default Socketed effect configs");
-        Map<String, EffectGroup> defaultData = DefaultCustomConfig.getDefaultEffects();
-        for(Map.Entry<String, EffectGroup> entry : defaultData.entrySet()) {
+    private static void initDefaultGemEffects() {
+        Socketed.LOGGER.log(Level.INFO, "Initializing default Socketed gem effect configs");
+        Map<String, GemType> defaultData = DefaultCustomConfig.getDefaultGemEffects();
+        for(Map.Entry<String, GemType> entry : defaultData.entrySet()) {
             try {
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 JsonElement elem = gson.toJsonTree(entry.getValue());
                 String entryString = gson.toJson(elem);
-                File file = new File(effectsFolder, String.format("%s.json", entry.getKey()));
-                if(!file.createNewFile()) Socketed.LOGGER.log(Level.ERROR, "Failed to create new effect file, " + entry.getKey());
-                else if(!file.setWritable(true)) Socketed.LOGGER.log(Level.ERROR, "Failed to set new effect file writeable, " + entry.getKey());
+                File file = new File(gemEffectsFolder, String.format("%s.json", entry.getKey()));
+                if(!file.createNewFile()) Socketed.LOGGER.log(Level.ERROR, "Failed to create new gem effect file, " + entry.getKey());
+                else if(!file.setWritable(true)) Socketed.LOGGER.log(Level.ERROR, "Failed to set new gem effect file writeable, " + entry.getKey());
                 else {
                     PrintWriter writer = new PrintWriter(file);
                     writer.write(entryString);
@@ -129,7 +129,7 @@ public class CustomConfig {
                 }
             }
             catch(Exception e) {
-                Socketed.LOGGER.log(Level.ERROR, "Failed to generate default effect file, " + entry.getKey() + ", " + e);
+                Socketed.LOGGER.log(Level.ERROR, "Failed to generate default gem effect file, " + entry.getKey() + ", " + e);
             }
         }
     }
@@ -191,18 +191,18 @@ public class CustomConfig {
         Socketed.LOGGER.log(Level.INFO, "=== Finishing Socketed Recipient Data Loading ===");
     }
 
-    private static void loadEffectData() {
-        Socketed.LOGGER.log(Level.INFO, "=== Starting Socketed Effect Data Loading ===");
+    private static void loadGemEffectData() {
+        Socketed.LOGGER.log(Level.INFO, "=== Starting Socketed Gem Effect Data Loading ===");
 
-        if(effectsFolder == null || !effectsFolder.exists() || !effectsFolder.isDirectory()) {
-            Socketed.LOGGER.log(Level.ERROR, "Failed to load effect config, folder does not exist");
-            Socketed.LOGGER.log(Level.INFO, "=== Finishing Socketed Effect Data Loading ===");
+        if(gemEffectsFolder == null || !gemEffectsFolder.exists() || !gemEffectsFolder.isDirectory()) {
+            Socketed.LOGGER.log(Level.ERROR, "Failed to load gem effect config, folder does not exist");
+            Socketed.LOGGER.log(Level.INFO, "=== Finishing Socketed Gem Effect Data Loading ===");
             return;
         }
 
         if(recipientDataMap.isEmpty()) {
-            Socketed.LOGGER.log(Level.ERROR, "Failed to load effect config, recipient data does not exist");
-            Socketed.LOGGER.log(Level.INFO, "=== Finishing Socketed Effect Data Loading ===");
+            Socketed.LOGGER.log(Level.ERROR, "Failed to load gem effect config, recipient data does not exist");
+            Socketed.LOGGER.log(Level.INFO, "=== Finishing Socketed Gem Effect Data Loading ===");
             return;
         }
 
@@ -212,53 +212,53 @@ public class CustomConfig {
                 filterDeserializer.registerType(entry.getKey(), entry.getValue());
             }
             EffectDeserializer effectDeserializer = new EffectDeserializer();
-            for(Map.Entry<String, Class<? extends EffectEntry>> entry : effectDeserializerMap.entrySet()) {
+            for(Map.Entry<String, Class<? extends GenericGemEffect>> entry : gemEffectDeserializerMap.entrySet()) {
                 effectDeserializer.registerType(entry.getKey(), entry.getValue());
             }
             Gson gson = new GsonBuilder()
                     .registerTypeAdapter(FilterEntry.class, filterDeserializer)
-                    .registerTypeAdapter(EffectEntry.class, effectDeserializer)
+                    .registerTypeAdapter(GenericGemEffect.class, effectDeserializer)
                     .create();
 
-            File[] files = effectsFolder.listFiles();
+            File[] files = gemEffectsFolder.listFiles();
             if(files == null) {
-                Socketed.LOGGER.log(Level.ERROR, "Failed to load effect config, folder is invalid");
-                Socketed.LOGGER.log(Level.INFO, "=== Finishing Socketed Effect Data Loading ===");
+                Socketed.LOGGER.log(Level.ERROR, "Failed to load gem effect config, folder is invalid");
+                Socketed.LOGGER.log(Level.INFO, "=== Finishing Socketed Gem Effect Data Loading ===");
                 return;
             }
-            if(files.length <= 0) initDefaultEffects();
-            files = effectsFolder.listFiles();
+            if(files.length <= 0) initDefaultGemEffects();
+            files = gemEffectsFolder.listFiles();
             if(files == null) {
-                Socketed.LOGGER.log(Level.ERROR, "Failed to load effect config, folder is invalid");
-                Socketed.LOGGER.log(Level.INFO, "=== Finishing Socketed Effect Data Loading ===");
+                Socketed.LOGGER.log(Level.ERROR, "Failed to load gem effect config, folder is invalid");
+                Socketed.LOGGER.log(Level.INFO, "=== Finishing Socketed Gem Effect Data Loading ===");
                 return;
             }
             if(files.length <= 0) {
-                Socketed.LOGGER.log(Level.ERROR, "Failed to load effect config, folder is empty");
-                Socketed.LOGGER.log(Level.INFO, "=== Finishing Socketed Effect Data Loading ===");
+                Socketed.LOGGER.log(Level.ERROR, "Failed to load gem effect config, folder is empty");
+                Socketed.LOGGER.log(Level.INFO, "=== Finishing Socketed Gem Effect Data Loading ===");
                 return;
             }
             for(File file : files) {
                 if(file.isDirectory()) continue;
                 JsonElement elem = getJson(file);
                 try {
-                    EffectGroup effectData = gson.fromJson(elem, EffectGroup.class);
-                    if(effectData == null) Socketed.LOGGER.log(Level.WARN, "Failed to load effect config file, invalid file: " + file.getName());
+                    GemType gemEffectData = gson.fromJson(elem, GemType.class);
+                    if(gemEffectData == null) Socketed.LOGGER.log(Level.WARN, "Failed to load gem effect config file, invalid file: " + file.getName());
                     else {
-                        if(effectData.isValid()) effectDataMap.put(effectData.getName(), effectData);
-                        else Socketed.LOGGER.log(Level.WARN, "Failed to load effect config file, validation failed: " + file.getName());
+                        if(gemEffectData.isValid()) gemEffectsDataMap.put(gemEffectData.getName(), gemEffectData);
+                        else Socketed.LOGGER.log(Level.WARN, "Failed to load gem effect config file, validation failed: " + file.getName());
                     }
                 }
                 catch(Exception e) {
-                    Socketed.LOGGER.log(Level.WARN, "Failed to load effect config file: " + file.getName() + ", " + e);
+                    Socketed.LOGGER.log(Level.WARN, "Failed to load gem effect config file: " + file.getName() + ", " + e);
                 }
             }
         }
         catch(Exception e) {
-            Socketed.LOGGER.log(Level.ERROR, "Failed to load effect config: " + e);
+            Socketed.LOGGER.log(Level.ERROR, "Failed to load gem effect config: " + e);
         }
 
-        Socketed.LOGGER.log(Level.INFO, "=== Finishing Socketed Effect Data Loading ===");
+        Socketed.LOGGER.log(Level.INFO, "=== Finishing Socketed Gem Effect Data Loading ===");
     }
 
     @Nullable

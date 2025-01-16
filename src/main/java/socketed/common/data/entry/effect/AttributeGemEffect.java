@@ -7,7 +7,7 @@ import socketed.Socketed;
 
 import java.util.UUID;
 
-public class AttributeEntry extends EffectEntry {
+public class AttributeGemEffect extends GenericGemEffect {
     private static final AttributeModifier INVALID = new AttributeModifier(new UUID(1,1), "INVALID", 0, 0);
 
     public static final String FILTER_NAME = "Attribute";
@@ -24,9 +24,12 @@ public class AttributeEntry extends EffectEntry {
     @SerializedName("Modifier Operation")
     private final int operation;
 
+    @SerializedName("Modifier UUID")
+    private UUID uuid;
+
     private transient AttributeModifier modifier;
 
-    public AttributeEntry(String name, String attribute, double amount, int operation) {
+    public AttributeGemEffect(String name, String attribute, double amount, int operation) {
         this.name = name;
         this.attribute = attribute;
         this.amount = amount;
@@ -51,7 +54,8 @@ public class AttributeEntry extends EffectEntry {
         else if(this.attribute == null || this.attribute.trim().isEmpty()) Socketed.LOGGER.log(Level.WARN, "Invalid Attribute Effect entry, " + this.name + ", attribute null or empty");
         else if(this.operation < 0 || this.operation > 2) Socketed.LOGGER.log(Level.WARN, "Invalid Attribute Effect entry, " + this.name + ", operation must be 0, 1, or 2");
         else {
-            this.modifier = new AttributeModifier(new UUID(1, 1), this.name, this.amount, this.operation);
+            this.uuid = UUID.randomUUID();
+            this.modifier = new AttributeModifier(this.uuid, this.name, this.amount, this.operation);
             this.valid = true;
         }
         this.parsed = true;

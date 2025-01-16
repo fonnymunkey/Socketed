@@ -3,28 +3,14 @@ buildscript {
         maven {
             url = 'https://maven.minecraftforge.net/'
         }
-        maven {
-            url = 'https://maven.gofancy.wtf/releases'
-        }
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        classpath group: 'wtf.gofancy.fancygradle', name: 'wtf.gofancy.fancygradle.gradle.plugin', version: '1.1.2-3'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'wtf.gofancy.fancygradle'
 
-fancyGradle {
-    patches {
-        resources
-        coremods
-        codeChickenLib
-        asm
-        mergetool
-    }
-}
 
 version = "${mod_version}"
 group = "${mod_id}"

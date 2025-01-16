@@ -6,13 +6,16 @@ import net.minecraft.util.text.TextFormatting;
 import org.apache.logging.log4j.Level;
 import socketed.Socketed;
 import socketed.common.config.CustomConfig;
-import socketed.common.data.entry.effect.EffectEntry;
+import socketed.common.data.entry.effect.GenericGemEffect;
 import socketed.common.data.entry.filter.FilterEntry;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class EffectGroup {
+public class GemType {
 
     @SerializedName("Effect Group Name")
     private final String name;
@@ -23,19 +26,19 @@ public class EffectGroup {
     @SerializedName("Recipient Group Names")
     private final List<String> recipientEntries;
     @SerializedName("Effect Entries")
-    private final List<EffectEntry> effectEntries;
+    private final List<GenericGemEffect> effects;
     @SerializedName("Filter Entries")
     private final List<FilterEntry> filterEntries;
 
     private transient boolean parsed;
     private transient boolean valid;
 
-    public EffectGroup(String name, String display, TextFormatting clr, List<String> groups, List<EffectEntry> effects, List<FilterEntry> filters) {
+    public GemType(String name, String display, TextFormatting clr, List<String> groups, List<GenericGemEffect> effects, List<FilterEntry> filters) {
         this.name = name;
         this.displayName = display;
         this.color = clr;
         this.recipientEntries = groups;
-        this.effectEntries = effects;
+        this.effects = effects;
         this.filterEntries = filters;
     }
 
@@ -59,9 +62,9 @@ public class EffectGroup {
         return this.recipientEntries;
     }
 
-    public List<EffectEntry> getEffectEntries() {
-        if(this.effectEntries == null || !this.isValid()) return Collections.emptyList();
-        return this.effectEntries;
+    public List<GenericGemEffect> getEffects() {
+        if(this.effects == null || !this.isValid()) return Collections.emptyList();
+        return this.effects;
     }
 
     public List<FilterEntry> getFilterEntries() {
@@ -101,9 +104,9 @@ public class EffectGroup {
 
             int validEffects = 0;
             int totalEffects = 0;
-            List<EffectEntry> effects = this.effectEntries;
+            List<GenericGemEffect> effects = this.effects;
             if(effects != null) {
-                for(EffectEntry effect : effects) {
+                for(GenericGemEffect effect : effects) {
                     totalEffects++;
                     if(effect.isValid()) validEffects++;
                 }
@@ -133,5 +136,12 @@ public class EffectGroup {
             this.valid = validEntries > 0 && validEffects > 0 && validRecipients > 0;
         }
         this.parsed = true;
+    }
+
+    public static GemType getGemTypeFromItemStack(@Nullable ItemStack itemStack){
+        for (GemType effects : CustomConfig.getEffectData().values())
+            if (effects.matches(itemStack))
+                return effects;
+        return null;
     }
 }

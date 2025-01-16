@@ -2,16 +2,16 @@ package socketed.common.data.entry.effect.activatable;
 
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.entity.EntityLivingBase;
-import socketed.common.data.entry.effect.EffectEntry;
+import socketed.common.data.entry.effect.GenericGemEffect;
 
-public abstract class ActivatableEntry extends EffectEntry {
+public abstract class ActivatableGemEffect extends GenericGemEffect {
     public static final String FILTER_NAME = "Activation Type";
 
-    @SerializedName(ActivatableEntry.FILTER_NAME)
+    @SerializedName(ActivatableGemEffect.FILTER_NAME)
     protected IActivationType activation;
 
     public IActivationType getActivationType() {
-        if(!this.isValid()) return SocketedActivationTypes.INVALID;
+        if(!this.isValid()) return EnumActivationTypes.INVALID;
         return this.activation;
     }
 

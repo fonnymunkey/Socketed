@@ -2,7 +2,7 @@ package socketed.common.data.entry.effect;
 
 import com.google.gson.annotations.SerializedName;
 
-public abstract class EffectEntry {
+public abstract class GenericGemEffect {
     public static final String FILTER_NAME = "Effect Type";
 
     @SerializedName(FILTER_NAME)

@@ -8,9 +8,9 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EffectDeserializer implements JsonDeserializer<EffectEntry> {
+public class EffectDeserializer implements JsonDeserializer<GenericGemEffect> {
     private final Gson gson;
-    private final Map<String, Class<? extends EffectEntry>> typeReg;
+    private final Map<String, Class<? extends GenericGemEffect>> typeReg;
 
     public EffectDeserializer() {
         ActivationTypeDeserializer activationDeserializer = new ActivationTypeDeserializer();
@@ -23,14 +23,14 @@ public class EffectDeserializer implements JsonDeserializer<EffectEntry> {
         this.typeReg = new HashMap<>();
     }
 
-    public void registerType(String typeName, Class<? extends EffectEntry> typeClass) {
+    public void registerType(String typeName, Class<? extends GenericGemEffect> typeClass) {
         typeReg.put(typeName, typeClass);
     }
 
     @Override
-    public EffectEntry deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public GenericGemEffect deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject obj = json.getAsJsonObject();
-        Class<? extends EffectEntry> typeClass = typeReg.get(obj.get(EffectEntry.FILTER_NAME).getAsString());
+        Class<? extends GenericGemEffect> typeClass = typeReg.get(obj.get(GenericGemEffect.FILTER_NAME).getAsString());
         return this.gson.fromJson(obj, typeClass);
     }
 }

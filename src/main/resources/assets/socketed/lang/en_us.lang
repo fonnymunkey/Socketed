@@ -1,7 +1,7 @@
 item.socketed.socket_tool.tooltip=Used to add and remove socketed gems from tools and armor
 item.socketed.socket_tool.name=Socketing Tool
 
-socketed.tooltip.socket=Socket: %s
+socketed.tooltip.socket=Sockets (%d/%d): %s
 socketed.tooltip.empty=Empty
 socketed.tooltip.potiontype.passive=Passively: %s
 socketed.tooltip.potiontype.hitreceived_self=When Attacked: %s

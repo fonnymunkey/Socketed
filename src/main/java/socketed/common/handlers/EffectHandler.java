@@ -1,151 +1,156 @@
 package socketed.common.handlers;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import socketed.common.config.CustomConfig;
-import socketed.common.data.EffectGroup;
-import socketed.common.data.entry.effect.activatable.ActivatableEntry;
-import socketed.common.data.entry.effect.AttributeEntry;
-import socketed.common.data.entry.effect.EffectEntry;
-import socketed.common.util.SocketedUtil;
+import socketed.Socketed;
+import socketed.common.capabilities.CapabilityHasSockets;
+import socketed.common.data.entry.effect.activatable.ActivatableGemEffect;
+import socketed.common.data.entry.effect.AttributeGemEffect;
+import socketed.common.data.entry.effect.GenericGemEffect;
+import socketed.common.data.entry.effect.activatable.EnumActivationTypes;
+import socketed.common.data.entry.effect.activatable.IActivationType;
+import socketed.common.data.entry.effect.activatable.PotionGemEffect;
 
-import java.util.Iterator;
+import java.util.Arrays;
+import java.util.List;
 
 @Mod.EventBusSubscriber
 public class EffectHandler {
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onEntityHit(LivingAttackEvent event) {
-        /*
         if(event.getEntity().world.isRemote) return;
-        boolean indirect =
-        if(event.getEntity() instanceof EntityPlayer) {
-
-        }
-            handleHitEffects((EntityPlayer)event.getEntity(), event.getSource().getImmediateSource(), true, true);
-        if(event.getSource().getImmediateSource() instanceof EntityPlayer)//TODO: add config for ranged vs melee
-            handleHitEffects((EntityPlayer)event.getSource().getImmediateSource(), event.getEntity(), false);
-
-         */
+        //TODO: add activation types for ranged vs melee
+        //TODO: same for indirect dmg sources
+        if(event.getEntity() instanceof EntityPlayer)
+            handleHitEffects((EntityPlayer)event.getEntityLiving(), (EntityPlayer)event.getSource().getTrueSource(), event.getSource(), true);
+        if(event.getSource().getTrueSource() instanceof EntityPlayer)
+            handleHitEffects((EntityPlayer)event.getSource().getTrueSource(), event.getEntityLiving(), event.getSource(), false);
     }
-/*
-    private static void handleHitEffects(EntityPlayer player, @Nullable Entity other, boolean received) {
-        Socketed.LOGGER.log(Level.INFO, "Handling hit effects");
-        for(EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {//Iterate active slots
-            ItemStack stack = player.getItemStackFromSlot(slot);
-            String effectName = SocketedUtil.getSocketEffectName(stack);
-            if(!effectName.isEmpty()) {
-                Socketed.LOGGER.log(Level.INFO, "Effect item found: " + effectName);
-                EffectGroup group = CustomConfig.getEffectData().get(effectName);//Get effect group of slot
-                if(group == null) continue;
-                for(EffectEntry effect : group.getEffectEntries()) {//Iterate socket effects
-                    //No attribute from hit effect currently
-                    //Potion effect
-                    if(effect instanceof PotionEntry) {
-                        Socketed.LOGGER.log(Level.INFO, "Potion entry found");
-                        PotionEntry potEffect = (PotionEntry)effect;
-                        if(potEffect.getPotion() == null) continue;
-                        if(received) {
-                            if(potEffect.getActivationType() == PotionEntry.ActivationType.DAMAGE_RECEIVED_SELF) {
-                                Socketed.LOGGER.log(Level.INFO, "Applying " + potEffect.getPotion().getName() + " to " + player.getName());
-                                player.addPotionEffect(new PotionEffect(potEffect.getPotion(), potEffect.getDuration(), potEffect.getAmplifier()));
-                            }
-                            else if(potEffect.getActivationType() == PotionEntry.ActivationType.DAMAGE_RECEIVED_ATTACKER && other instanceof EntityLivingBase) {
-                                Socketed.LOGGER.log(Level.INFO, "Applying " + potEffect.getPotion().getName() + " to " + other.getName());
-                                ((EntityLivingBase)other).addPotionEffect(new PotionEffect(potEffect.getPotion(), potEffect.getDuration(), potEffect.getAmplifier()));
-                            }
-                        }
-                        else {
-                            if(potEffect.getActivationType() == PotionEntry.ActivationType.DAMAGE_GIVEN_SELF) {
-                                Socketed.LOGGER.log(Level.INFO, "Applying " + potEffect.getPotion().getName() + " to " + player.getName());
-                                player.addPotionEffect(new PotionEffect(potEffect.getPotion(), potEffect.getDuration(), potEffect.getAmplifier()));
-                            }
-                            else if(potEffect.getActivationType() == PotionEntry.ActivationType.DAMAGE_GIVEN_TARGET && other instanceof EntityLivingBase) {
-                                Socketed.LOGGER.log(Level.INFO, "Applying " + potEffect.getPotion().getName() + " to " + other.getName());
-                                ((EntityLivingBase)other).addPotionEffect(new PotionEffect(potEffect.getPotion(), potEffect.getDuration(), potEffect.getAmplifier()));
-                            }
-                        }
+
+    private static void handleHitEffects(EntityPlayer player, EntityLivingBase other, DamageSource source, boolean received) {
+        //Iterate active slots
+        for (ItemStack stack : player.getEquipmentAndArmor()) {
+            if(!stack.hasCapability(CapabilityHasSockets.HAS_SOCKETS,null)) continue;
+
+            List<GenericGemEffect> effects = stack.getCapability(CapabilityHasSockets.HAS_SOCKETS,null).getAllEffectsFromAllSockets();
+            for(GenericGemEffect effect : effects){
+                //No attribute from hit effect currently
+                //Potion effect
+                if (effect instanceof PotionGemEffect) {
+                    PotionGemEffect potEffect = (PotionGemEffect) effect;
+                    if (potEffect.getPotion() == null) continue;
+                    IActivationType activationType = potEffect.getActivationType();
+                    if(received) {
+                        if(activationType == EnumActivationTypes.ON_ATTACKED_SELF)
+                            potEffect.getActivationType().triggerOnAttackEffect(potEffect, player, source);
+                        if(activationType == EnumActivationTypes.ON_ATTACKED_ATTACKER)
+                            potEffect.getActivationType().triggerOnAttackEffect(potEffect, other, source);
+                    } else {
+                        if(activationType == EnumActivationTypes.ON_ATTACKING_SELF)
+                            potEffect.getActivationType().triggerOnAttackEffect(potEffect, player, source);
+                        if(activationType == EnumActivationTypes.ON_ATTACKING_TARGET)
+                            potEffect.getActivationType().triggerOnAttackEffect(potEffect, other, source);
                     }
                 }
             }
         }
     }
-
- */
 
     @SubscribeEvent
     public static void onPlayerUpdate(LivingEvent.LivingUpdateEvent event) {
-        if(event.getEntityLiving().world.isRemote || !(event.getEntityLiving() instanceof EntityPlayer) || event.getEntityLiving().ticksExisted%20 != 0) return;
-        EntityPlayer player = (EntityPlayer)event.getEntityLiving();
-        Multimap<String, AttributeModifier> previousModifiers = HashMultimap.create();
-        player.getAttributeMap().getAllAttributes()
-                .forEach(a -> a.getModifiers().stream()
-                        .filter(m -> m.getName().startsWith("socketed."))
-                        .forEach(m -> previousModifiers.put(a.getAttribute().getName(), m)));//Get all active socketed modifiers
+        if(event.getEntityLiving().world.isRemote ||
+                !(event.getEntityLiving() instanceof EntityPlayer) ||
+                event.getEntityLiving().ticksExisted%20 != 0
+        ) return;
+        EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+
         for(EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {//Iterate active slots
             ItemStack stack = player.getItemStackFromSlot(slot);
-            String effectName = SocketedUtil.getSocketEffectName(stack);
-            if(!effectName.isEmpty()) {
-                EffectGroup group = CustomConfig.getEffectData().get(effectName);//Get effect group of slot
-                if(group == null) continue;
-                for(EffectEntry effect : group.getEffectEntries()) {//Iterate socket effects
-                    //Attribute effect
-                    if(effect instanceof AttributeEntry) {
-                        AttributeEntry attrEffect = (AttributeEntry)effect;
-                        boolean active = false;
-                        //Skip damage/speed/reach attributes for offhand, let 2 hand mods like RLCombat handle the compat properly
-                        if(slot == EntityEquipmentSlot.OFFHAND && (
-                                attrEffect.getAttribute().contains("attackDamage") ||
-                                attrEffect.getAttribute().contains("attackSpeed") ||
-                                attrEffect.getAttribute().contains("reachDistance"))) {
-                            continue;
-                        }
-                        //Iterate active modifiers, remove from previous list if it should stay
-                        for(Iterator<AttributeModifier> iter = previousModifiers.get(attrEffect.getAttribute()).iterator(); iter.hasNext();) {
-                            if(iter.next().getName().startsWith(
-                                    "socketed." +
-                                    slot.getName() +
-                                    "." +
-                                    attrEffect.getModifier().getName())) {
-                                iter.remove();
-                                active = true;
-                                break;
-                            }
-                        }
-                        //Apply new modifier if not already active
-                        if(!active) {
-                            IAttributeInstance inst = player.getAttributeMap().getAttributeInstanceByName((attrEffect.getAttribute()));
-                            AttributeModifier newMod = new AttributeModifier(
-                                    "socketed." +
-                                            slot.getName() +
-                                            "." +
-                                            attrEffect.getModifier().getName(),
-                                    attrEffect.getModifier().getAmount(),
-                                    attrEffect.getModifier().getOperation());
-                            if(inst != null && !inst.hasModifier(newMod)) {
-                                inst.applyModifier(newMod);
-                            }
-                        }
-                    }
-                    //Activated effect
-                    else if(effect instanceof ActivatableEntry) {
-                        ActivatableEntry actEffect = (ActivatableEntry)effect;
-                        actEffect.getActivationType().triggerOnSecondEffect(actEffect, player);
-                    }
+            if(!stack.hasCapability(CapabilityHasSockets.HAS_SOCKETS,null)) continue;
+
+            List<GenericGemEffect> effects = stack.getCapability(CapabilityHasSockets.HAS_SOCKETS,null).getAllEffectsFromAllSockets();
+            for(GenericGemEffect effect : effects){
+                //Activated effect
+                if(effect instanceof ActivatableGemEffect) {
+                    ActivatableGemEffect actEffect = (ActivatableGemEffect)effect;
+                    if(actEffect.getActivationType() == EnumActivationTypes.PASSIVE)
+                        actEffect.getActivationType().triggerPerSecondEffect(actEffect, player);
                 }
             }
         }
-        //Remove any leftover effects that shouldn't be active
-        player.getAttributeMap().removeAttributeModifiers(previousModifiers);
+    }
+
+    private static final List<IAttribute> offhandSkipAttributes = Arrays.asList(SharedMonsterAttributes.ATTACK_DAMAGE, SharedMonsterAttributes.ATTACK_SPEED);
+
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void onEquipmentChanged(LivingEquipmentChangeEvent event) {
+        if(event.getEntityLiving().world.isRemote) return;
+        if(!(event.getEntityLiving() instanceof EntityPlayer)) return;
+        EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+
+        EntityEquipmentSlot slot = event.getSlot();
+        ItemStack stackOld = event.getFrom();
+        ItemStack stackNew = event.getTo();
+        //Reskillable changes the value behind the "to" itemstack to empty if requirements are not met, but it shouldn't matter
+        //ItemStack stackNew = player.getItemStackFromSlot(slot);
+
+        //Remove all modifiers that were on removed item
+        if(stackOld.hasCapability(CapabilityHasSockets.HAS_SOCKETS,null)){
+            List<GenericGemEffect> effectsOld = stackOld.getCapability(CapabilityHasSockets.HAS_SOCKETS, null).getAllEffectsFromAllSockets();
+            for (GenericGemEffect effect : effectsOld) {
+                if (effect instanceof AttributeGemEffect) {
+                    AttributeGemEffect attrEffect = (AttributeGemEffect) effect;
+
+                    String attribute = attrEffect.getAttribute();
+                    IAttributeInstance attrInstance = player.getAttributeMap().getAttributeInstanceByName(attribute);
+                    if (attrInstance == null) continue;
+
+                    //Skip damage/speed/reach attributes for offhand, let 2 hand mods like RLCombat handle the compat properly
+                    if (slot == EntityEquipmentSlot.OFFHAND && (offhandSkipAttributes.contains(attrInstance.getAttribute()) || attribute.contains("reachDistance")))
+                        continue;
+
+                    AttributeModifier modifier = attrEffect.getModifier();
+                    if (attrInstance.hasModifier(modifier))
+                        attrInstance.removeModifier(modifier);
+                }
+            }
+        }
+
+        //Apply new modifiers from new item
+        if(stackNew.hasCapability(CapabilityHasSockets.HAS_SOCKETS,null)) {
+            List<GenericGemEffect> effectsNew = stackNew.getCapability(CapabilityHasSockets.HAS_SOCKETS, null).getAllEffectsFromAllSockets();
+            for (GenericGemEffect effect : effectsNew) {
+                if (effect instanceof AttributeGemEffect) {
+                    AttributeGemEffect attrEffect = (AttributeGemEffect) effect;
+
+                    String attribute = attrEffect.getAttribute();
+                    IAttributeInstance attrInstance = player.getAttributeMap().getAttributeInstanceByName(attribute);
+                    if (attrInstance == null) continue;
+
+                    //Skip damage/speed/reach attributes for offhand, let 2 hand mods like RLCombat handle the compat properly
+                    if (slot == EntityEquipmentSlot.OFFHAND && (offhandSkipAttributes.contains(attrInstance.getAttribute()) || attribute.contains("reachDistance")))
+                        continue;
+
+                    AttributeModifier modifier = attrEffect.getModifier();
+                    if (!attrInstance.hasModifier(modifier))
+                        attrInstance.applyModifier(modifier);
+                }
+            }
+        }
     }
 }
