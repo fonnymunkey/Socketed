@@ -18,7 +18,8 @@ public class GenericSocket{
     }
 
     public GenericSocket(NBTTagCompound nbt) {
-        this.gem = new GemInstance(nbt.getCompoundTag("Gem"));
+        if(nbt.hasKey("Gem"))
+            this.gem = new GemInstance(nbt.getCompoundTag("Gem"));
     }
 
     private GemInstance gem = null;
@@ -78,8 +79,6 @@ public class GenericSocket{
         nbt.setString("SocketType","Generic");
         if (this.gem != null)
             nbt.setTag("Gem", this.gem.writeToNBT());
-        else
-            nbt.setTag("Gem", new NBTTagCompound());
         return nbt;
     }
 }

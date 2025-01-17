@@ -23,32 +23,40 @@ public class SocketAddRecipe extends IForgeRegistryEntry.Impl<IRecipe> implement
 
     @Override
     public boolean matches(@Nonnull InventoryCrafting inv, @Nonnull World worldIn) {
-        List<Integer> remainingOccupiedSlots = new ArrayList<>();
-
         //Prevent this from running multiple times until getCraftingResult is called
         if(toolSlot!=-1 && recipientSlot != -1 && gemSlot != -1) return true;
 
-        //Iterate crafting grid, check first for tool and 3 filled slots in total
-        for(int i = 0; i < inv.getSizeInventory(); i++) {
+        List<Integer> occupiedSlots = new ArrayList<>();
+
+        //Quick check if there's more than 3 items in crafting, return false if so
+        int itemCounter = 0;
+        for(int i = 0; i< inv.getSizeInventory(); i++) {
             if(!inv.getStackInSlot(i).isEmpty()) {
-                if(inv.getStackInSlot(i).getItem() instanceof ItemSocketTool)
-                    if(toolSlot==-1)
-                        toolSlot = i;
-                    else {
-                        //More than one socketing tool
-                        resetSlotIndices();
-                        return false;
-                    }
-                else remainingOccupiedSlots.add(i);
+                itemCounter++;
+                occupiedSlots.add(i);
+            } if(itemCounter > 3)
+                return false;
+        }
+
+        //Iterate crafting grid, check first for tool and 3 filled slots in total
+        for(int i : occupiedSlots) {
+            if (inv.getStackInSlot(i).getItem() instanceof ItemSocketTool) {
+                if (toolSlot == -1)
+                    toolSlot = i;
+                else {
+                    //More than one socketing tool
+                    resetSlotIndices();
+                    return false;
+                }
             }
         }
-        if(toolSlot == -1 || remainingOccupiedSlots.size() != 2){
+        if(toolSlot == -1){
             resetSlotIndices();
             return false;
         }
 
         //Iterate occupied slots, get recipient item and gem
-        for(int i : remainingOccupiedSlots) {
+        for(int i : occupiedSlots) {
             ItemStack itemStack = inv.getStackInSlot(i);
             boolean hasSockets = itemStack.hasCapability(CapabilityHasSockets.HAS_SOCKETS, null);
             boolean isGem = GemType.getGemTypeFromItemStack(itemStack) != null;

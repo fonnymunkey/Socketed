@@ -1,7 +1,13 @@
 package socketed.common.capabilities;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagInt;
+import net.minecraft.nbt.NBTTagString;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import socketed.Socketed;
 import socketed.common.config.CustomConfig;
 import socketed.common.data.GemType;
 import socketed.common.data.RecipientGroup;
@@ -14,26 +20,44 @@ import java.util.List;
 
 public class GemInstance {
 
-    @Nullable private final ItemStack stack;
+    private final String itemId;
+    private final int metadata;
     @Nullable private final GemType gemType;
 
     public GemInstance(@Nullable ItemStack stack) {
-        this.stack = stack;
-        this.gemType = GemType.getGemTypeFromItemStack(stack);;
+        if(stack!=null) {
+            this.itemId = stack.getItem().getRegistryName().toString();
+            this.metadata = stack.getMetadata();
+            this.gemType = GemType.getGemTypeFromItemStack(stack);
+        } else{
+            this.itemId = "";
+            this.metadata = 0;
+            this.gemType = null;
+        }
     }
 
     public GemInstance(NBTTagCompound nbt){
-        if(nbt.hasKey("ItemStack")) {
-            NBTTagCompound itemStackNBT = nbt.getCompoundTag("ItemStack");
-            this.stack = new ItemStack(itemStackNBT);
-        } else
-            this.stack = null;
-        this.gemType = GemType.getGemTypeFromItemStack(stack);;
+        if(nbt.hasKey("ItemId"))
+            this.itemId = nbt.getString("ItemId");
+        else
+            this.itemId = "";
+        if(nbt.hasKey("Metadata"))
+            this.metadata = nbt.getInteger("Metadata");
+        else
+            this.metadata = 0;
+
+        Item item = Item.getByNameOrId(itemId);
+        if(item!=null)
+            this.gemType = GemType.getGemTypeFromItemStack(new ItemStack(item,1,metadata));
+        else
+            this.gemType = null;
     }
 
     @Nullable
     public ItemStack getItemStack() {
-        return stack;
+        Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(this.itemId));
+        if(item==null) return null;
+        return new ItemStack(item,1,this.metadata);
     }
 
     public boolean canApplyOn(ItemStack stack) {
@@ -63,8 +87,10 @@ public class GemInstance {
     
     public NBTTagCompound writeToNBT() {
         NBTTagCompound nbt = new NBTTagCompound();
-        if (this.stack != null)
-            nbt.setTag("ItemStack", this.stack.writeToNBT(new NBTTagCompound()));
+        if(!this.itemId.isEmpty())
+            nbt.setTag("ItemId", new NBTTagString(this.itemId));
+        if(this.metadata!=0)
+            nbt.setTag("Metadata", new NBTTagInt(this.metadata));
         return nbt;
     }
 }

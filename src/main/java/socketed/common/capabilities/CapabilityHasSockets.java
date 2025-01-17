@@ -23,18 +23,19 @@ public class CapabilityHasSockets {
 
     public static final ResourceLocation CAPABILITY_KEY = new ResourceLocation(Socketed.MODID, "has_sockets");
 
+    //Default implementation of the capability
     public static class GenericHasSockets implements ICapabilityHasSockets {
         //Copy of the itemstack these sockets belong to
         private final ItemStack itemStack;
 
         //Ordered list of sockets, default size of 0 sockets
-        //private final List<GenericSocket> sockets = new ArrayList<>();
-        private final List<GenericSocket> sockets = Collections.singletonList(new GenericSocket());
+        private final List<GenericSocket> sockets = new ArrayList<>();
 
         public GenericHasSockets() {
             this(null);
         }
         public GenericHasSockets(ItemStack itemStack) {
+            //this.setSocketCount(1); //TEST!
             this.itemStack = itemStack;
         }
 
@@ -72,14 +73,19 @@ public class CapabilityHasSockets {
 
         @Override
         @Nullable
-        public GemInstance setSocketAt(GenericSocket socket, int socketIndex) {
-            Socketed.LOGGER.info("Set Socket at");
-            if(socketIndex < 0 || socketIndex >= getSocketCount())
+        public GemInstance setSocketAt(GenericSocket newSocket, int socketIndex) {
+            if (socketIndex < 0 || socketIndex >= getSocketCount())
                 return null;
-            GemInstance gem = sockets.get(socketIndex).getGem();
-            if(socket.setGem(gem))
-                return null;
-            return gem;
+
+            GemInstance gemInOldSocket = sockets.get(socketIndex).getGem();
+            GemInstance returnGem = null;
+            //Put old gem in new socket if possible
+            if (newSocket.isEmpty() && gemInOldSocket!=null && !newSocket.setGem(gemInOldSocket))
+                returnGem = gemInOldSocket;
+
+            //Put new socket in old socket slot, deleting the old socket
+            this.sockets.set(socketIndex, newSocket);
+            return returnGem;
         }
 
         @Override
@@ -97,20 +103,16 @@ public class CapabilityHasSockets {
 
         @Override
         public boolean addGem(GemInstance gem) {
-            Socketed.LOGGER.info("Add Gem");
             if(!gem.canApplyOn(this.itemStack)) return false;
-            for (GenericSocket socket : sockets) {
-                if (socket.isEmpty() && socket.setGem(gem)) {
+            for (GenericSocket socket : sockets)
+                if (socket.isEmpty() && socket.setGem(gem))
                     return true;
-                }
-            }
             return false;
         }
 
         @Override
         @Nullable
         public GemInstance setGemAt(GemInstance gem, int socketIndex) {
-            Socketed.LOGGER.info("Set Gem at");
             if(socketIndex < 0 || socketIndex >= sockets.size()) return null;
             if(!gem.canApplyOn(this.itemStack)) return null;
             GemInstance oldGem = sockets.get(socketIndex).getGem();
@@ -131,7 +133,6 @@ public class CapabilityHasSockets {
         @Override
         @Nonnull
         public List<GemInstance> removeAllGems() {
-            Socketed.LOGGER.info("Remove All Gems");
             List<GemInstance> gems = getAllGems();
             for(GenericSocket socket : sockets){
                 socket.setGem(null);
