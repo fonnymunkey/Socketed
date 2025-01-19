@@ -9,17 +9,18 @@ import net.minecraftforge.registries.IForgeRegistryEntry;
 import socketed.common.capabilities.CapabilityHasSockets;
 import socketed.common.capabilities.GemInstance;
 import socketed.common.capabilities.ICapabilityHasSockets;
-import socketed.common.data.GemType;
 import socketed.common.item.ItemSocketTool;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SocketAddRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
 
     private int toolSlot = -1;
     private int recipientSlot = -1;
     private int gemSlot = -1;
+    GemInstance gem = null;
 
     @Override
     public boolean matches(@Nonnull InventoryCrafting inv, @Nonnull World worldIn) {
@@ -45,13 +46,13 @@ public class SocketAddRecipe extends IForgeRegistryEntry.Impl<IRecipe> implement
                     toolSlot = i;
                 else {
                     //More than one socketing tool
-                    resetSlotIndices();
+                    resetTempValues();
                     return false;
                 }
             }
         }
         if(toolSlot == -1){
-            resetSlotIndices();
+            resetTempValues();
             return false;
         }
 
@@ -59,14 +60,22 @@ public class SocketAddRecipe extends IForgeRegistryEntry.Impl<IRecipe> implement
         for(int i : occupiedSlots) {
             ItemStack itemStack = inv.getStackInSlot(i);
             boolean hasSockets = itemStack.hasCapability(CapabilityHasSockets.HAS_SOCKETS, null);
-            boolean isGem = GemType.getGemTypeFromItemStack(itemStack) != null;
+
+            boolean isGem = false;
+            if (gem == null){
+                gem = new GemInstance(itemStack);
+                isGem = gem.getGemType() != null;
+                if(!isGem)
+                    gem = null;
+            }
+
             if (hasSockets && !isGem)
                 recipientSlot = i;
             if (!hasSockets && isGem)
                 gemSlot = i;
         }
         if(recipientSlot == -1 || gemSlot == -1){
-            resetSlotIndices();
+            resetTempValues();
             return false;
         }
         return true;
@@ -78,32 +87,33 @@ public class SocketAddRecipe extends IForgeRegistryEntry.Impl<IRecipe> implement
         //Output is copy of item with sockets
         ItemStack returnStack = inv.getStackInSlot(recipientSlot).copy();
 
-        ICapabilityHasSockets socketSlots = returnStack.getCapability(CapabilityHasSockets.HAS_SOCKETS,null);
-        ItemStack gemStack = inv.getStackInSlot(gemSlot).copy();
-        gemStack.setCount(1);
-        GemInstance gem = new GemInstance(gemStack);
-
-        //Reset search values
-        resetSlotIndices();
+        ICapabilityHasSockets recipientSockets = returnStack.getCapability(CapabilityHasSockets.HAS_SOCKETS,null);
 
         //Try to add Gem to sockets, return Empty Stack (crafting not possible) if no empty sockets available
-        if(!socketSlots.addGem(gem))
+        if(!recipientSockets.addGem(gem)) {
+            resetTempValues();
             return ItemStack.EMPTY;
+        }
+
+        resetTempValues();
         return returnStack;
     }
 
     @Override
     public boolean isDynamic()
     {
-        //Should guarantee that getCraftingResult() always runs right after matches() if recipe matches
-        //But getRemainingItems() also runs after matches, so we have to reset search values there as well
         return true;
     }
 
-    private void resetSlotIndices(){
+    /**
+     * These temporary search values assume that either getCraftingResult() or getRemainingItems() will always run after matches() if recipe does match.
+     * Which should be guaranteed by isDynamic = true, but other mods might change that behavior
+     */
+    private void resetTempValues(){
         toolSlot = -1;
         recipientSlot = -1;
         gemSlot = -1;
+        gem = null;
     }
 
     @Override
@@ -121,7 +131,7 @@ public class SocketAddRecipe extends IForgeRegistryEntry.Impl<IRecipe> implement
     @Nonnull
     public NonNullList<ItemStack> getRemainingItems(@Nonnull InventoryCrafting inv)
     {
-        resetSlotIndices();
+        resetTempValues();
         return net.minecraftforge.common.ForgeHooks.defaultRecipeGetRemainingItems(inv);
     }
 }

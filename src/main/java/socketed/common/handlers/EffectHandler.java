@@ -15,12 +15,11 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import socketed.Socketed;
 import socketed.common.capabilities.CapabilityHasSockets;
-import socketed.common.data.entry.effect.activatable.ActivatableGemEffect;
 import socketed.common.data.entry.effect.AttributeGemEffect;
 import socketed.common.data.entry.effect.GenericGemEffect;
-import socketed.common.data.entry.effect.activatable.EnumActivationTypes;
+import socketed.common.data.entry.effect.activatable.ActivatableGemEffect;
+import socketed.common.data.entry.effect.activatable.EnumActivationType;
 import socketed.common.data.entry.effect.activatable.IActivationType;
 import socketed.common.data.entry.effect.activatable.PotionGemEffect;
 
@@ -43,10 +42,11 @@ public class EffectHandler {
 
     private static void handleHitEffects(EntityPlayer player, EntityLivingBase other, DamageSource source, boolean received) {
         //Iterate active slots
-        for (ItemStack stack : player.getEquipmentAndArmor()) {
+        for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
+            ItemStack stack = player.getItemStackFromSlot(slot);
             if(!stack.hasCapability(CapabilityHasSockets.HAS_SOCKETS,null)) continue;
 
-            List<GenericGemEffect> effects = stack.getCapability(CapabilityHasSockets.HAS_SOCKETS,null).getAllEffectsFromAllSockets();
+            List<GenericGemEffect> effects = stack.getCapability(CapabilityHasSockets.HAS_SOCKETS,null).getAllEffectsForSlot(slot);
             for(GenericGemEffect effect : effects){
                 //No attribute from hit effect currently
                 //Potion effect
@@ -55,14 +55,14 @@ public class EffectHandler {
                     if (potEffect.getPotion() == null) continue;
                     IActivationType activationType = potEffect.getActivationType();
                     if(received) {
-                        if(activationType == EnumActivationTypes.ON_ATTACKED_SELF)
+                        if(activationType == EnumActivationType.ON_ATTACKED_SELF)
                             potEffect.getActivationType().triggerOnAttackEffect(potEffect, player, source);
-                        if(activationType == EnumActivationTypes.ON_ATTACKED_ATTACKER)
+                        if(activationType == EnumActivationType.ON_ATTACKED_ATTACKER)
                             potEffect.getActivationType().triggerOnAttackEffect(potEffect, other, source);
                     } else {
-                        if(activationType == EnumActivationTypes.ON_ATTACKING_SELF)
+                        if(activationType == EnumActivationType.ON_ATTACKING_SELF)
                             potEffect.getActivationType().triggerOnAttackEffect(potEffect, player, source);
-                        if(activationType == EnumActivationTypes.ON_ATTACKING_TARGET)
+                        if(activationType == EnumActivationType.ON_ATTACKING_TARGET)
                             potEffect.getActivationType().triggerOnAttackEffect(potEffect, other, source);
                     }
                 }
@@ -82,12 +82,12 @@ public class EffectHandler {
             ItemStack stack = player.getItemStackFromSlot(slot);
             if(!stack.hasCapability(CapabilityHasSockets.HAS_SOCKETS,null)) continue;
 
-            List<GenericGemEffect> effects = stack.getCapability(CapabilityHasSockets.HAS_SOCKETS,null).getAllEffectsFromAllSockets();
+            List<GenericGemEffect> effects = stack.getCapability(CapabilityHasSockets.HAS_SOCKETS,null).getAllEffectsForSlot(slot);
             for(GenericGemEffect effect : effects){
                 //Activated effect
                 if(effect instanceof ActivatableGemEffect) {
                     ActivatableGemEffect actEffect = (ActivatableGemEffect)effect;
-                    if(actEffect.getActivationType() == EnumActivationTypes.PASSIVE)
+                    if(actEffect.getActivationType() == EnumActivationType.PASSIVE)
                         actEffect.getActivationType().triggerPerSecondEffect(actEffect, player);
                 }
             }
@@ -111,7 +111,7 @@ public class EffectHandler {
 
         //Remove all modifiers that were on removed item
         if(stackOld.hasCapability(CapabilityHasSockets.HAS_SOCKETS,null)){
-            List<GenericGemEffect> effectsOld = stackOld.getCapability(CapabilityHasSockets.HAS_SOCKETS, null).getAllEffectsFromAllSockets();
+            List<GenericGemEffect> effectsOld = stackOld.getCapability(CapabilityHasSockets.HAS_SOCKETS, null).getAllEffectsForSlot(slot);
             for (GenericGemEffect effect : effectsOld) {
                 if (effect instanceof AttributeGemEffect) {
                     AttributeGemEffect attrEffect = (AttributeGemEffect) effect;
@@ -133,7 +133,7 @@ public class EffectHandler {
 
         //Apply new modifiers from new item
         if(stackNew.hasCapability(CapabilityHasSockets.HAS_SOCKETS,null)) {
-            List<GenericGemEffect> effectsNew = stackNew.getCapability(CapabilityHasSockets.HAS_SOCKETS, null).getAllEffectsFromAllSockets();
+            List<GenericGemEffect> effectsNew = stackNew.getCapability(CapabilityHasSockets.HAS_SOCKETS, null).getAllEffectsForSlot(slot);
             for (GenericGemEffect effect : effectsNew) {
                 if (effect instanceof AttributeGemEffect) {
                     AttributeGemEffect attrEffect = (AttributeGemEffect) effect;

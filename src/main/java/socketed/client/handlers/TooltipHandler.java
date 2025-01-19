@@ -21,6 +21,7 @@ public class TooltipHandler {
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void ItemTooltipEvent(ItemTooltipEvent event) {
         ItemStack stack = event.getItemStack();
+        //TODO: check in what equipment slot this item is in and only show the effects that are applied
         if(!stack.hasCapability(CapabilityHasSockets.HAS_SOCKETS,null)) return;
         ICapabilityHasSockets sockets = stack.getCapability(CapabilityHasSockets.HAS_SOCKETS, null);
 
@@ -28,7 +29,7 @@ public class TooltipHandler {
         int gemCount = sockets.getGemCount();
 
         event.getToolTip().add(TextFormatting.BOLD + I18n.format("socketed.tooltip.socket", gemCount,socketCount,TextFormatting.RESET));
-        for(GenericGemEffect effect : sockets.getAllEffectsFromAllSockets()) {
+        for(GenericGemEffect effect : sockets.getAllEffects()) {
             String tooltipString = getTooltipString(effect);
             if(!tooltipString.isEmpty()) event.getToolTip().add("  " +tooltipString);
         }
@@ -51,7 +52,7 @@ public class TooltipHandler {
     private static String getPotionString(PotionGemEffect entry) {
         Potion potion = entry.getPotion();
         if(potion == null) return "";
-        String tooltip = I18n.format("socketed.tooltip.potiontype." + entry.getActivationType().getKey(), I18n.format(potion.getName()));
+        String tooltip = I18n.format("socketed.tooltip.activationtype." + entry.getActivationType().getToolTipKey(), I18n.format(potion.getName()));
         if(entry.getAmplifier() < 10) return tooltip + " " + I18n.format("enchantment.level." + (entry.getAmplifier() + 1));
         else return tooltip + " " + (entry.getAmplifier() + 1);
     }

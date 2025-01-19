@@ -9,5 +9,5 @@ public interface IActivationType {
     default void triggerPerSecondEffect(ActivatableGemEffect actEffect, EntityPlayer player) { /*noop*/ }
     default void triggerOnAttackEffect(ActivatableGemEffect entry, EntityLivingBase effectTarget, DamageSource source) { /*noop*/ }
 
-    String getKey();
+    String getToolTipKey();
 }

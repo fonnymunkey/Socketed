@@ -1,5 +1,6 @@
 package socketed.common.capabilities;
 
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,7 +16,8 @@ import socketed.common.socket.GenericSocket;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CapabilityHasSockets {
     @CapabilityInject(ICapabilityHasSockets.class)
@@ -35,7 +37,6 @@ public class CapabilityHasSockets {
             this(null);
         }
         public GenericHasSockets(ItemStack itemStack) {
-            //this.setSocketCount(1); //TEST!
             this.itemStack = itemStack;
         }
 
@@ -89,6 +90,12 @@ public class CapabilityHasSockets {
         }
 
         @Override
+        public void addSocket(GenericSocket socket) {
+            if(socket != null)
+                this.sockets.add(socket);
+        }
+
+        @Override
         public GenericSocket createSocketFromNBT(String socketType, NBTTagCompound tags) {
             return new GenericSocket(tags);
         }
@@ -102,8 +109,8 @@ public class CapabilityHasSockets {
         }
 
         @Override
-        public boolean addGem(GemInstance gem) {
-            if(!gem.canApplyOn(this.itemStack)) return false;
+        public boolean addGem(@Nonnull GemInstance gem) {
+            if(!gem.hasEffectsForStackDefaultSlot(this.itemStack)) return false;
             for (GenericSocket socket : sockets)
                 if (socket.isEmpty() && socket.setGem(gem))
                     return true;
@@ -114,7 +121,7 @@ public class CapabilityHasSockets {
         @Nullable
         public GemInstance setGemAt(GemInstance gem, int socketIndex) {
             if(socketIndex < 0 || socketIndex >= sockets.size()) return null;
-            if(!gem.canApplyOn(this.itemStack)) return null;
+            if(!gem.hasEffectsForStackDefaultSlot(this.itemStack)) return null;
             GemInstance oldGem = sockets.get(socketIndex).getGem();
             sockets.get(socketIndex).setGem(gem);
             return oldGem;
@@ -150,10 +157,22 @@ public class CapabilityHasSockets {
 
         @Nonnull
         @Override
-        public List<GenericGemEffect> getAllEffectsFromAllSockets() {
+        public List<GenericGemEffect> getAllEffects() {
             List<GenericGemEffect> effects = new ArrayList<>();
             for(GenericSocket socket : sockets){
                 effects.addAll(socket.getEffects());
+            }
+            return effects;
+        }
+
+        @Nonnull
+        @Override
+        public List<GenericGemEffect> getAllEffectsForSlot(EntityEquipmentSlot slot) {
+            List<GenericGemEffect> effects = new ArrayList<>();
+            for(GenericSocket socket : sockets){
+                for(GenericGemEffect effect : socket.getEffects())
+                    if(effect.getSlots().contains(slot))
+                        effects.add(effect);
             }
             return effects;
         }
@@ -209,13 +228,12 @@ public class CapabilityHasSockets {
             NBTTagCompound tags = (NBTTagCompound) nbt;
 
             int socketCount = tags.getInteger("SocketCount");
-            instance.setSocketCount(socketCount);
 
             NBTTagList socketsNBT = tags.getTagList("Sockets",10);
             for (int socketIndex = 0; socketIndex < socketCount; socketIndex++) {
                 NBTTagCompound socketNBT = socketsNBT.getCompoundTagAt(socketIndex);
                 String socketType = socketNBT.getString("SocketType");
-                instance.setSocketAt(instance.createSocketFromNBT(socketType,socketNBT),socketIndex);
+                instance.addSocket(instance.createSocketFromNBT(socketType,socketNBT));
             }
         }
     }

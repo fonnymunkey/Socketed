@@ -3,16 +3,17 @@ item.socketed.socket_tool.name=Socketing Tool
 
 socketed.tooltip.socket=Sockets (%d/%d): %s
 socketed.tooltip.empty=Empty
-socketed.tooltip.potiontype.passive=Passively: %s
-socketed.tooltip.potiontype.hitreceived_self=When Attacked: %s
-socketed.tooltip.potiontype.hitreceived_attacker=Attacker Receives: %s
-socketed.tooltip.potiontype.hitgiven_self=When Attacking: %s
-socketed.tooltip.potiontype.hitgiven_target=Target Receives: %s
+socketed.tooltip.activationtype.passive=Passively: %s
+socketed.tooltip.activationtype.on_attacked_self=When Attacked: %s
+socketed.tooltip.activationtype.on_attacked_attacker=Attacker Receives: %s
+socketed.tooltip.activationtype.on_attacking_self=When Attacking: %s
+socketed.tooltip.activationtype.on_attacking_target=Target Receives: %s
 
 socketed.tooltip.default.obsidian_damage=Obsidian Tipped
-socketed.tooltip.default.diamond_damage=Diamond Honed
+socketed.tooltip.default.diamond=Diamond
+#socketed.tooltip.default.diamond_damage=Diamond Honed
 socketed.tooltip.default.stone_damage=Whet Stone
 socketed.tooltip.default.sticky=Sticky
 socketed.tooltip.default.lucky=Lucky
 socketed.tooltip.default.streamlined=Streamlined
-socketed.tooltip.default.diamond_defense=Diamond Reinforced
+#socketed.tooltip.default.diamond_defense=Diamond Reinforced

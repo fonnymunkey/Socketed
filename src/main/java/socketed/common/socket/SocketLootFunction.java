@@ -3,7 +3,6 @@ package socketed.common.socket;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import java.util.Random;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
@@ -12,6 +11,8 @@ import net.minecraft.world.storage.loot.RandomValueRange;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import socketed.common.capabilities.CapabilityHasSockets;
+
+import java.util.Random;
 
 public class SocketLootFunction extends LootFunction
 {

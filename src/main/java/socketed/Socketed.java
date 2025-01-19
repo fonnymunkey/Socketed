@@ -1,26 +1,25 @@
 package socketed;
 
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.logging.log4j.Logger;
-import socketed.common.capabilities.*;
+import socketed.common.capabilities.CapabilityHasSockets;
+import socketed.common.capabilities.ICapabilityHasSockets;
 import socketed.common.config.CustomConfig;
-import socketed.common.data.RecipientGroup;
 import socketed.common.init.ModItems;
 import socketed.common.init.ModRecipes;
 import socketed.common.proxy.IProxy;
+import socketed.common.socket.AddSocketCommand;
 import socketed.common.socket.SocketLootFunction;
 
 @Mod(modid = Socketed.MODID, name = Socketed.MODNAME, version = Socketed.VERSION)
@@ -52,6 +51,11 @@ public class Socketed {
     }
 
     @Mod.EventHandler
+    public static void serverInit(FMLServerStartingEvent event) {
+        event.registerServerCommand(new AddSocketCommand());
+    }
+
+    @Mod.EventHandler
     public static void postInit(FMLInitializationEvent event) {
         CustomConfig.postInit();
     }
@@ -72,20 +76,6 @@ public class Socketed {
         @SubscribeEvent
         public static void registerItemModels(ModelRegistryEvent event) {
             ModItems.registerModels();
-        }
-
-        @SubscribeEvent
-        public static void itemCapabilityAttach(AttachCapabilitiesEvent<ItemStack> event) {
-            ItemStack stack = event.getObject();
-            if (stack.isEmpty()) return;
-            if (stack.hasCapability(CapabilityHasSockets.HAS_SOCKETS, null)) return;
-
-            for (RecipientGroup recipientGroup : CustomConfig.getRecipientData().values()) {
-                if (recipientGroup.matches(stack)) {
-                    event.addCapability(CapabilityHasSockets.CAPABILITY_KEY, new CapabilityHasSockets.Provider(stack));
-                    return;
-                }
-            }
         }
     }
 }

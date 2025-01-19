@@ -2,7 +2,8 @@ package socketed.common.data.entry.effect;
 
 import com.google.gson.*;
 import socketed.common.config.CustomConfig;
-import socketed.common.data.entry.effect.activatable.*;
+import socketed.common.data.entry.effect.activatable.ActivationTypeDeserializer;
+import socketed.common.data.entry.effect.activatable.IActivationType;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;

@@ -2,11 +2,13 @@ package socketed.common.data.entry.effect.activatable;
 
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import socketed.Socketed;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class PotionGemEffect extends ActivatableGemEffect {
 
@@ -23,7 +25,8 @@ public class PotionGemEffect extends ActivatableGemEffect {
 
     private transient Potion potion;
 
-    public PotionGemEffect(String potionName, int amplifier, int duration, IActivationType activation) {
+    public PotionGemEffect(List<EntityEquipmentSlot> slots, String potionName, int amplifier, int duration, EnumActivationType activation) {
+        super(slots);
         this.potionName = potionName;
         this.amplifier = amplifier;
         this.duration = duration;
@@ -43,7 +46,7 @@ public class PotionGemEffect extends ActivatableGemEffect {
     }
 
     public int getDuration() {
-        if(!this.isValid() || this.getActivationType() == EnumActivationTypes.PASSIVE) return 21;
+        if(!this.isValid() || this.getActivationType() == EnumActivationType.PASSIVE) return 21;
         return this.amplifier;
     }
 

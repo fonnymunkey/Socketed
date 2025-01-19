@@ -1,5 +1,6 @@
 package socketed.common.capabilities;
 
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.nbt.NBTTagCompound;
 import socketed.common.data.entry.effect.GenericGemEffect;
 import socketed.common.socket.GenericSocket;
@@ -30,6 +31,11 @@ public interface ICapabilityHasSockets {
     GemInstance setSocketAt(GenericSocket socket, int socketIndex);
 
     /**
+     * Adds a socket at the end of the list of this items' sockets
+     */
+    void addSocket(GenericSocket socket);
+
+    /**
      * Creates a socket instance inheriting from GenericSocket, built with the given nbt tags
      */
     @Nullable
@@ -50,7 +56,7 @@ public interface ICapabilityHasSockets {
      * Adds a gem to the first available empty socket
      * @return true if gem was added, false if no available empty socket
      */
-    boolean addGem(GemInstance gem);
+    boolean addGem(@Nonnull GemInstance gem);
 
     /**
      * Adds a gem to the specified socket. Will not add the gem and return null if socketIndex is out of range
@@ -85,5 +91,11 @@ public interface ICapabilityHasSockets {
      * Gathers and returns a list of effect entries of all socketed gems
      */
     @Nonnull
-    List<GenericGemEffect> getAllEffectsFromAllSockets();
+    List<GenericGemEffect> getAllEffects();
+
+    /**
+     * Gathers and returns a list of effect entries of all socketed gems that match the given equipment slot
+     */
+    @Nonnull
+    List<GenericGemEffect> getAllEffectsForSlot(EntityEquipmentSlot slot);
 }

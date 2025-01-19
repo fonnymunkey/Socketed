@@ -1,12 +1,12 @@
 package socketed.common.data.entry.filter;
 
+import com.google.gson.annotations.SerializedName;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.Level;
-import com.google.gson.annotations.SerializedName;
 import socketed.Socketed;
 
 public class ItemEntry extends FilterEntry {

@@ -1,5 +1,5 @@
 package socketed.common.config;
-/*
+
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
@@ -29,4 +29,3 @@ public class ForgeConfig {
         }
     }
 }
- */

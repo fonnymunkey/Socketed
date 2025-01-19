@@ -6,7 +6,6 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.IForgeRegistryEntry;
-import socketed.Socketed;
 import socketed.common.capabilities.CapabilityHasSockets;
 import socketed.common.capabilities.GemInstance;
 import socketed.common.capabilities.ICapabilityHasSockets;
@@ -44,7 +43,7 @@ public class SocketRemoveRecipe extends IForgeRegistryEntry.Impl<IRecipe> implem
                     toolSlot = i;
                 else {
                     //More than one SocketTool
-                    resetSlotIndices();
+                    resetTempValues();
                     return false;
                 }
             }
@@ -53,15 +52,15 @@ public class SocketRemoveRecipe extends IForgeRegistryEntry.Impl<IRecipe> implem
             }
         }
         if (toolSlot == -1 || recipientSlot == -1) {
-            resetSlotIndices();
+            resetTempValues();
             return false;
         }
         if(inv.getStackInSlot(recipientSlot).getCapability(CapabilityHasSockets.HAS_SOCKETS,null).getSocketCount()<1){
-            resetSlotIndices();
+            resetTempValues();
             return false;
         }
         if(inv.getStackInSlot(recipientSlot).getCapability(CapabilityHasSockets.HAS_SOCKETS,null).getGemCount()<1){
-            resetSlotIndices();
+            resetTempValues();
             return false;
         }
 
@@ -75,7 +74,7 @@ public class SocketRemoveRecipe extends IForgeRegistryEntry.Impl<IRecipe> implem
         ICapabilityHasSockets sockets = returnStack.getCapability(CapabilityHasSockets.HAS_SOCKETS, null);
         sockets.removeAllGems();
 
-        resetSlotIndices();
+        resetTempValues();
         return returnStack;
     }
 
@@ -90,16 +89,18 @@ public class SocketRemoveRecipe extends IForgeRegistryEntry.Impl<IRecipe> implem
         return ItemStack.EMPTY;
     }
 
-    private void resetSlotIndices() {
-        toolSlot = -1;
-        recipientSlot = -1;
-    }
-
     @Override
     public boolean isDynamic() {
-        //Should guarantee that getCraftingResult() always runs right after matches() if recipe matches
-        //But getRemainingItems() also runs after matches, so we have to reset search values there as well
         return true;
+    }
+
+    /**
+     * These temporary search values assume that either getCraftingResult() or getRemainingItems() will always run after matches() if recipe does match.
+     * Which should be guaranteed by isDynamic = true, but other mods might change that behavior
+     */
+    private void resetTempValues() {
+        toolSlot = -1;
+        recipientSlot = -1;
     }
 
     @Override
@@ -108,15 +109,13 @@ public class SocketRemoveRecipe extends IForgeRegistryEntry.Impl<IRecipe> implem
         ItemStack oldGemmedItem = inv.getStackInSlot(recipientSlot).copy();
         List<GemInstance> gemsInItem = oldGemmedItem.getCapability(CapabilityHasSockets.HAS_SOCKETS,null).removeAllGems();
 
-        resetSlotIndices();
+        resetTempValues();
         NonNullList<ItemStack> remainingItems = net.minecraftforge.common.ForgeHooks.defaultRecipeGetRemainingItems(inv);
         for (int i = 0; i < remainingItems.size(); i++) {
             if (remainingItems.get(i).isEmpty() && !gemsInItem.isEmpty()) {
                 //This will fail to give back more than 8 gems in a normal crafting grid
                 ItemStack gemStack = gemsInItem.remove(0).getItemStack();
-
-                if (gemStack!=null)
-                    remainingItems.set(i, gemStack);
+                remainingItems.set(i, gemStack);
             }
         }
         return remainingItems;

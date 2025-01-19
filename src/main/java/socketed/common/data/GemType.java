@@ -11,9 +11,7 @@ import socketed.common.data.entry.filter.FilterEntry;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class GemType {
 
@@ -23,8 +21,6 @@ public class GemType {
     private final String displayName;
     @SerializedName("Text Color")
     private final TextFormatting color;
-    @SerializedName("Recipient Group Names")
-    private final List<String> recipientEntries;
     @SerializedName("Effect Entries")
     private final List<GenericGemEffect> effects;
     @SerializedName("Filter Entries")
@@ -33,11 +29,10 @@ public class GemType {
     private transient boolean parsed;
     private transient boolean valid;
 
-    public GemType(String name, String display, TextFormatting clr, List<String> groups, List<GenericGemEffect> effects, List<FilterEntry> filters) {
+    public GemType(String name, String display, TextFormatting clr, List<GenericGemEffect> effects, List<FilterEntry> filters) {
         this.name = name;
         this.displayName = display;
         this.color = clr;
-        this.recipientEntries = groups;
         this.effects = effects;
         this.filterEntries = filters;
     }
@@ -55,11 +50,6 @@ public class GemType {
     public TextFormatting getColor() {
         if(!this.isValid()) return TextFormatting.RESET;
         return this.color;
-    }
-
-    public List<String> getRecipientEntries() {
-        if(this.recipientEntries == null || !this.isValid()) return Collections.emptyList();
-        return this.recipientEntries;
     }
 
     public List<GenericGemEffect> getEffects() {
@@ -92,16 +82,6 @@ public class GemType {
         else if(this.displayName == null || this.displayName.isEmpty()) Socketed.LOGGER.log(Level.WARN, "Invalid Effect Group, " + this.name + ", null or empty display name");
         else if(this.color == null) Socketed.LOGGER.log(Level.WARN, "Invalid Effect Group, " + this.name + ", invalid color");
         else {
-            int validRecipients = 0;
-            int totalRecipients = 0;
-            List<String> recipients = this.recipientEntries;
-            if(recipients != null) {
-                for(String recipient : recipients) {
-                    totalRecipients++;
-                    if(CustomConfig.getRecipientData().containsKey(recipient)) validRecipients++;
-                }
-            }
-
             int validEffects = 0;
             int totalEffects = 0;
             List<GenericGemEffect> effects = this.effects;
@@ -127,21 +107,26 @@ public class GemType {
                     "Effect Group Validating, Name: " + this.name +
                             ", Display Name: " + this.displayName +
                             ", Color: " + this.color.name() +
-                            ", Valid Recipients: " + validRecipients + "/" + totalRecipients +
                             ", Valid Effects: " + validEffects + "/" + totalEffects +
                             ", Valid Entries: " + validEntries + "/" + totalEntries);
-            if(validRecipients <= 0) Socketed.LOGGER.log(Level.WARN, "Invalid Effect Group, " + this.name + ", no valid recipients");
             if(validEffects <= 0) Socketed.LOGGER.log(Level.WARN, "Invalid Effect Group, " + this.name + ", no valid effects");
             if(validEntries <= 0) Socketed.LOGGER.log(Level.WARN, "Invalid Effect Group, " + this.name + ", no valid entries");
-            this.valid = validEntries > 0 && validEffects > 0 && validRecipients > 0;
+            this.valid = validEntries > 0 && validEffects > 0;
         }
         this.parsed = true;
     }
 
     public static GemType getGemTypeFromItemStack(@Nullable ItemStack itemStack){
-        for (GemType effects : CustomConfig.getEffectData().values())
-            if (effects.matches(itemStack))
-                return effects;
+        for (GemType gemType : CustomConfig.getGemData().values())
+            if (gemType.matches(itemStack))
+                return gemType;
         return null;
+    }
+
+    public static GemType getGemTypeFromName(@Nullable String gemTypeName){
+        if(gemTypeName==null)
+            return null;
+        else
+            return CustomConfig.getGemData().get(gemTypeName);
     }
 }

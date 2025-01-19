@@ -1,7 +1,6 @@
 package socketed.common.socket;
 
 import net.minecraft.nbt.NBTTagCompound;
-import socketed.Socketed;
 import socketed.common.capabilities.GemInstance;
 import socketed.common.data.entry.effect.GenericGemEffect;
 
