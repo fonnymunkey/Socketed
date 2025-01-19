@@ -34,7 +34,7 @@ public class GenericSocket{
     /**
      * Whether this socket accepts the given gem. Default socket accepts all gems
      */
-    public boolean acceptsGem(@Nullable GemInstance gem){
+    public boolean acceptsGem(@Nonnull GemInstance gem){
         return true;
     }
     
@@ -54,12 +54,12 @@ public class GenericSocket{
     }
 
     /**
-     * Fills the socket with the given gem
+     * Fills the socket with the given gem.
      * @param gem The gem this socket should get filled with
      * @return true if socket accepts the gem, false if not. Will not set the gem if it doesn't accept it
      */
     public boolean setGem(@Nullable GemInstance gem) {
-        if(this.acceptsGem(gem)) {
+        if(gem == null || this.acceptsGem(gem)) {
             this.gem = gem;
             return true;
         }

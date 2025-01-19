@@ -17,3 +17,13 @@ socketed.tooltip.default.sticky=Sticky
 socketed.tooltip.default.lucky=Lucky
 socketed.tooltip.default.streamlined=Streamlined
 #socketed.tooltip.default.diamond_defense=Diamond Reinforced
+
+socketed.tooltip.gem=In Socket: %s
+socketed.tooltip.slotsbody=On Body
+socketed.tooltip.slotshead=On Head
+socketed.tooltip.slotschest=On Chest
+socketed.tooltip.slotslegs=On Legs
+socketed.tooltip.slotsfeet=On Feet
+socketed.tooltip.slotshands=In Hands
+socketed.tooltip.slotsmainhand=In Mainhand
+socketed.tooltip.slotsoffhand=In Offhand

@@ -25,16 +25,19 @@ public class GemType {
     private final List<GenericGemEffect> effects;
     @SerializedName("Filter Entries")
     private final List<FilterEntry> filterEntries;
+    @SerializedName("Gem Tier")
+    private final Integer tier;
 
     private transient boolean parsed;
     private transient boolean valid;
 
-    public GemType(String name, String display, TextFormatting clr, List<GenericGemEffect> effects, List<FilterEntry> filters) {
+    public GemType(String name, String display, TextFormatting clr, List<GenericGemEffect> effects, List<FilterEntry> filters, Integer tier) {
         this.name = name;
         this.displayName = display;
         this.color = clr;
         this.effects = effects;
         this.filterEntries = filters;
+        this.tier = tier;
     }
 
     public String getName() {
@@ -81,6 +84,7 @@ public class GemType {
         if(this.name == null || this.name.isEmpty()) Socketed.LOGGER.log(Level.WARN, "Invalid Effect Group name, null or empty");
         else if(this.displayName == null || this.displayName.isEmpty()) Socketed.LOGGER.log(Level.WARN, "Invalid Effect Group, " + this.name + ", null or empty display name");
         else if(this.color == null) Socketed.LOGGER.log(Level.WARN, "Invalid Effect Group, " + this.name + ", invalid color");
+        else if(this.tier == null) Socketed.LOGGER.log(Level.WARN, "Invalid Effect Group, " + this.name + ", invalid tier");
         else {
             int validEffects = 0;
             int totalEffects = 0;
@@ -108,7 +112,8 @@ public class GemType {
                             ", Display Name: " + this.displayName +
                             ", Color: " + this.color.name() +
                             ", Valid Effects: " + validEffects + "/" + totalEffects +
-                            ", Valid Entries: " + validEntries + "/" + totalEntries);
+                            ", Valid Entries: " + validEntries + "/" + totalEntries +
+                            ", Tier: " + this.tier);
             if(validEffects <= 0) Socketed.LOGGER.log(Level.WARN, "Invalid Effect Group, " + this.name + ", no valid effects");
             if(validEntries <= 0) Socketed.LOGGER.log(Level.WARN, "Invalid Effect Group, " + this.name + ", no valid entries");
             this.valid = validEntries > 0 && validEffects > 0;
@@ -128,5 +133,9 @@ public class GemType {
             return null;
         else
             return CustomConfig.getGemData().get(gemTypeName);
+    }
+
+    public int getTier() {
+        return this.tier;
     }
 }

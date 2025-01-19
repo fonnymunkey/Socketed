@@ -14,6 +14,7 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import socketed.Socketed;
 import socketed.common.data.entry.effect.GenericGemEffect;
 import socketed.common.socket.GenericSocket;
+import socketed.common.socket.TieredSocket;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -88,6 +89,10 @@ public class CapabilityHasSockets {
         public boolean addSocketFromNBT(String socketType, NBTTagCompound tags) {
             if(socketType.equals("Generic")) {
                 addSocket(new GenericSocket(tags));
+                return true;
+            }
+            if(socketType.equals("Tiered")) {
+                addSocket(new TieredSocket(tags));
                 return true;
             }
             return false;
