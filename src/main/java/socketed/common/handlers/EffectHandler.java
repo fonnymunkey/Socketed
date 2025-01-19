@@ -24,6 +24,7 @@ import socketed.common.data.entry.effect.activatable.IActivationType;
 import socketed.common.data.entry.effect.activatable.PotionGemEffect;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Mod.EventBusSubscriber

@@ -2,6 +2,7 @@ package socketed.client.handlers;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.text.TextFormatting;
@@ -10,10 +11,14 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import socketed.common.capabilities.CapabilityHasSockets;
+import socketed.common.capabilities.GemInstance;
 import socketed.common.capabilities.ICapabilityHasSockets;
+import socketed.common.data.GemType;
 import socketed.common.data.entry.effect.AttributeGemEffect;
 import socketed.common.data.entry.effect.GenericGemEffect;
 import socketed.common.data.entry.effect.activatable.PotionGemEffect;
+
+import java.util.List;
 
 @Mod.EventBusSubscriber
 public class TooltipHandler {
@@ -21,17 +26,22 @@ public class TooltipHandler {
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void ItemTooltipEvent(ItemTooltipEvent event) {
         ItemStack stack = event.getItemStack();
-        //TODO: check in what equipment slot this item is in and only show the effects that are applied
-        if(!stack.hasCapability(CapabilityHasSockets.HAS_SOCKETS,null)) return;
+
+        if (!stack.hasCapability(CapabilityHasSockets.HAS_SOCKETS, null)) return;
         ICapabilityHasSockets sockets = stack.getCapability(CapabilityHasSockets.HAS_SOCKETS, null);
+
+        List<EntityEquipmentSlot> slots = CapabilityHasSockets.getSlotsForItemStack(stack);
 
         int socketCount = sockets.getSocketCount();
         int gemCount = sockets.getGemCount();
-
-        event.getToolTip().add(TextFormatting.BOLD + I18n.format("socketed.tooltip.socket", gemCount,socketCount,TextFormatting.RESET));
-        for(GenericGemEffect effect : sockets.getAllEffects()) {
-            String tooltipString = getTooltipString(effect);
-            if(!tooltipString.isEmpty()) event.getToolTip().add("  " +tooltipString);
+        event.getToolTip().add(TextFormatting.BOLD + I18n.format("socketed.tooltip.socket", gemCount, socketCount, TextFormatting.RESET));
+        for (GemInstance gem : sockets.getAllGems()) {
+            GemType gemType = gem.getGemType();
+            List<GenericGemEffect> effectsForSlot = gem.getGemEffectsForSlots(slots);
+            event.getToolTip().add(" " + gemType.getColor() + I18n.format(gemType.getDisplayName()) + TextFormatting.RESET);
+            for (GenericGemEffect effect : effectsForSlot) {
+                event.getToolTip().add("  " + gemType.getColor() + getTooltipString(effect) + TextFormatting.RESET);
+            }
         }
     }
 

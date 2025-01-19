@@ -1,5 +1,6 @@
 package socketed.common.capabilities;
 
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -17,6 +18,7 @@ import socketed.common.socket.GenericSocket;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class CapabilityHasSockets {
@@ -24,6 +26,11 @@ public class CapabilityHasSockets {
     public static Capability<ICapabilityHasSockets> HAS_SOCKETS;
 
     public static final ResourceLocation CAPABILITY_KEY = new ResourceLocation(Socketed.MODID, "has_sockets");
+
+    public static List<EntityEquipmentSlot> getSlotsForItemStack(ItemStack stack){
+        //TODO: customisable via config
+        return Collections.singletonList(EntityLiving.getSlotForItemStack(stack));
+    }
 
     //Default implementation of the capability
     public static class GenericHasSockets implements ICapabilityHasSockets {
@@ -46,16 +53,16 @@ public class CapabilityHasSockets {
         }
 
         @Override
-        public int getGemCount() {
-            int counter = 0;
-            for(GenericSocket socket : sockets)
-                if(!socket.isEmpty())
-                    counter++;
-            return counter;
+        @Nullable
+        public GenericSocket getSocketAt(int socketIndex) {
+            if(socketIndex<0 || socketIndex>=sockets.size())
+                return null;
+            return sockets.get(socketIndex);
         }
 
         @Override
         @Nonnull
+        @Deprecated
         public List<GemInstance> setSocketCount(int newSocketCount) {
             //If setSocketCount increases socketCount, add empty sockets in socketedGems at end of list
             while (newSocketCount > this.sockets.size())
@@ -73,8 +80,22 @@ public class CapabilityHasSockets {
         }
 
         @Override
+        public void addSocket(GenericSocket socket) {
+            if(socket != null)
+                this.sockets.add(socket);
+        }
+
+        public boolean addSocketFromNBT(String socketType, NBTTagCompound tags) {
+            if(socketType.equals("Generic")) {
+                addSocket(new GenericSocket(tags));
+                return true;
+            }
+            return false;
+        }
+
+        @Override
         @Nullable
-        public GemInstance setSocketAt(GenericSocket newSocket, int socketIndex) {
+        public GemInstance replaceSocketAt(GenericSocket newSocket, int socketIndex) {
             if (socketIndex < 0 || socketIndex >= getSocketCount())
                 return null;
 
@@ -90,41 +111,20 @@ public class CapabilityHasSockets {
         }
 
         @Override
-        public void addSocket(GenericSocket socket) {
-            if(socket != null)
-                this.sockets.add(socket);
-        }
-
-        @Override
-        public GenericSocket createSocketFromNBT(String socketType, NBTTagCompound tags) {
-            return new GenericSocket(tags);
+        public int getGemCount() {
+            int counter = 0;
+            for(GenericSocket socket : sockets)
+                if(!socket.isEmpty())
+                    counter++;
+            return counter;
         }
 
         @Override
         @Nullable
-        public GenericSocket getSocketAt(int socketIndex) {
-            if(socketIndex<0 || socketIndex>=sockets.size())
+        public GemInstance getGemAt(int socketIndex) {
+            if (socketIndex < 0 || socketIndex >= sockets.size())
                 return null;
-            return sockets.get(socketIndex);
-        }
-
-        @Override
-        public boolean addGem(@Nonnull GemInstance gem) {
-            if(!gem.hasEffectsForStackDefaultSlot(this.itemStack)) return false;
-            for (GenericSocket socket : sockets)
-                if (socket.isEmpty() && socket.setGem(gem))
-                    return true;
-            return false;
-        }
-
-        @Override
-        @Nullable
-        public GemInstance setGemAt(GemInstance gem, int socketIndex) {
-            if(socketIndex < 0 || socketIndex >= sockets.size()) return null;
-            if(!gem.hasEffectsForStackDefaultSlot(this.itemStack)) return null;
-            GemInstance oldGem = sockets.get(socketIndex).getGem();
-            sockets.get(socketIndex).setGem(gem);
-            return oldGem;
+            return this.sockets.get(socketIndex).getGem();
         }
 
         @Override
@@ -138,6 +138,36 @@ public class CapabilityHasSockets {
         }
 
         @Override
+        public boolean addGem(@Nonnull GemInstance gem) {
+            if(!gem.hasEffectsForStackDefaultSlot(this.itemStack)) return false;
+            for (GenericSocket socket : sockets)
+                if (socket.isEmpty() && socket.setGem(gem))
+                    return true;
+            return false;
+        }
+
+        @Override
+        @Nullable
+        public GemInstance replaceGemAt(@Nonnull GemInstance gem, int socketIndex) {
+            if(socketIndex < 0 || socketIndex >= sockets.size()) return null;
+            if(!gem.hasEffectsForStackDefaultSlot(this.itemStack)) return null;
+            GemInstance oldGem = sockets.get(socketIndex).getGem();
+            sockets.get(socketIndex).setGem(gem);
+            return oldGem;
+        }
+
+        @Nullable
+        @Override
+        public GemInstance removeGemAt(int socketIndex) {
+            if(socketIndex < 0 || socketIndex >= sockets.size()) return null;
+            GenericSocket socket = sockets.get(socketIndex);
+            if(socket.isEmpty()) return null;
+            GemInstance returnGem = socket.getGem();
+            socket.setGem(null);
+            return returnGem;
+        }
+
+        @Override
         @Nonnull
         public List<GemInstance> removeAllGems() {
             List<GemInstance> gems = getAllGems();
@@ -148,15 +178,7 @@ public class CapabilityHasSockets {
         }
 
         @Override
-        @Nullable
-        public GemInstance getGemAt(int socketIndex) {
-            if (socketIndex < 0 || socketIndex >= sockets.size())
-                return null;
-            return this.sockets.get(socketIndex).getGem();
-        }
-
         @Nonnull
-        @Override
         public List<GenericGemEffect> getAllEffects() {
             List<GenericGemEffect> effects = new ArrayList<>();
             for(GenericSocket socket : sockets){
@@ -165,15 +187,13 @@ public class CapabilityHasSockets {
             return effects;
         }
 
-        @Nonnull
         @Override
+        @Nonnull
         public List<GenericGemEffect> getAllEffectsForSlot(EntityEquipmentSlot slot) {
             List<GenericGemEffect> effects = new ArrayList<>();
-            for(GenericSocket socket : sockets){
-                for(GenericGemEffect effect : socket.getEffects())
-                    if(effect.getSlots().contains(slot))
-                        effects.add(effect);
-            }
+            for(GenericGemEffect effect : getAllEffects())
+                if(effect.getSlots().contains(slot))
+                    effects.add(effect);
             return effects;
         }
     }
@@ -212,11 +232,8 @@ public class CapabilityHasSockets {
         public NBTBase writeNBT(Capability<ICapabilityHasSockets> capability, ICapabilityHasSockets instance, EnumFacing side) {
             NBTTagCompound nbt = new NBTTagCompound();
 
-            int socketCount = instance.getSocketCount();
-            nbt.setInteger("SocketCount", socketCount);
-
             NBTTagList socketTagList = new NBTTagList();
-            for (int socketIndex = 0; socketIndex < socketCount; socketIndex++)
+            for (int socketIndex = 0; socketIndex < instance.getSocketCount(); socketIndex++)
                 socketTagList.appendTag(instance.getSocketAt(socketIndex).writeToNBT());
             nbt.setTag("Sockets", socketTagList);
 
@@ -227,13 +244,11 @@ public class CapabilityHasSockets {
         public void readNBT(Capability<ICapabilityHasSockets> capability, ICapabilityHasSockets instance, EnumFacing side, NBTBase nbt) {
             NBTTagCompound tags = (NBTTagCompound) nbt;
 
-            int socketCount = tags.getInteger("SocketCount");
-
             NBTTagList socketsNBT = tags.getTagList("Sockets",10);
-            for (int socketIndex = 0; socketIndex < socketCount; socketIndex++) {
+            for (int socketIndex = 0; socketIndex < socketsNBT.tagCount(); socketIndex++) {
                 NBTTagCompound socketNBT = socketsNBT.getCompoundTagAt(socketIndex);
                 String socketType = socketNBT.getString("SocketType");
-                instance.addSocket(instance.createSocketFromNBT(socketType,socketNBT));
+                instance.addSocketFromNBT(socketType,socketNBT);
             }
         }
     }

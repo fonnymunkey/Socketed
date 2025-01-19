@@ -1,5 +1,6 @@
 package socketed.common.capabilities;
 
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -70,22 +71,31 @@ public class GemInstance {
     }
 
     public boolean hasEffectsForStackDefaultSlot(ItemStack stack) {
-        if(this.gemType==null)/* || this.effects.isEmpty())*/
+        if (this.gemType == null || this.effects.isEmpty())
             return false;
 
-        //TODO: how to get default slots
-        return true;
-        /*for(GenericGemEffect effect : this.gemType.getEffects()) {
-            for(EntityEquipmentSlot effectslot : effect.getSlots())
-                if(effectslot == slot)
+        for (GenericGemEffect effect : this.gemType.getEffects()) {
+            for (EntityEquipmentSlot itemslot : CapabilityHasSockets.getSlotsForItemStack(stack))
+                if (effect.getSlots().contains(itemslot))
                     return true;
         }
-        return false;*/
+        return false;
     }
 
     @Nonnull
     public List<GenericGemEffect> getGemEffects() {
         return this.effects;
+    }
+
+    public List<GenericGemEffect> getGemEffectsForSlots(List<EntityEquipmentSlot> slots) {
+        List<GenericGemEffect> effectsForSlot = new ArrayList<>();
+        for(GenericGemEffect effect : effects)
+            for(EntityEquipmentSlot slot : slots)
+                if(effect.getSlots().contains(slot)) {
+                    effectsForSlot.add(effect);
+                    break; //don't count the same effect multiple times
+                }
+        return effectsForSlot;
     }
 
     @Nullable
