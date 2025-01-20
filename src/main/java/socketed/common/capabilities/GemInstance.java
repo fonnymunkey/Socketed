@@ -7,8 +7,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import socketed.common.data.GemType;
-import socketed.common.data.entry.effect.GenericGemEffect;
+import socketed.common.jsondata.GemType;
+import socketed.common.jsondata.entry.effect.GenericGemEffect;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -120,5 +120,10 @@ public class GemInstance {
         nbt.setTag("Effects", effectsNBT);
 
         return nbt;
+    }
+
+    public static boolean stackIsGem(ItemStack stack){
+        GemInstance gem = new GemInstance(stack);
+        return gem.getGemType() != null;
     }
 }

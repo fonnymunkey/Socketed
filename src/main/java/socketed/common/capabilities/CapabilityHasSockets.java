@@ -12,7 +12,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import socketed.Socketed;
-import socketed.common.data.entry.effect.GenericGemEffect;
+import socketed.common.jsondata.entry.effect.GenericGemEffect;
 import socketed.common.socket.GenericSocket;
 import socketed.common.socket.TieredSocket;
 

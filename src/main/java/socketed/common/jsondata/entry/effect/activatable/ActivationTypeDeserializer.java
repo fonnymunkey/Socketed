@@ -1,4 +1,4 @@
-package socketed.common.data.entry.effect.activatable;
+package socketed.common.jsondata.entry.effect.activatable;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;

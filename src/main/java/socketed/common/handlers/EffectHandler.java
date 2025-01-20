@@ -16,15 +16,14 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import socketed.common.capabilities.CapabilityHasSockets;
-import socketed.common.data.entry.effect.AttributeGemEffect;
-import socketed.common.data.entry.effect.GenericGemEffect;
-import socketed.common.data.entry.effect.activatable.ActivatableGemEffect;
-import socketed.common.data.entry.effect.activatable.EnumActivationType;
-import socketed.common.data.entry.effect.activatable.IActivationType;
-import socketed.common.data.entry.effect.activatable.PotionGemEffect;
+import socketed.common.jsondata.entry.effect.AttributeGemEffect;
+import socketed.common.jsondata.entry.effect.GenericGemEffect;
+import socketed.common.jsondata.entry.effect.activatable.ActivatableGemEffect;
+import socketed.common.jsondata.entry.effect.activatable.EnumActivationType;
+import socketed.common.jsondata.entry.effect.activatable.IActivationType;
+import socketed.common.jsondata.entry.effect.activatable.PotionGemEffect;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @Mod.EventBusSubscriber

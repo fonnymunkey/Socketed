@@ -6,17 +6,17 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import socketed.Socketed;
-import socketed.common.data.GemType;
-import socketed.common.data.entry.effect.AttributeGemEffect;
-import socketed.common.data.entry.effect.EffectDeserializer;
-import socketed.common.data.entry.effect.GenericGemEffect;
-import socketed.common.data.entry.effect.activatable.EnumActivationType;
-import socketed.common.data.entry.effect.activatable.IActivationType;
-import socketed.common.data.entry.effect.activatable.PotionGemEffect;
-import socketed.common.data.entry.filter.FilterDeserializer;
-import socketed.common.data.entry.filter.FilterEntry;
-import socketed.common.data.entry.filter.ItemEntry;
-import socketed.common.data.entry.filter.OreEntry;
+import socketed.common.jsondata.GemType;
+import socketed.common.jsondata.entry.effect.AttributeGemEffect;
+import socketed.common.jsondata.entry.effect.EffectDeserializer;
+import socketed.common.jsondata.entry.effect.GenericGemEffect;
+import socketed.common.jsondata.entry.effect.activatable.EnumActivationType;
+import socketed.common.jsondata.entry.effect.activatable.IActivationType;
+import socketed.common.jsondata.entry.effect.activatable.PotionGemEffect;
+import socketed.common.jsondata.entry.filter.FilterDeserializer;
+import socketed.common.jsondata.entry.filter.FilterEntry;
+import socketed.common.jsondata.entry.filter.ItemEntry;
+import socketed.common.jsondata.entry.filter.OreEntry;
 
 import javax.annotation.Nullable;
 import java.io.File;
@@ -69,9 +69,9 @@ public class CustomConfig {
     }
 
     public static void refreshAllData() {
-        Socketed.LOGGER.info("Clearing existing Socketed data");
+        Socketed.LOGGER.info("Clearing existing Socketed jsondata");
         gemTypesDataMap.clear();
-        Socketed.LOGGER.info("Loading new Socketed data");
+        Socketed.LOGGER.info("Loading new Socketed jsondata");
         loadGemTypeData();
     }
 

@@ -1,4 +1,4 @@
-package socketed.common.data.entry.effect.activatable;
+package socketed.common.jsondata.entry.effect.activatable;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;

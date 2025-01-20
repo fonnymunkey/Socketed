@@ -34,7 +34,7 @@ public class TieredSocket extends GenericSocket {
      * Whether this socket accepts the given gem.
      */
     public boolean acceptsGem(@Nonnull GemInstance gem) {
-        return gem.getGemType().getTier() <= this.tier;
+        return gem.getGemType() != null && gem.getGemType().getTier() <= this.tier;
     }
 
     /**

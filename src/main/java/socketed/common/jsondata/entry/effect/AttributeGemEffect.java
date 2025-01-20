@@ -1,4 +1,4 @@
-package socketed.common.data.entry.effect;
+package socketed.common.jsondata.entry.effect;
 
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.entity.ai.attributes.AttributeModifier;

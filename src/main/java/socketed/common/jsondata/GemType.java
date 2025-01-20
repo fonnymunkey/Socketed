@@ -1,4 +1,4 @@
-package socketed.common.data;
+package socketed.common.jsondata;
 
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.item.ItemStack;
@@ -6,8 +6,8 @@ import net.minecraft.util.text.TextFormatting;
 import org.apache.logging.log4j.Level;
 import socketed.Socketed;
 import socketed.common.config.CustomConfig;
-import socketed.common.data.entry.effect.GenericGemEffect;
-import socketed.common.data.entry.filter.FilterEntry;
+import socketed.common.jsondata.entry.effect.GenericGemEffect;
+import socketed.common.jsondata.entry.filter.FilterEntry;
 
 import javax.annotation.Nullable;
 import java.util.Collections;

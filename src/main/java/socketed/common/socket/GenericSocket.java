@@ -2,7 +2,7 @@ package socketed.common.socket;
 
 import net.minecraft.nbt.NBTTagCompound;
 import socketed.common.capabilities.GemInstance;
-import socketed.common.data.entry.effect.GenericGemEffect;
+import socketed.common.jsondata.entry.effect.GenericGemEffect;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

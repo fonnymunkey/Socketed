@@ -1,4 +1,4 @@
-package socketed.common.data.entry.filter;
+package socketed.common.jsondata.entry.filter;
 
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.item.Item;

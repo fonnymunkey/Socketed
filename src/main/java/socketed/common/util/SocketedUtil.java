@@ -1,9 +1,9 @@
 package socketed.common.util;
 
 import socketed.common.config.CustomConfig;
-import socketed.common.data.entry.effect.GenericGemEffect;
-import socketed.common.data.entry.effect.activatable.IActivationType;
-import socketed.common.data.entry.filter.FilterEntry;
+import socketed.common.jsondata.entry.effect.GenericGemEffect;
+import socketed.common.jsondata.entry.effect.activatable.IActivationType;
+import socketed.common.jsondata.entry.filter.FilterEntry;
 
 public abstract class SocketedUtil {
 

@@ -15,10 +15,10 @@ import socketed.common.capabilities.CapabilityHasSockets;
 import socketed.common.capabilities.GemInstance;
 import socketed.common.capabilities.ICapabilityHasSockets;
 import socketed.common.config.DefaultCustomConfig;
-import socketed.common.data.GemType;
-import socketed.common.data.entry.effect.AttributeGemEffect;
-import socketed.common.data.entry.effect.GenericGemEffect;
-import socketed.common.data.entry.effect.activatable.PotionGemEffect;
+import socketed.common.jsondata.GemType;
+import socketed.common.jsondata.entry.effect.AttributeGemEffect;
+import socketed.common.jsondata.entry.effect.GenericGemEffect;
+import socketed.common.jsondata.entry.effect.activatable.PotionGemEffect;
 
 import java.util.HashSet;
 import java.util.List;

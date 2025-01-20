@@ -27,3 +27,5 @@ socketed.tooltip.slotsfeet=On Feet
 socketed.tooltip.slotshands=In Hands
 socketed.tooltip.slotsmainhand=In Mainhand
 socketed.tooltip.slotsoffhand=In Offhand
+
+socketed.socketinggui.displayname=Socketing

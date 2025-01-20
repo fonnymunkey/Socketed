@@ -5,11 +5,11 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.text.TextFormatting;
-import socketed.common.data.GemType;
-import socketed.common.data.entry.effect.AttributeGemEffect;
-import socketed.common.data.entry.effect.activatable.EnumActivationType;
-import socketed.common.data.entry.effect.activatable.PotionGemEffect;
-import socketed.common.data.entry.filter.OreEntry;
+import socketed.common.jsondata.GemType;
+import socketed.common.jsondata.entry.effect.AttributeGemEffect;
+import socketed.common.jsondata.entry.effect.activatable.EnumActivationType;
+import socketed.common.jsondata.entry.effect.activatable.PotionGemEffect;
+import socketed.common.jsondata.entry.filter.OreEntry;
 
 import java.util.*;
 

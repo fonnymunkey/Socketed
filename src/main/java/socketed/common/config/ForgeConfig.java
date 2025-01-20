@@ -15,6 +15,8 @@ public class ForgeConfig {
 
     public static class General {
 
+        @Config.Name("Maximum amount of sockets an item can have")
+        public int maxSockets = 8;
     }
 
     public static class Client {

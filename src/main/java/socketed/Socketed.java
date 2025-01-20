@@ -12,15 +12,17 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import org.apache.logging.log4j.Logger;
 import socketed.common.capabilities.CapabilityHasSockets;
 import socketed.common.capabilities.ICapabilityHasSockets;
 import socketed.common.config.CustomConfig;
+import socketed.common.container.GuiHandlerSocketing;
 import socketed.common.init.ModItems;
 import socketed.common.init.ModRecipes;
 import socketed.common.proxy.IProxy;
 import socketed.common.socket.AddSocketCommand;
-import socketed.common.socket.SocketLootFunction;
+import socketed.common.lootfunctions.SocketLootFunction;
 
 @Mod(modid = Socketed.MODID, name = Socketed.MODNAME, version = Socketed.VERSION)
 public class Socketed {
@@ -43,6 +45,7 @@ public class Socketed {
 
         CapabilityManager.INSTANCE.register(ICapabilityHasSockets.class, new CapabilityHasSockets.Storage(), CapabilityHasSockets.GenericHasSockets::new);
         LootFunctionManager.registerFunction(new SocketLootFunction.Serializer());
+        NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandlerSocketing());
     }
 
     @Mod.EventHandler

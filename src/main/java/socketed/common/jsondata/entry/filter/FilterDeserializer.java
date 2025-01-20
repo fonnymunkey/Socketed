@@ -1,4 +1,4 @@
-package socketed.common.data.entry.filter;
+package socketed.common.jsondata.entry.filter;
 
 import com.google.gson.*;
 

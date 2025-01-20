@@ -2,7 +2,7 @@ package socketed.common.capabilities;
 
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.nbt.NBTTagCompound;
-import socketed.common.data.entry.effect.GenericGemEffect;
+import socketed.common.jsondata.entry.effect.GenericGemEffect;
 import socketed.common.socket.GenericSocket;
 
 import javax.annotation.Nonnull;

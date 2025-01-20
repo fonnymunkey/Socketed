@@ -1,9 +1,9 @@
-package socketed.common.data.entry.effect.activatable;
+package socketed.common.jsondata.entry.effect.activatable;
 
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import socketed.common.data.entry.effect.GenericGemEffect;
+import socketed.common.jsondata.entry.effect.GenericGemEffect;
 
 import java.util.List;
 

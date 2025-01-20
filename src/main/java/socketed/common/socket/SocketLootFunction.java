@@ -1,4 +1,4 @@
-package socketed.common.socket;
+package socketed.common.lootfunctions;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
