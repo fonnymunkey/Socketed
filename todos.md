@@ -1,0 +1,34 @@
+## Todos + Ideas
+- GUI socket tier draw
+- gem tooltip tier draw
+- Random value range on gem effects
+- Config for what items can get sockets and how many
+- additional effect types: 
+  - +x lvl to specific enchant
+  - explosion on hit 
+  - give potion effect passively to surrounding entities (activation: passive_nearby)
+    - glowstone = glowing
+    - whatever = slowness
+  - lower merchant cost
+  - plus enchanting lvl
+  - plus skill (reskillable/levelup)
+  - plus gold from mobs (lol)
+  - temperature attribute simplediff
+  - lifesteal + life degen 
+  - plus durability
+- Baubles compat?
+- Maybe make jsons shorter
+  - move tiers to first line
+  - put all of the same filter entries in a list instead of one entry per item
+  - remove first line name? how to name file then
+  - give access to slots "hands" and "body"
+  - make attributes shorter as "generic.attackDamage +2 @0"
+  - make potions shorter as "minecraft:slowness 20 1"
+- gem that has uses til it breaks?
+- should gems be instantiated on socketing or earlier? 
+  - or maybe a possibility for rare gems to roll directly with stats?
+  - like there should be an api to create gems dynamically from attached nbt instead of statically via json
+- get sockets on craft, mob drop, loot gen, villager trades with separate chances + socket amount ranges
+- rune words (config: has to match exactly, has to be in correct order)
+- ddd compat if neccessary (maybe via attributes)
+- 

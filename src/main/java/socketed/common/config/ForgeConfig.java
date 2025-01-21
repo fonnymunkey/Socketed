@@ -14,9 +14,13 @@ public class ForgeConfig {
     public static Client client = new Client();
 
     public static class General {
-
-        @Config.Name("Maximum amount of sockets an item can have")
+        @Config.Comment("Maximum amount of sockets an item can have")
+        @Config.Name("Max Sockets")
         public int maxSockets = 8;
+
+        @Config.Comment("Set to false to disable removing gems from sockets")
+        @Config.Name("Gems are removable")
+        public boolean gemsAreRemovable = false;
     }
 
     public static class Client {

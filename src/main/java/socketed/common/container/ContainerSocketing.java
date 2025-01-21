@@ -136,6 +136,17 @@ public class ContainerSocketing extends Container {
         return stackFromCopy;
     }
 
+    @Override
+    @Nonnull
+    public ItemStack slotClick(int slotId, int dragType, @Nonnull ClickType clickType, @Nonnull EntityPlayer player) {
+        //disable removing gems if disabled via config
+        if(!ForgeConfig.general.gemsAreRemovable)
+            if(!this.inventorySlots.get(slotId).getStack().isEmpty())
+                if(slotId > 0 && slotId <= ForgeConfig.general.maxSockets)
+                    return ItemStack.EMPTY;
+        return super.slotClick(slotId,dragType,clickType,player);
+    }
+
     public class SlotSocketable extends Slot {
         public SlotSocketable(IInventory inventoryIn, int index, int xPosition, int yPosition) {
             super(inventoryIn, index, xPosition, yPosition);

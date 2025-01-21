@@ -3,7 +3,6 @@ package socketed.common.jsondata;
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
-import org.apache.logging.log4j.Level;
 import socketed.Socketed;
 import socketed.common.config.CustomConfig;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
@@ -81,10 +80,10 @@ public class GemType {
 
     private void validate() {
         this.valid = false;
-        if(this.name == null || this.name.isEmpty()) Socketed.LOGGER.log(Level.WARN, "Invalid Effect Group name, null or empty");
-        else if(this.displayName == null || this.displayName.isEmpty()) Socketed.LOGGER.log(Level.WARN, "Invalid Effect Group, " + this.name + ", null or empty display name");
-        else if(this.color == null) Socketed.LOGGER.log(Level.WARN, "Invalid Effect Group, " + this.name + ", invalid color");
-        else if(this.tier == null) Socketed.LOGGER.log(Level.WARN, "Invalid Effect Group, " + this.name + ", invalid tier");
+        if(this.name == null || this.name.isEmpty()) Socketed.LOGGER.warn("Invalid Gem Type name, null or empty");
+        else if(this.displayName == null || this.displayName.isEmpty()) Socketed.LOGGER.warn("Invalid Gem Type, " + this.name + ", null or empty display name");
+        else if(this.color == null) Socketed.LOGGER.warn("Invalid Gem Type, " + this.name + ", invalid color");
+        else if(this.tier == null) Socketed.LOGGER.warn("Invalid Gem Type, " + this.name + ", invalid tier");
         else {
             int validEffects = 0;
             int totalEffects = 0;
@@ -107,15 +106,14 @@ public class GemType {
                 }
             }
 
-            Socketed.LOGGER.log(Level.INFO,
-                    "Effect Group Validating, Name: " + this.name +
+            Socketed.LOGGER.info("Effect Group Validating, Name: " + this.name +
                             ", Display Name: " + this.displayName +
                             ", Color: " + this.color.name() +
                             ", Valid Effects: " + validEffects + "/" + totalEffects +
                             ", Valid Entries: " + validEntries + "/" + totalEntries +
                             ", Tier: " + this.tier);
-            if(validEffects <= 0) Socketed.LOGGER.log(Level.WARN, "Invalid Effect Group, " + this.name + ", no valid effects");
-            if(validEntries <= 0) Socketed.LOGGER.log(Level.WARN, "Invalid Effect Group, " + this.name + ", no valid entries");
+            if(validEffects <= 0) Socketed.LOGGER.warn("Invalid Gem Type, " + this.name + ", no valid effects");
+            if(validEntries <= 0) Socketed.LOGGER.warn("Invalid Gem Type, " + this.name + ", no valid entries");
             this.valid = validEntries > 0 && validEffects > 0;
         }
         this.parsed = true;
