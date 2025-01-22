@@ -46,8 +46,8 @@ public class PotionGemEffect extends ActivatableGemEffect {
     }
 
     public int getDuration() {
-        if(!this.isValid() || this.getActivationType() == EnumActivationType.PASSIVE_SELF) return 21;
-        return this.amplifier;
+        if(!this.isValid()) return 0;
+        return this.duration;
     }
 
     @Override

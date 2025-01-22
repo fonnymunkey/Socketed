@@ -2,6 +2,7 @@ package socketed.common.jsondata.entry.effect;
 
 import com.google.gson.*;
 import socketed.common.config.JsonConfig;
+import socketed.common.jsondata.entry.RandomValueRange;
 import socketed.common.jsondata.entry.effect.activatable.ActivationTypeDeserializer;
 import socketed.common.jsondata.entry.effect.activatable.IActivationType;
 
@@ -20,6 +21,7 @@ public class EffectDeserializer implements JsonDeserializer<GenericGemEffect> {
         }
         this.gson = new GsonBuilder()
                 .registerTypeAdapter(IActivationType.class, activationDeserializer)
+                .registerTypeAdapter(RandomValueRange.class, new RandomValueRange.Serializer())
                 .create();
         this.typeReg = new HashMap<>();
     }

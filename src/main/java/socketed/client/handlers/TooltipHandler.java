@@ -19,6 +19,7 @@ import socketed.common.capabilities.ICapabilityHasSockets;
 import socketed.common.config.DefaultJsonConfig;
 import socketed.common.jsondata.GemCombinationType;
 import socketed.common.jsondata.GemType;
+import socketed.common.jsondata.entry.RandomValueRange;
 import socketed.common.jsondata.entry.effect.AttributeGemEffect;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
 import socketed.common.jsondata.entry.effect.activatable.PotionGemEffect;
@@ -71,7 +72,7 @@ public class TooltipHandler {
 
                 //Effect Tooltips
                 for (GenericGemEffect effect : combination.getGemEffectsForSlots(slots)) {
-                    putBeforeItemId("  " + combinationType.getColor() + getTooltipString(effect) + TextFormatting.RESET);
+                    putBeforeItemId("  " + combinationType.getColor() + getTooltipString(effect, true) + TextFormatting.RESET);
                 }
             }
             //Gems
@@ -82,7 +83,7 @@ public class TooltipHandler {
 
                 //Effect Tooltips
                 for (GenericGemEffect effect : gemInstance.getGemEffectsForSlots(slots)) {
-                    putBeforeItemId("  " + gemType.getColor() + getTooltipString(effect) + TextFormatting.RESET);
+                    putBeforeItemId("  " + gemType.getColor() + getTooltipString(effect, true) + TextFormatting.RESET);
                 }
             }
         } else {
@@ -95,7 +96,7 @@ public class TooltipHandler {
             for (GenericGemEffect effect : gem.getGemEffects()) {
                 List<EntityEquipmentSlot> slots = effect.getSlots();
 
-                String tooltip = "  " + gemType.getColor() + getTooltipString(effect);
+                String tooltip = "  " + gemType.getColor() + getTooltipString(effect,false);
                 tooltip += getSlotTooltip(slots);
                 putBeforeItemId(tooltip + TextFormatting.RESET);
             }
@@ -126,21 +127,42 @@ public class TooltipHandler {
         return " ("+tooltip + ")";
     }
 
-    private static String getTooltipString(GenericGemEffect entry) {
-        if(entry instanceof AttributeGemEffect) return getAttributeString((AttributeGemEffect)entry);
-        else if(entry instanceof PotionGemEffect) return getPotionString((PotionGemEffect)entry);
+    private static String getTooltipString(GenericGemEffect entry, boolean onItem) {
+        if(entry instanceof AttributeGemEffect) return getAttributeString((AttributeGemEffect)entry, onItem);
+        else if(entry instanceof PotionGemEffect) return getPotionString((PotionGemEffect)entry, onItem);
         else return "";
     }
 
-    private static String getAttributeString(AttributeGemEffect entry) {
+    private static String getRandomRangeString(RandomValueRange range, int operation, String attributeString){
+        if(range.getMax()==range.getMin()) {
+            double amount = range.getMin() * (operation == 0 ? 1.0D : 100.0D);
+            if (amount > 0.0D) return I18n.format("attribute.modifier.plus." + operation, ItemStack.DECIMALFORMAT.format(amount), attributeString);
+            else if (amount < 0.0D) return I18n.format("attribute.modifier.take." + operation, ItemStack.DECIMALFORMAT.format(amount), attributeString);
+            else return "";
+        } else {
+            double min = range.getMin() * (operation == 0 ? 1.0D : 100.0D);
+            double max = range.getMax() * (operation == 0 ? 1.0D : 100.0D);
+            if(min >= 0.0D) return I18n.format("socketed.modifier.plus.plus." + operation, ItemStack.DECIMALFORMAT.format(min), ItemStack.DECIMALFORMAT.format(max), attributeString);
+            else if(min < 0.0D && max >=0.0D) return I18n.format("socketed.modifier.take.plus." + operation, ItemStack.DECIMALFORMAT.format(min), ItemStack.DECIMALFORMAT.format(max), attributeString);
+            else if(min < 0.0D && max < 0.0D) return I18n.format("socketed.modifier.take.take." + operation, ItemStack.DECIMALFORMAT.format(min), ItemStack.DECIMALFORMAT.format(max), attributeString);
+            return "";
+        }
+    }
+
+    private static String getAttributeString(AttributeGemEffect entry, boolean onItem) {
         AttributeModifier modifier = entry.getModifier();
-        double amount = modifier.getAmount() * (modifier.getOperation() == 0 ? 1.0D : 100.0D);
-        if(amount > 0.0D) return I18n.format("attribute.modifier.plus." + modifier.getOperation(), ItemStack.DECIMALFORMAT.format(amount), I18n.format("attribute.name." + entry.getAttribute()));
-        else if(amount < 0.0D) return I18n.format("attribute.modifier.take." + modifier.getOperation(), ItemStack.DECIMALFORMAT.format(amount), I18n.format("attribute.name." + entry.getAttribute()));
-        else return "";
+        if(onItem) {
+            double amount = modifier.getAmount() * (modifier.getOperation() == 0 ? 1.0D : 100.0D);
+            if (amount > 0.0D)
+                return I18n.format("attribute.modifier.plus." + modifier.getOperation(), ItemStack.DECIMALFORMAT.format(amount), I18n.format("attribute.name." + entry.getAttribute()));
+            else if (amount < 0.0D)
+                return I18n.format("attribute.modifier.take." + modifier.getOperation(), ItemStack.DECIMALFORMAT.format(amount), I18n.format("attribute.name." + entry.getAttribute()));
+            else return "";
+        } else
+            return getRandomRangeString(entry.getAmountRange(), modifier.getOperation(), I18n.format("attribute.name." + entry.getAttribute()));
     }
 
-    private static String getPotionString(PotionGemEffect entry) {
+    private static String getPotionString(PotionGemEffect entry, boolean onItem) {
         Potion potion = entry.getPotion();
         if(potion == null) return "";
         String tooltip = I18n.format("socketed.tooltip.activationtype." + entry.getActivationType().getToolTipKey(), I18n.format(potion.getName()));

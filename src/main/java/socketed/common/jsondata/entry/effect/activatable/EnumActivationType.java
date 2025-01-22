@@ -36,7 +36,8 @@ public enum EnumActivationType implements IActivationType {
         public void triggerPerSecondEffect(ActivatableGemEffect entry, EntityPlayer player) {
             List<EntityLivingBase> entitiesNearby = player.world.getEntitiesWithinAABB(EntityLivingBase.class,new AxisAlignedBB(player.getPosition()).grow(8.));
             for(EntityLivingBase entity : entitiesNearby)
-                entry.performEffect(entity);
+                if(entity != player)
+                    entry.performEffect(entity);
         }
         @Override
         public String getToolTipKey() {
@@ -50,7 +51,8 @@ public enum EnumActivationType implements IActivationType {
         public void triggerPerSecondEffect(ActivatableGemEffect entry, EntityPlayer player) {
             List<EntityLivingBase> entitiesNearby = player.world.getEntitiesWithinAABB(EntityLivingBase.class,new AxisAlignedBB(player.getPosition()).grow(32.));
             for(EntityLivingBase entity : entitiesNearby)
-                entry.performEffect(entity);
+                if(entity != player)
+                    entry.performEffect(entity);
         }
         @Override
         public String getToolTipKey() {

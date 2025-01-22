@@ -21,6 +21,7 @@ socketed.tooltip.default.lucky=Lucky
 socketed.tooltip.default.streamlined=Streamlined
 socketed.tooltip.default.redstone=Redstone Powered
 socketed.tooltip.default.glowstone=+10 Lightradius
+socketed.tooltip.default.lapis=Master enchanter
 
 socketed.tooltip.default.three_diamonds=Could've been a diamond pick
 socketed.tooltip.default.rgb=RGB Effects
@@ -36,3 +37,13 @@ socketed.tooltip.slotsmainhand=In Mainhand
 socketed.tooltip.slotsoffhand=In Offhand
 
 socketed.socketinggui.displayname=Socketing
+
+socketed.modifier.plus.plus.0=+%s to +%s %s
+socketed.modifier.take.plus.0=-%s to +%s %s
+socketed.modifier.take.take.0=-%s to -%s %s
+socketed.modifier.plus.plus.1=+%s%% to +%s%% %s
+socketed.modifier.take.plus.1=-%s%% to +%s%% %s
+socketed.modifier.take.take.1=-%s%% to -%s%% %s
+socketed.modifier.plus.plus.2=+%s%% to +%s%% %s
+socketed.modifier.take.plus.2=+%s%% to -%s%% %s
+socketed.modifier.take.take.2=-%s%% to -%s%% %s

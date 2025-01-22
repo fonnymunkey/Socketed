@@ -24,6 +24,8 @@ import socketed.common.proxy.IProxy;
 import socketed.common.socket.AddSocketCommand;
 import socketed.common.lootfunctions.SocketLootFunction;
 
+import java.util.Random;
+
 @Mod(modid = Socketed.MODID, name = Socketed.MODNAME, version = Socketed.VERSION)
 public class Socketed {
 
@@ -34,6 +36,8 @@ public class Socketed {
 
     @Mod.Instance(MODID)
     public static Socketed instance;
+
+    public static Random RAND = new Random();
 
     @SidedProxy(serverSide = "socketed.common.proxy.ServerProxy", clientSide = "socketed.client.proxy.ClientProxy")
     public static IProxy proxy;

@@ -6,6 +6,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.nbt.NBTTagCompound;
 import org.apache.logging.log4j.Level;
 import socketed.Socketed;
+import socketed.common.jsondata.entry.RandomValueRange;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,17 +20,19 @@ public class AttributeGemEffect extends GenericGemEffect {
     private final String attribute;
 
     @SerializedName("Modifier Amount")
-    private final double amount;
+    private final RandomValueRange amountRange;
+    private transient float amount;
 
     @SerializedName("Modifier Operation")
     private final int operation;
 
     private transient AttributeModifier modifier = INVALID;
 
-    public AttributeGemEffect(List<EntityEquipmentSlot> slots, String attribute, double amount, int operation) {
+
+    public AttributeGemEffect(List<EntityEquipmentSlot> slots, String attribute, RandomValueRange amountRange, int operation) {
         super(slots);
         this.attribute = attribute;
-        this.amount = amount;
+        this.amountRange = amountRange;
         this.operation = operation;
         this.type = FILTER_NAME;
     }
@@ -37,11 +40,16 @@ public class AttributeGemEffect extends GenericGemEffect {
     public AttributeGemEffect(AttributeGemEffect effect){
         super(effect.getSlots());
         this.attribute = effect.attribute;
-        this.amount = effect.amount;
+        this.amountRange = effect.amountRange;
         this.operation = effect.operation;
 
-        //Only instantiated AttributeGemEffects have valid modifiers
+        //Only instantiated AttributeGemEffects have valid modifiers and amounts
+        this.amount = this.amountRange.generateValue(Socketed.RAND);
         this.modifier = new AttributeModifier(UUID.randomUUID(),Socketed.MODID+"GemEffect", this.amount, this.operation);
+    }
+
+    public RandomValueRange getAmountRange(){
+        return amountRange;
     }
 
     public AttributeModifier getModifier() {
@@ -74,11 +82,16 @@ public class AttributeGemEffect extends GenericGemEffect {
     public NBTTagCompound writeToNBT() {
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setString("UUID",this.modifier.getID().toString());
+        nbt.setFloat("Amount",this.amount);
         return nbt;
     }
 
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
+        if(nbt.hasKey("Amount"))
+            this.amount = nbt.getFloat("Amount");
+        else
+            this.amount = 0;
         if(nbt.hasKey("UUID"))
             this.modifier = new AttributeModifier(UUID.fromString(nbt.getString("UUID")),Socketed.MODID+"GemEffect", this.amount, this.operation);
         else

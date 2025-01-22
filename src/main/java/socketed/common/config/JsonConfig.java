@@ -8,6 +8,7 @@ import com.google.gson.JsonParser;
 import socketed.Socketed;
 import socketed.common.jsondata.GemCombinationType;
 import socketed.common.jsondata.GemType;
+import socketed.common.jsondata.entry.RandomValueRange;
 import socketed.common.jsondata.entry.effect.AttributeGemEffect;
 import socketed.common.jsondata.entry.effect.EffectDeserializer;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
@@ -95,7 +96,7 @@ public class JsonConfig {
         Map<String, GemType> defaultData = DefaultJsonConfig.getDefaultGemTypes();
         for(Map.Entry<String, GemType> entry : defaultData.entrySet()) {
             try {
-                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                Gson gson = new GsonBuilder().registerTypeAdapter(RandomValueRange.class,new RandomValueRange.Serializer()).setPrettyPrinting().create();
                 JsonElement elem = gson.toJsonTree(entry.getValue());
                 String entryString = gson.toJson(elem);
                 File file = new File(gemTypesFolder, String.format("%s.json", entry.getKey()));
@@ -115,11 +116,11 @@ public class JsonConfig {
     }
 
     private static void initDefaultGemCombinations() {
-        Socketed.LOGGER.info("Initializing default Socketed gem type configs");
+        Socketed.LOGGER.info("Initializing default Socketed gem combination configs");
         Map<String, GemCombinationType> defaultCombinationData = DefaultJsonConfig.getDefaultGemCombinations();
         for(Map.Entry<String, GemCombinationType> entry : defaultCombinationData.entrySet()) {
             try {
-                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                Gson gson = new GsonBuilder().registerTypeAdapter(RandomValueRange.class,new RandomValueRange.Serializer()).setPrettyPrinting().create();
                 JsonElement elem = gson.toJsonTree(entry.getValue());
                 String entryString = gson.toJson(elem);
                 File file = new File(gemCombinationFolder, String.format("%s.json", entry.getKey()));
@@ -288,10 +289,11 @@ public class JsonConfig {
         return null;
     }
 
-    //Order matters bc a list of gems might fit multiple gem combinations. more strict combinations will be found first
+    //Order matters bc a list of gems might fit multiple gem combinations. more strict combinations will be found first and higher gem count combinations too
     public static List<GemCombinationType> getSortedGemCombinationData() {
         if(sortedGemCombinationDataList == null){
             sortedGemCombinationDataList = new ArrayList<>(gemCombinationDataMap.values());
+            sortedGemCombinationDataList.sort(Comparator.comparingInt(v -> - v.getGemTypes().size()));
             sortedGemCombinationDataList.sort((v1,v2) -> Boolean.compare(!v1.getIsStrictOrder(),!v2.getIsStrictOrder()));
             sortedGemCombinationDataList.sort((v1,v2) -> Boolean.compare(!v1.getIsStrictSocketCount(),!v2.getIsStrictSocketCount()));
         }
