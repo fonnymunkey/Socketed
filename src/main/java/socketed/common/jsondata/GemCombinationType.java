@@ -21,8 +21,8 @@ public class GemCombinationType extends GemType {
     @SerializedName("Gem Types")
     private final List<String> gemTypes;
 
-    public GemCombinationType(String name, String displayName, TextFormatting color, List<GenericGemEffect> effects, boolean isStrictOrder, boolean isStrictSocketCount, boolean replacesOriginalEffects, List<String> gemTypes) {
-        super(name, displayName, color, effects, Collections.singletonList(new BlockAllFilterEntry()), 0);
+    public GemCombinationType(String displayName, TextFormatting color, List<GenericGemEffect> effects, boolean isStrictOrder, boolean isStrictSocketCount, boolean replacesOriginalEffects, List<String> gemTypes) {
+        super(displayName, color, effects, Collections.singletonList(new BlockAllFilterEntry()), 0);
         this.isStrictOrder = isStrictOrder;
         this.isStrictSocketCount = isStrictSocketCount;
         this.replacesOriginalEffects = replacesOriginalEffects;

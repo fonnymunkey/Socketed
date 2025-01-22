@@ -6,6 +6,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import socketed.Socketed;
+import socketed.common.jsondata.entry.effect.EnumSlots;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -25,7 +26,7 @@ public class PotionGemEffect extends ActivatableGemEffect {
 
     private transient Potion potion;
 
-    public PotionGemEffect(List<EntityEquipmentSlot> slots, String potionName, int amplifier, int duration, EnumActivationType activation) {
+    public PotionGemEffect(EnumSlots slots, String potionName, int amplifier, int duration, EnumActivationType activation) {
         super(slots);
         this.potionName = potionName;
         this.amplifier = amplifier;

@@ -28,8 +28,7 @@ public class AttributeGemEffect extends GenericGemEffect {
 
     private transient AttributeModifier modifier = INVALID;
 
-
-    public AttributeGemEffect(List<EntityEquipmentSlot> slots, String attribute, RandomValueRange amountRange, int operation) {
+    public AttributeGemEffect(EnumSlots slots, String attribute, RandomValueRange amountRange, int operation) {
         super(slots);
         this.attribute = attribute;
         this.amountRange = amountRange;
@@ -38,7 +37,7 @@ public class AttributeGemEffect extends GenericGemEffect {
     }
 
     public AttributeGemEffect(AttributeGemEffect effect){
-        super(effect.getSlots());
+        super(effect.getEnumSlots());
         this.attribute = effect.attribute;
         this.amountRange = effect.amountRange;
         this.operation = effect.operation;
@@ -50,6 +49,10 @@ public class AttributeGemEffect extends GenericGemEffect {
 
     public RandomValueRange getAmountRange(){
         return amountRange;
+    }
+
+    public int getOperation() {
+        return this.operation;
     }
 
     public AttributeModifier getModifier() {

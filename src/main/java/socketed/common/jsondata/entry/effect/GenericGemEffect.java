@@ -12,13 +12,13 @@ public class GenericGemEffect {
     @SerializedName(FILTER_NAME)
     protected String type;
     @SerializedName("Equipment Slots")
-    protected List<EntityEquipmentSlot> slots;
+    protected EnumSlots slots;
 
     protected transient boolean valid;
 
     protected transient boolean parsed;
 
-    public GenericGemEffect(List<EntityEquipmentSlot> slots){
+    public GenericGemEffect(EnumSlots slots){
         this.slots = slots;
     }
 
@@ -27,8 +27,11 @@ public class GenericGemEffect {
         return this.valid;
     }
 
-    public List<EntityEquipmentSlot> getSlots(){
+    public EnumSlots getEnumSlots(){
         return slots;
+    }
+    public List<EntityEquipmentSlot> getSlots(){
+        return EnumSlots.getSlots(this.slots);
     }
 
     protected void validate() {

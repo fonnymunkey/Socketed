@@ -11,20 +11,18 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import socketed.Socketed;
 import socketed.common.capabilities.CapabilityHasSockets;
 import socketed.common.capabilities.GemCombinationInstance;
 import socketed.common.capabilities.GemInstance;
 import socketed.common.capabilities.ICapabilityHasSockets;
-import socketed.common.config.DefaultJsonConfig;
 import socketed.common.jsondata.GemCombinationType;
 import socketed.common.jsondata.GemType;
 import socketed.common.jsondata.entry.RandomValueRange;
 import socketed.common.jsondata.entry.effect.AttributeGemEffect;
+import socketed.common.jsondata.entry.effect.EnumSlots;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
 import socketed.common.jsondata.entry.effect.activatable.PotionGemEffect;
 
-import java.util.HashSet;
 import java.util.List;
 
 @Mod.EventBusSubscriber
@@ -37,8 +35,7 @@ public class TooltipHandler {
         ItemStack stack = event.getItemStack();
 
         boolean hasSockets = stack.hasCapability(CapabilityHasSockets.HAS_SOCKETS, null);
-        GemInstance gem = new GemInstance(stack);
-        GemType gemType = gem.getGemType();
+        GemType gemType = GemType.getGemTypeFromItemStack(stack);
         boolean isGem = gemType != null;
 
         if(!hasSockets && !isGem) return;
@@ -93,38 +90,12 @@ public class TooltipHandler {
             putBeforeItemId(" " + gemType.getColor() + I18n.format(gemType.getDisplayName()) + TextFormatting.RESET);
 
             //Effect Tooltips
-            for (GenericGemEffect effect : gem.getGemEffects()) {
-                List<EntityEquipmentSlot> slots = effect.getSlots();
-
+            for (GenericGemEffect effect : gemType.getEffects()) {
                 String tooltip = "  " + gemType.getColor() + getTooltipString(effect,false);
-                tooltip += getSlotTooltip(slots);
+                tooltip += EnumSlots.getSlotTooltip(effect.getEnumSlots());
                 putBeforeItemId(tooltip + TextFormatting.RESET);
             }
         }
-    }
-
-    private static String getSlotTooltip(List<EntityEquipmentSlot> slots) {
-        HashSet<EntityEquipmentSlot> slotsSet = new HashSet<>(slots);
-        if(slotsSet.containsAll(DefaultJsonConfig.allSlots))
-            return "";
-
-        String tooltip = "";
-        if(slotsSet.containsAll(DefaultJsonConfig.body))
-            tooltip = I18n.format("socketed.tooltip.slotsbody");
-        else if(slotsSet.containsAll(DefaultJsonConfig.hands))
-            tooltip = I18n.format("socketed.tooltip.slotshands");
-        else if(slots.size()==1) {
-            EntityEquipmentSlot slot = slots.get(0);
-            switch(slot){
-                case HEAD: tooltip = I18n.format("socketed.tooltip.slotshead"); break;
-                case CHEST: tooltip = I18n.format("socketed.tooltip.slotschest"); break;
-                case LEGS: tooltip = I18n.format("socketed.tooltip.slotslegs"); break;
-                case FEET: tooltip = I18n.format("socketed.tooltip.slotsfeet"); break;
-                case MAINHAND: tooltip = I18n.format("socketed.tooltip.slotsmainhand"); break;
-                case OFFHAND: tooltip = I18n.format("socketed.tooltip.slotsoffhand"); break;
-            }
-        } else return "";
-        return " ("+tooltip + ")";
     }
 
     private static String getTooltipString(GenericGemEffect entry, boolean onItem) {
@@ -150,8 +121,8 @@ public class TooltipHandler {
     }
 
     private static String getAttributeString(AttributeGemEffect entry, boolean onItem) {
-        AttributeModifier modifier = entry.getModifier();
         if(onItem) {
+            AttributeModifier modifier = entry.getModifier();
             double amount = modifier.getAmount() * (modifier.getOperation() == 0 ? 1.0D : 100.0D);
             if (amount > 0.0D)
                 return I18n.format("attribute.modifier.plus." + modifier.getOperation(), ItemStack.DECIMALFORMAT.format(amount), I18n.format("attribute.name." + entry.getAttribute()));
@@ -159,15 +130,17 @@ public class TooltipHandler {
                 return I18n.format("attribute.modifier.take." + modifier.getOperation(), ItemStack.DECIMALFORMAT.format(amount), I18n.format("attribute.name." + entry.getAttribute()));
             else return "";
         } else
-            return getRandomRangeString(entry.getAmountRange(), modifier.getOperation(), I18n.format("attribute.name." + entry.getAttribute()));
+            return getRandomRangeString(entry.getAmountRange(), entry.getOperation(), I18n.format("attribute.name." + entry.getAttribute()));
     }
 
     private static String getPotionString(PotionGemEffect entry, boolean onItem) {
         Potion potion = entry.getPotion();
-        if(potion == null) return "";
+        if (potion == null) return "";
         String tooltip = I18n.format("socketed.tooltip.activationtype." + entry.getActivationType().getToolTipKey(), I18n.format(potion.getName()));
-        if(entry.getAmplifier() < 10) return tooltip + " " + I18n.format("enchantment.level." + (entry.getAmplifier() + 1));
-        else return tooltip + " " + (entry.getAmplifier() + 1);
+        int potionLvl = entry.getAmplifier() + 1;
+        if (potionLvl == 1) return tooltip;
+        else if (potionLvl > 1 && potionLvl <= 10) return tooltip + " " + I18n.format("enchantment.level." + potionLvl);
+        else return tooltip + " " + potionLvl;
     }
 
     private static void putBeforeItemId(String tooltip) {

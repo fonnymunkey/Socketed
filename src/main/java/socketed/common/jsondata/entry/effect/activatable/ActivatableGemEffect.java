@@ -3,6 +3,7 @@ package socketed.common.jsondata.entry.effect.activatable;
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import socketed.common.jsondata.entry.effect.EnumSlots;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public abstract class ActivatableGemEffect extends GenericGemEffect {
     @SerializedName(ActivatableGemEffect.FILTER_NAME)
     protected IActivationType activation;
 
-    public ActivatableGemEffect(List<EntityEquipmentSlot> slots) {
+    public ActivatableGemEffect(EnumSlots slots) {
         super(slots);
     }
 

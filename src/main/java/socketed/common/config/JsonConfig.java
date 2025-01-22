@@ -187,6 +187,7 @@ public class JsonConfig {
                     GemType gemType = gson.fromJson(elem, GemType.class);
                     if(gemType == null) Socketed.LOGGER.warn("Failed to load gem type config file, invalid file: " + file.getName());
                     else {
+                        gemType.setName(file.getName().split("\\.json")[0]);
                         if(gemType.isValid()) gemTypesDataMap.put(gemType.getName(), gemType);
                         else Socketed.LOGGER.warn("Failed to load gem type config file, validation failed: " + file.getName());
                     }
@@ -251,6 +252,7 @@ public class JsonConfig {
                     GemCombinationType gemCombination = gson.fromJson(elem, GemCombinationType.class);
                     if(gemCombination == null) Socketed.LOGGER.warn("Failed to load gem combination config file, invalid file: " + file.getName());
                     else {
+                        gemCombination.setName(file.getName().split("\\.json")[0]);
                         if(gemCombination.isValid()) gemCombinationDataMap.put(gemCombination.getName(), gemCombination);
                         else Socketed.LOGGER.warn("Failed to load gem combination config file, validation failed: " + file.getName());
                     }

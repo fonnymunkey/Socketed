@@ -16,8 +16,10 @@ import java.util.List;
 
 public class GemType {
 
-    @SerializedName("Effect Group Name")
-    protected final String name;
+    //Serialized via file name
+    protected transient String name;
+    @SerializedName("Gem Tier")
+    private final Integer tier;
     @SerializedName("Display Name")
     private final String displayName;
     @SerializedName("Text Color")
@@ -26,19 +28,21 @@ public class GemType {
     private final List<GenericGemEffect> effects;
     @SerializedName("Filter Entries")
     private final List<FilterEntry> filterEntries;
-    @SerializedName("Gem Tier")
-    private final Integer tier;
 
     protected transient boolean parsed;
     protected transient boolean valid;
 
-    public GemType(String name, String display, TextFormatting clr, List<GenericGemEffect> effects, List<FilterEntry> filters, Integer tier) {
-        this.name = name;
+    public GemType(String display, TextFormatting clr, List<GenericGemEffect> effects, List<FilterEntry> filters, Integer tier) {
         this.displayName = display;
         this.color = clr;
         this.effects = effects;
         this.filterEntries = filters;
         this.tier = tier;
+    }
+
+    public void setName(String name){
+        if(this.name == null)
+            this.name = name;
     }
 
     public String getName() {
