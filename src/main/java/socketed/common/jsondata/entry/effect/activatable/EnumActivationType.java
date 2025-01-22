@@ -4,7 +4,10 @@ import com.google.gson.annotations.SerializedName;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.AxisAlignedBB;
 import socketed.Socketed;
+
+import java.util.List;
 
 public enum EnumActivationType implements IActivationType {
     @SerializedName(Socketed.MODID + ":"+"INVALID")
@@ -15,15 +18,43 @@ public enum EnumActivationType implements IActivationType {
         }
     },
 
-    @SerializedName(Socketed.MODID + ":"+"PASSIVE")
-    PASSIVE {
+    @SerializedName(Socketed.MODID + ":"+"PASSIVE_SELF")
+    PASSIVE_SELF {
         @Override
         public void triggerPerSecondEffect(ActivatableGemEffect entry, EntityPlayer player) {
             entry.performEffect(player);
         }
         @Override
         public String getToolTipKey() {
-            return "passive";
+            return "passive_self";
+        }
+    },
+
+    @SerializedName(Socketed.MODID + ":"+"PASSIVE_NEARBY")
+    PASSIVE_NEARBY{
+        @Override
+        public void triggerPerSecondEffect(ActivatableGemEffect entry, EntityPlayer player) {
+            List<EntityLivingBase> entitiesNearby = player.world.getEntitiesWithinAABB(EntityLivingBase.class,new AxisAlignedBB(player.getPosition()).grow(8.));
+            for(EntityLivingBase entity : entitiesNearby)
+                entry.performEffect(entity);
+        }
+        @Override
+        public String getToolTipKey() {
+            return "passive_nearby";
+        }
+    },
+
+    @SerializedName(Socketed.MODID + ":"+"PASSIVE_FAR")
+    PASSIVE_FAR{
+        @Override
+        public void triggerPerSecondEffect(ActivatableGemEffect entry, EntityPlayer player) {
+            List<EntityLivingBase> entitiesNearby = player.world.getEntitiesWithinAABB(EntityLivingBase.class,new AxisAlignedBB(player.getPosition()).grow(32.));
+            for(EntityLivingBase entity : entitiesNearby)
+                entry.performEffect(entity);
+        }
+        @Override
+        public String getToolTipKey() {
+            return "passive_far";
         }
     },
 
@@ -73,7 +104,7 @@ public enum EnumActivationType implements IActivationType {
         public String getToolTipKey() {
             return "on_attacking_target";
         }
-    };
+    }
 }
     
     

@@ -5,6 +5,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.text.TextFormatting;
+import socketed.common.jsondata.GemCombinationType;
 import socketed.common.jsondata.GemType;
 import socketed.common.jsondata.entry.effect.AttributeGemEffect;
 import socketed.common.jsondata.entry.effect.activatable.EnumActivationType;
@@ -13,7 +14,7 @@ import socketed.common.jsondata.entry.filter.OreEntry;
 
 import java.util.*;
 
-public abstract class DefaultCustomConfig {
+public abstract class DefaultJsonConfig {
 
     public static final List<EntityEquipmentSlot> body = Arrays.asList(
             EntityEquipmentSlot.fromString("head"),
@@ -46,7 +47,7 @@ public abstract class DefaultCustomConfig {
 
         map.put("sticky", new GemType("sticky", "socketed.tooltip.default.sticky", TextFormatting.DARK_GREEN,
                 Collections.singletonList(new PotionGemEffect(body,
-                        MobEffects.SLOWNESS.getRegistryName().toString(), 0, 60, EnumActivationType.PASSIVE)),
+                        MobEffects.SLOWNESS.getRegistryName().toString(), 0, 60, EnumActivationType.PASSIVE_SELF)),
                 Collections.singletonList(new OreEntry("slimeball")),0));
 
         map.put("lucky", new GemType("lucky", "socketed.tooltip.default.lucky", TextFormatting.GREEN,
@@ -62,6 +63,38 @@ public abstract class DefaultCustomConfig {
                         new AttributeGemEffect(hands,/*"diamond_damage",*/ SharedMonsterAttributes.ATTACK_DAMAGE.getName(), 2, 0),
                         new AttributeGemEffect(body,/*"diamond_defense",*/ SharedMonsterAttributes.ARMOR.getName(), 2, 0)),
                 Collections.singletonList(new OreEntry("gemDiamond")),2));
+
+        map.put("redstone", new GemType("redstone", "socketed.tooltip.default.redstone", TextFormatting.RED,
+                Arrays.asList(
+                        new AttributeGemEffect(hands, SharedMonsterAttributes.ATTACK_SPEED.getName(), 0.05, 1),
+                        new AttributeGemEffect(body, SharedMonsterAttributes.MOVEMENT_SPEED.getName(), 0.05, 1)),
+                Collections.singletonList(new OreEntry("dustRedstone")),2));
+
+        map.put("lapis", new GemType("lapis", "socketed.tooltip.default.lapis", TextFormatting.BLUE,
+                Collections.singletonList(new AttributeGemEffect(allSlots, "socketed.attributes.enchantingpower", 2, 0)),
+                Collections.singletonList(new OreEntry("gemLapis")),2));
+
+        map.put("glowstone", new GemType("glowstone", "socketed.tooltip.default.glowstone", TextFormatting.YELLOW,
+                Collections.singletonList(new PotionGemEffect(Collections.singletonList(EntityEquipmentSlot.HEAD), MobEffects.GLOWING.getRegistryName().toString(), 0, 60,EnumActivationType.PASSIVE_FAR)),
+                Collections.singletonList(new OreEntry("dustGlowstone")),1));
+
+        return map;
+    }
+
+    public static Map<String, GemCombinationType> getDefaultGemCombinations() {
+        Map<String, GemCombinationType> map = new HashMap<>();
+
+        map.put("three_diamonds", new GemCombinationType("three_diamonds", "socketed.tooltip.default.three_diamonds", TextFormatting.DARK_BLUE,
+                Collections.singletonList(new AttributeGemEffect(hands, SharedMonsterAttributes.ATTACK_DAMAGE.getName(), 8, 0)),
+                false,false, true,
+                Arrays.asList("diamond", "diamond", "diamond")));
+
+        map.put("rgb", new GemCombinationType("rgb", "socketed.tooltip.default.rgb", TextFormatting.GOLD,
+                Arrays.asList(
+                        new PotionGemEffect(allSlots, MobEffects.GLOWING.getRegistryName().toString(), 1, 60, EnumActivationType.PASSIVE_SELF),
+                        new PotionGemEffect(allSlots, MobEffects.GLOWING.getRegistryName().toString(), 1, 60, EnumActivationType.PASSIVE_NEARBY)),
+                true,true, false,
+                Arrays.asList("redstone", "lucky", "lapis")));
 
         return map;
     }

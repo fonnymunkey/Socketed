@@ -1,6 +1,6 @@
 package socketed.common.util;
 
-import socketed.common.config.CustomConfig;
+import socketed.common.config.JsonConfig;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
 import socketed.common.jsondata.entry.effect.activatable.IActivationType;
 import socketed.common.jsondata.entry.filter.FilterEntry;
@@ -8,14 +8,14 @@ import socketed.common.jsondata.entry.filter.FilterEntry;
 public abstract class SocketedUtil {
 
     public static void registerFilterDeserializer(String ENTRY_FILTER, Class<? extends FilterEntry> typeClass) {
-        CustomConfig.filterDeserializerMap.put(ENTRY_FILTER, typeClass);
+        JsonConfig.filterDeserializerMap.put(ENTRY_FILTER, typeClass);
     }
 
     public static void registerEffectDeserializer(String ENTRY_FILTER, Class<? extends GenericGemEffect> typeClass) {
-        CustomConfig.gemEffectDeserializerMap.put(ENTRY_FILTER, typeClass);
+        JsonConfig.gemEffectDeserializerMap.put(ENTRY_FILTER, typeClass);
     }
 
     public static void registerActivationTypeDeserializer(String MODID, Class<? extends IActivationType> typeClass) {
-        CustomConfig.activationDeserializerMap.put(MODID, typeClass);
+        JsonConfig.activationDeserializerMap.put(MODID, typeClass);
     }
 }

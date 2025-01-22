@@ -3,7 +3,9 @@ item.socketed.socket_tool.name=Socketing Tool
 
 socketed.tooltip.socket=Sockets (%d/%d): %s
 socketed.tooltip.empty=Empty
-socketed.tooltip.activationtype.passive=Passively: %s
+socketed.tooltip.activationtype.passive_self=Passively: %s
+socketed.tooltip.activationtype.passive_nearby=Entities nearby:  %s
+socketed.tooltip.activationtype.passive_far=Entities in area:  %s
 socketed.tooltip.activationtype.on_attacked_self=When Attacked: %s
 socketed.tooltip.activationtype.on_attacked_attacker=Attacker Receives: %s
 socketed.tooltip.activationtype.on_attacking_self=When Attacking: %s
@@ -12,11 +14,16 @@ socketed.tooltip.activationtype.on_attacking_target=Target Receives: %s
 socketed.tooltip.default.obsidian_damage=Obsidian Tipped
 socketed.tooltip.default.diamond=Diamond
 #socketed.tooltip.default.diamond_damage=Diamond Honed
+#socketed.tooltip.default.diamond_defense=Diamond Reinforced
 socketed.tooltip.default.stone_damage=Whet Stone
 socketed.tooltip.default.sticky=Sticky
 socketed.tooltip.default.lucky=Lucky
 socketed.tooltip.default.streamlined=Streamlined
-#socketed.tooltip.default.diamond_defense=Diamond Reinforced
+socketed.tooltip.default.redstone=Redstone Powered
+socketed.tooltip.default.glowstone=+10 Lightradius
+
+socketed.tooltip.default.three_diamonds=Could've been a diamond pick
+socketed.tooltip.default.rgb=RGB Effects
 
 socketed.tooltip.gem=In Socket: %s
 socketed.tooltip.slotsbody=On Body

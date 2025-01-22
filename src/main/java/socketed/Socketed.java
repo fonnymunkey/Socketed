@@ -16,7 +16,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import org.apache.logging.log4j.Logger;
 import socketed.common.capabilities.CapabilityHasSockets;
 import socketed.common.capabilities.ICapabilityHasSockets;
-import socketed.common.config.CustomConfig;
+import socketed.common.config.JsonConfig;
 import socketed.common.container.GuiHandlerSocketing;
 import socketed.common.init.ModItems;
 import socketed.common.init.ModRecipes;
@@ -41,7 +41,7 @@ public class Socketed {
     @Mod.EventHandler
     public static void preInit(FMLPreInitializationEvent event) {
         LOGGER = event.getModLog();
-        CustomConfig.preInit(event.getModConfigurationDirectory());
+        JsonConfig.preInit(event.getModConfigurationDirectory());
 
         CapabilityManager.INSTANCE.register(ICapabilityHasSockets.class, new CapabilityHasSockets.Storage(), CapabilityHasSockets.GenericHasSockets::new);
         LootFunctionManager.registerFunction(new SocketLootFunction.Serializer());
@@ -60,7 +60,7 @@ public class Socketed {
 
     @Mod.EventHandler
     public static void postInit(FMLInitializationEvent event) {
-        CustomConfig.postInit();
+        JsonConfig.postInit();
     }
 
     @Mod.EventBusSubscriber

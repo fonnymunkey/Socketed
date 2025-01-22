@@ -22,7 +22,13 @@ public class GemInstance {
     @Nullable private final GemType gemType;
 
     //Instantiated effects, do not use gemType.getEffects() to perform effects
-    private final List<GenericGemEffect> effects = new ArrayList<>();
+    protected final List<GenericGemEffect> effects = new ArrayList<>();
+
+    public GemInstance(){
+        this.itemId = "";
+        this.metadata = 0;
+        this.gemType = null;
+    }
 
     public GemInstance(@Nullable ItemStack stack) {
         if (stack != null) {
@@ -74,7 +80,7 @@ public class GemInstance {
         if (this.gemType == null || this.effects.isEmpty())
             return false;
 
-        for (GenericGemEffect effect : this.gemType.getEffects()) {
+        for (GenericGemEffect effect : this.effects) {
             for (EntityEquipmentSlot itemslot : CapabilityHasSockets.getSlotsForItemStack(stack))
                 if (effect.getSlots().contains(itemslot))
                     return true;

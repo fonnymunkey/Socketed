@@ -1,21 +1,23 @@
 package socketed.common.jsondata;
 
 import com.google.gson.annotations.SerializedName;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import socketed.Socketed;
-import socketed.common.config.CustomConfig;
+import socketed.common.config.JsonConfig;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
 import socketed.common.jsondata.entry.filter.FilterEntry;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class GemType {
 
     @SerializedName("Effect Group Name")
-    private final String name;
+    protected final String name;
     @SerializedName("Display Name")
     private final String displayName;
     @SerializedName("Text Color")
@@ -27,8 +29,8 @@ public class GemType {
     @SerializedName("Gem Tier")
     private final Integer tier;
 
-    private transient boolean parsed;
-    private transient boolean valid;
+    protected transient boolean parsed;
+    protected transient boolean valid;
 
     public GemType(String name, String display, TextFormatting clr, List<GenericGemEffect> effects, List<FilterEntry> filters, Integer tier) {
         this.name = name;
@@ -78,7 +80,7 @@ public class GemType {
         return this.valid;
     }
 
-    private void validate() {
+    protected void validate() {
         this.valid = false;
         if(this.name == null || this.name.isEmpty()) Socketed.LOGGER.warn("Invalid Gem Type name, null or empty");
         else if(this.displayName == null || this.displayName.isEmpty()) Socketed.LOGGER.warn("Invalid Gem Type, " + this.name + ", null or empty display name");
@@ -119,8 +121,19 @@ public class GemType {
         this.parsed = true;
     }
 
+    public List<GenericGemEffect> getGemEffectsForSlots(List<EntityEquipmentSlot> slots) {
+        List<GenericGemEffect> effectsForSlot = new ArrayList<>();
+        for(GenericGemEffect effect : effects)
+            for(EntityEquipmentSlot slot : slots)
+                if(effect.getSlots().contains(slot)) {
+                    effectsForSlot.add(effect);
+                    break; //don't count the same effect multiple times
+                }
+        return effectsForSlot;
+    }
+
     public static GemType getGemTypeFromItemStack(@Nullable ItemStack itemStack){
-        for (GemType gemType : CustomConfig.getGemData().values())
+        for (GemType gemType : JsonConfig.getGemData().values())
             if (gemType.matches(itemStack))
                 return gemType;
         return null;
@@ -130,7 +143,7 @@ public class GemType {
         if(gemTypeName==null)
             return null;
         else
-            return CustomConfig.getGemData().get(gemTypeName);
+            return JsonConfig.getGemData().get(gemTypeName);
     }
 
     public int getTier() {

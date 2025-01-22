@@ -1,7 +1,7 @@
 package socketed.common.jsondata.entry.effect;
 
 import com.google.gson.*;
-import socketed.common.config.CustomConfig;
+import socketed.common.config.JsonConfig;
 import socketed.common.jsondata.entry.effect.activatable.ActivationTypeDeserializer;
 import socketed.common.jsondata.entry.effect.activatable.IActivationType;
 
@@ -15,7 +15,7 @@ public class EffectDeserializer implements JsonDeserializer<GenericGemEffect> {
 
     public EffectDeserializer() {
         ActivationTypeDeserializer activationDeserializer = new ActivationTypeDeserializer();
-        for(Map.Entry<String, Class<? extends IActivationType>> entry : CustomConfig.activationDeserializerMap.entrySet()) {
+        for(Map.Entry<String, Class<? extends IActivationType>> entry : JsonConfig.activationDeserializerMap.entrySet()) {
             activationDeserializer.registerType(entry.getKey(), entry.getValue());
         }
         this.gson = new GsonBuilder()

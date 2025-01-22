@@ -9,7 +9,7 @@ import socketed.common.recipe.SocketRemoveRecipe;
 
 public class ModRecipes {
     public static void registerRecipes(IForgeRegistry<IRecipe> registry) {
-        registry.register(new SocketAddRecipe().setRegistryName(new ResourceLocation(Socketed.MODID, "socket_add")));
-        registry.register(new SocketRemoveRecipe().setRegistryName(new ResourceLocation(Socketed.MODID, "socket_remove")));
+        //registry.register(new SocketAddRecipe().setRegistryName(new ResourceLocation(Socketed.MODID, "socket_add")));
+        //registry.register(new SocketRemoveRecipe().setRegistryName(new ResourceLocation(Socketed.MODID, "socket_remove")));
     }
 }

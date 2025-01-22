@@ -70,10 +70,11 @@ public interface ICapabilityHasSockets {
 
     /**
      * Returns a list of all gems this item has in its sockets
+     * @param includeDisabled whether to also return gems in disabled sockets
      * @return List of non-null gems, can be size 0 if there are no gems
      */
     @Nonnull
-    List<GemInstance> getAllGems();
+    List<GemInstance> getAllGems(boolean includeDisabled);
 
     /**
      * Adds a gem to the first available empty socket
@@ -120,4 +121,24 @@ public interface ICapabilityHasSockets {
      */
     @Nonnull
     List<GenericGemEffect> getAllEffectsForSlot(EntityEquipmentSlot slot);
+
+
+    // -----     GEM COMBINATION SECTION     -----
+    // -------------------------------------------
+
+    /**
+     * Returns the gem combinations on this item
+     */
+    @Nonnull
+    List<GemCombinationInstance> getGemCombinations();
+
+    /**
+     * Adds a gem combination from NBT to this item (quick write without check)
+     */
+    void addCombinationFromNBT(NBTTagCompound nbt);
+
+    /**
+     * Refreshes the gem combinations when gems are added/removed
+     */
+    void refreshCombinations();
 }

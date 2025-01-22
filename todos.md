@@ -5,12 +5,9 @@
 - Config for what items can get sockets and how many
 - additional effect types: 
   - +x lvl to specific enchant
-  - explosion on hit 
-  - give potion effect passively to surrounding entities (activation: passive_nearby)
-    - glowstone = glowing
-    - whatever = slowness
+  - whatever = slowness passive_nearby
   - lower merchant cost
-  - plus enchanting lvl
+  - plus enchanting lvl (lapis)
   - plus skill (reskillable/levelup)
   - plus gold from mobs (lol)
   - temperature attribute simplediff
@@ -29,6 +26,4 @@
   - or maybe a possibility for rare gems to roll directly with stats?
   - like there should be an api to create gems dynamically from attached nbt instead of statically via json
 - get sockets on craft, mob drop, loot gen, villager trades with separate chances + socket amount ranges
-- rune words (config: has to match exactly, has to be in correct order)
 - ddd compat if neccessary (maybe via attributes)
-- 

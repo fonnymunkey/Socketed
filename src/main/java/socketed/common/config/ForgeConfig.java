@@ -20,7 +20,11 @@ public class ForgeConfig {
 
         @Config.Comment("Set to false to disable removing gems from sockets")
         @Config.Name("Gems are removable")
-        public boolean gemsAreRemovable = false;
+        public boolean gemsAreRemovable = true;
+
+        @Config.Comment("Set to true to destroy gems when removing them from sockets")
+        @Config.Name("Destroy gems on removal")
+        public boolean destroyGemsOnRemoval = false;
     }
 
     public static class Client {

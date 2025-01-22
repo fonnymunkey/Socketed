@@ -1,5 +1,6 @@
 package socketed.common.socket;
 
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import socketed.common.capabilities.GemInstance;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
@@ -11,6 +12,7 @@ import java.util.List;
 
 public class GenericSocket{
     private GemInstance gem = null;
+    private boolean disabled = false;
 
     public GenericSocket(){
 
@@ -29,6 +31,23 @@ public class GenericSocket{
     public GenericSocket(NBTTagCompound nbt) {
         if(nbt.hasKey("Gem"))
             this.gem = new GemInstance(nbt.getCompoundTag("Gem"));
+        if(nbt.hasKey("Disabled"))
+            this.disabled = nbt.getBoolean("Disabled");
+    }
+
+    /**
+     * Gems in disabled sockets will not have effects (used for gem combinations overwriting gem effects)
+     * @return Disabled state of socket
+     */
+    public boolean isDisabled() {
+        return this.disabled;
+    }
+
+    /**
+     * Disable the socket (used for gem combinations that overwrite the original effects of their gems)
+     */
+    public void setDisabled(boolean disabled){
+        this.disabled = disabled;
     }
 
     /**
@@ -87,6 +106,7 @@ public class GenericSocket{
         nbt.setString("SocketType","Generic");
         if (this.gem != null)
             nbt.setTag("Gem", this.gem.writeToNBT());
+        nbt.setBoolean("Disabled",this.disabled);
         return nbt;
     }
 }

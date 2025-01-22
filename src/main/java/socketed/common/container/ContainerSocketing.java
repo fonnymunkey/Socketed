@@ -96,7 +96,7 @@ public class ContainerSocketing extends Container {
                 if (!this.mergeItemStack(stackFrom, indexPlayerSlotsStart, indexPlayerSlotsEnd, true))
                     return ItemStack.EMPTY;
             }
-            else if (fromIndex < indexPlayerSlotsStart) {
+            else if (isGemSlot(fromIndex)) {
                 //Take from gem socket slots, merge into player inventory if possible
                 //Fail if can't put in player inventory
                 if (!this.mergeItemStack(stackFrom, indexPlayerSlotsStart, indexPlayerSlotsEnd, true))
@@ -139,12 +139,19 @@ public class ContainerSocketing extends Container {
     @Override
     @Nonnull
     public ItemStack slotClick(int slotId, int dragType, @Nonnull ClickType clickType, @Nonnull EntityPlayer player) {
-        //disable removing gems if disabled via config
-        if(!ForgeConfig.general.gemsAreRemovable)
-            if(!this.inventorySlots.get(slotId).getStack().isEmpty())
-                if(slotId > 0 && slotId <= ForgeConfig.general.maxSockets)
-                    return ItemStack.EMPTY;
+        if (isGemSlot(slotId) && !this.inventorySlots.get(slotId).getStack().isEmpty()) {
+            if (!ForgeConfig.general.gemsAreRemovable) {
+                return ItemStack.EMPTY;
+            } else if (ForgeConfig.general.destroyGemsOnRemoval) {
+                this.putStackInSlot(slotId, ItemStack.EMPTY);
+                return ItemStack.EMPTY;
+            }
+        }
         return super.slotClick(slotId,dragType,clickType,player);
+    }
+
+    private boolean isGemSlot(int slotId) {
+        return slotId > 0 && slotId <= ForgeConfig.general.maxSockets;
     }
 
     public class SlotSocketable extends Slot {
@@ -216,7 +223,7 @@ public class ContainerSocketing extends Container {
             if(!this.inventory.getStackInSlot(0).isEmpty()) {
                 ICapabilityHasSockets sockets = this.inventory.getStackInSlot(0).getCapability(CapabilityHasSockets.HAS_SOCKETS, null);
                 if (this.getHasStack())
-                    sockets.getSocketAt(this.getSlotIndex() - 1).setGem(new GemInstance(this.getStack()));
+                    sockets.replaceGemAt(new GemInstance(this.getStack()),this.getSlotIndex()-1);
                 else
                     sockets.removeGemAt(this.getSlotIndex() - 1);
             }

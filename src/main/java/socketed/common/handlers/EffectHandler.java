@@ -87,7 +87,11 @@ public class EffectHandler {
                 //Activated effect
                 if(effect instanceof ActivatableGemEffect) {
                     ActivatableGemEffect actEffect = (ActivatableGemEffect)effect;
-                    if(actEffect.getActivationType() == EnumActivationType.PASSIVE)
+                    if(actEffect.getActivationType() == EnumActivationType.PASSIVE_SELF)
+                        actEffect.getActivationType().triggerPerSecondEffect(actEffect, player);
+                    if(actEffect.getActivationType() == EnumActivationType.PASSIVE_NEARBY)
+                        actEffect.getActivationType().triggerPerSecondEffect(actEffect, player);
+                    if(actEffect.getActivationType() == EnumActivationType.PASSIVE_FAR)
                         actEffect.getActivationType().triggerPerSecondEffect(actEffect, player);
                 }
             }
@@ -96,7 +100,7 @@ public class EffectHandler {
 
     private static final List<IAttribute> offhandSkipAttributes = Arrays.asList(SharedMonsterAttributes.ATTACK_DAMAGE, SharedMonsterAttributes.ATTACK_SPEED);
 
-
+    //This handling assumes that gems cant be added or removed while wearing the item
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onEquipmentChanged(LivingEquipmentChangeEvent event) {
         if(event.getEntityLiving().world.isRemote) return;

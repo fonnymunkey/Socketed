@@ -11,10 +11,13 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import socketed.Socketed;
 import socketed.common.capabilities.CapabilityHasSockets;
+import socketed.common.capabilities.GemCombinationInstance;
 import socketed.common.capabilities.GemInstance;
 import socketed.common.capabilities.ICapabilityHasSockets;
-import socketed.common.config.DefaultCustomConfig;
+import socketed.common.config.DefaultJsonConfig;
+import socketed.common.jsondata.GemCombinationType;
 import socketed.common.jsondata.GemType;
 import socketed.common.jsondata.entry.effect.AttributeGemEffect;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
@@ -60,7 +63,19 @@ public class TooltipHandler {
             int gemCount = sockets.getGemCount();
             putBeforeItemId(TextFormatting.BOLD + I18n.format("socketed.tooltip.socket", gemCount, socketCount, TextFormatting.RESET));
 
-            for (GemInstance gemInstance : sockets.getAllGems()) {
+            //Gem Combinations
+            for (GemCombinationInstance combination : sockets.getGemCombinations()){
+                GemCombinationType combinationType = combination.getGemCombinationType();
+                //Display Name Tooltip
+                putBeforeItemId(" " + TextFormatting.ITALIC + combinationType.getColor() + I18n.format(combinationType.getDisplayName()) + TextFormatting.RESET);
+
+                //Effect Tooltips
+                for (GenericGemEffect effect : combination.getGemEffectsForSlots(slots)) {
+                    putBeforeItemId("  " + combinationType.getColor() + getTooltipString(effect) + TextFormatting.RESET);
+                }
+            }
+            //Gems
+            for (GemInstance gemInstance : sockets.getAllGems(false)) {
                 gemType = gemInstance.getGemType();
                 //Display Name Tooltip
                 putBeforeItemId(" " + gemType.getColor() + I18n.format(gemType.getDisplayName()) + TextFormatting.RESET);
@@ -89,13 +104,13 @@ public class TooltipHandler {
 
     private static String getSlotTooltip(List<EntityEquipmentSlot> slots) {
         HashSet<EntityEquipmentSlot> slotsSet = new HashSet<>(slots);
-        if(slotsSet.containsAll(DefaultCustomConfig.allSlots))
+        if(slotsSet.containsAll(DefaultJsonConfig.allSlots))
             return "";
 
         String tooltip = "";
-        if(slotsSet.containsAll(DefaultCustomConfig.body))
+        if(slotsSet.containsAll(DefaultJsonConfig.body))
             tooltip = I18n.format("socketed.tooltip.slotsbody");
-        else if(slotsSet.containsAll(DefaultCustomConfig.hands))
+        else if(slotsSet.containsAll(DefaultJsonConfig.hands))
             tooltip = I18n.format("socketed.tooltip.slotshands");
         else if(slots.size()==1) {
             EntityEquipmentSlot slot = slots.get(0);
