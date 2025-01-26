@@ -9,13 +9,17 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 @Config(modid = socketed.Socketed.MODID, name = socketed.Socketed.MODNAME, category = "")
 public class ForgeConfig {
 
-    public static General general = new General();
+    @Config.Name("Common")
+    public static Common COMMON = new Common();
 
-    public static Client client = new Client();
+    @Config.Name("Client")
+    public static Client CLIENT = new Client();
 
-    public static class General {
-        @Config.Comment("Maximum amount of sockets an item can have")
+    public static class Common {
+        
+        @Config.Comment("Maximum amount of sockets any item can have")
         @Config.Name("Max Sockets")
+        @Config.RangeInt(min = 1, max = 8)
         public int maxSockets = 8;
 
         @Config.Comment("Set to false to disable removing gems from sockets")
@@ -33,9 +37,12 @@ public class ForgeConfig {
 
     @Mod.EventBusSubscriber(modid = socketed.Socketed.MODID)
     private static class EventHandler {
+        
         @SubscribeEvent
         public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
-            if(event.getModID().equals(socketed.Socketed.MODID)) ConfigManager.sync(socketed.Socketed.MODID, Config.Type.INSTANCE);
+            if(event.getModID().equals(socketed.Socketed.MODID)) {
+                ConfigManager.sync(socketed.Socketed.MODID, Config.Type.INSTANCE);
+            }
         }
     }
 }

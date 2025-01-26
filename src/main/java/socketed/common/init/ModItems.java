@@ -5,6 +5,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 import socketed.common.item.ItemSocketTool;
 
 public class ModItems {
+    
     public static final ItemSocketTool SOCKET_TOOL = new ItemSocketTool("socket_tool");
 
     public static void registerItems(IForgeRegistry<Item> registry) {

@@ -9,12 +9,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public interface ICapabilityHasSockets {
+public interface ICapabilitySocketable {
+    
     // -----     SOCKET SECTION     -----
     // ----------------------------------
 
     /**
-     * Returns the amount of sockets this item has
+     * @return the amount of sockets this item has
      */
     int getSocketCount();
 
@@ -44,10 +45,10 @@ public interface ICapabilityHasSockets {
     boolean addSocketFromNBT(String socketType, NBTTagCompound tags);
 
     /**
-     * Replaces the socket at the specified position with a different socket
-     * does not change socket count, use setSocketCount for that
-     * Will place the current gem (if not empty) into the new socket if the new socket accepts it
-     * @return the gem that was in the old socket, if the new socket doesn't accept that gem
+     * Replaces the socket at the specified position with the supplied socket
+     * Does not change socket count, use setSocketCount for that
+     * Will attempt to place the existing gem into the new socket if the new socket accepts it
+     * @return the gem that was in the old socket, if the new socket is full or doesn't accept that gem
      */
     @Nullable
     GemInstance replaceSocketAt(GenericSocket socket, int socketIndex);
@@ -57,7 +58,7 @@ public interface ICapabilityHasSockets {
     // -------------------------------
 
     /**
-     * Returns the amount of socketed gems this item has
+     * @return the amount of socketed gems this item has
      */
     int getGemCount();
 
@@ -86,7 +87,6 @@ public interface ICapabilityHasSockets {
      * Replaces the gem in the specified socket with the provided gem.
      * Will not add the gem and return null if socketIndex is out of range or if the provided gem is null
      * @return the gem that was in the same socket before, can be null if socket was empty.
-     *
      */
     @Nullable
     GemInstance replaceGemAt(GemInstance gem, int socketIndex);

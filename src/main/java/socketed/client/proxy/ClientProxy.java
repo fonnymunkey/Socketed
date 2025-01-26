@@ -12,5 +12,4 @@ public class ClientProxy implements IProxy {
     public void registerItemRenderer(Item item, int meta, String name) {
         ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(Socketed.MODID + ":" + name, "inventory"));
     }
-
 }

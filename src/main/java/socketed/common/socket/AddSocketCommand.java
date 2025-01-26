@@ -7,9 +7,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
-import socketed.common.capabilities.CapabilityHasSockets;
+import socketed.common.capabilities.CapabilitySocketableHandler;
 
 public class AddSocketCommand extends CommandBase {
+    
     @Override
     public String getName() {
         return "socketed";
@@ -22,18 +23,19 @@ public class AddSocketCommand extends CommandBase {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] argString) throws WrongUsageException {
-        if (sender.getEntityWorld().isRemote) return;
-        if (sender.getCommandSenderEntity() == null) return;
-        if (!(sender.getCommandSenderEntity() instanceof EntityPlayer)) return;
+        if(sender.getEntityWorld().isRemote) return;
+        if(sender.getCommandSenderEntity() == null) return;
+        if(!(sender.getCommandSenderEntity() instanceof EntityPlayer)) return;
         if(argString.length < 2) return;
-        if (argString[0].equals("addsocket")) {
+        if(argString[0].equals("addsocket")) {
             try {
-                EntityPlayer player = (EntityPlayer) sender.getCommandSenderEntity();
+                EntityPlayer player = (EntityPlayer)sender.getCommandSenderEntity();
                 ItemStack mainhand = player.getHeldItemMainhand().copy();
-                if (!mainhand.hasCapability(CapabilityHasSockets.HAS_SOCKETS, null)) return;
-                mainhand.getCapability(CapabilityHasSockets.HAS_SOCKETS, null).addSocket(new TieredSocket(Integer.parseInt(argString[1])));
+                if(!mainhand.hasCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null)) return;
+                mainhand.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null).addSocket(new TieredSocket(Integer.parseInt(argString[1])));
                 player.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, mainhand);
-            } catch(NumberFormatException exception) {
+            }
+            catch(NumberFormatException exception) {
                 throw new WrongUsageException("Invalid Usage of Socketed addsocket command, must provide tier (0-3)", new Object[]{argString});
             }
         }

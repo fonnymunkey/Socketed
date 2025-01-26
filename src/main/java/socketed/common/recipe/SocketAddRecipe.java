@@ -6,9 +6,9 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.IForgeRegistryEntry;
-import socketed.common.capabilities.CapabilityHasSockets;
+import socketed.common.capabilities.CapabilitySocketableHandler;
 import socketed.common.capabilities.GemInstance;
-import socketed.common.capabilities.ICapabilityHasSockets;
+import socketed.common.capabilities.ICapabilitySocketable;
 import socketed.common.item.ItemSocketTool;
 
 import javax.annotation.Nonnull;
@@ -59,7 +59,7 @@ public class SocketAddRecipe extends IForgeRegistryEntry.Impl<IRecipe> implement
         //Iterate occupied slots, get recipient item and gem
         for(int i : occupiedSlots) {
             ItemStack itemStack = inv.getStackInSlot(i);
-            boolean hasSockets = itemStack.hasCapability(CapabilityHasSockets.HAS_SOCKETS, null);
+            boolean hasSockets = itemStack.hasCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
 
             boolean isGem = false;
             if (gem == null){
@@ -87,7 +87,7 @@ public class SocketAddRecipe extends IForgeRegistryEntry.Impl<IRecipe> implement
         //Output is copy of item with sockets
         ItemStack returnStack = inv.getStackInSlot(recipientSlot).copy();
 
-        ICapabilityHasSockets recipientSockets = returnStack.getCapability(CapabilityHasSockets.HAS_SOCKETS,null);
+        ICapabilitySocketable recipientSockets = returnStack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
 
         //Try to add Gem to sockets, return Empty Stack (crafting not possible) if no empty sockets available
         if(!recipientSockets.addGem(gem)) {

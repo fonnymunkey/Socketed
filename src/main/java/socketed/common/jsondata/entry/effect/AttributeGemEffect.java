@@ -2,16 +2,18 @@ package socketed.common.jsondata.entry.effect;
 
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.nbt.NBTTagCompound;
 import org.apache.logging.log4j.Level;
 import socketed.Socketed;
 import socketed.common.jsondata.entry.RandomValueRange;
 
-import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 public class AttributeGemEffect extends GenericGemEffect {
+    
+    public static final Random RAND = new Random();
+    
     private static final AttributeModifier INVALID = new AttributeModifier(new UUID(1,1), "INVALID", 0, 0);
 
     public static final String FILTER_NAME = "Attribute";
@@ -43,7 +45,7 @@ public class AttributeGemEffect extends GenericGemEffect {
         this.operation = effect.operation;
 
         //Only instantiated AttributeGemEffects have valid modifiers and amounts
-        this.amount = this.amountRange.generateValue(Socketed.RAND);
+        this.amount = this.amountRange.generateValue(RAND);
         this.modifier = new AttributeModifier(UUID.randomUUID(),Socketed.MODID+"GemEffect", this.amount, this.operation);
     }
 

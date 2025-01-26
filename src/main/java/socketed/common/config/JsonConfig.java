@@ -24,6 +24,7 @@ import java.nio.charset.Charset;
 import java.util.*;
 
 public class JsonConfig {
+    
     private static final Map<String, GemType> gemTypesDataMap = new HashMap<>();
     private static final Map<String, GemCombinationType> gemCombinationDataMap = new HashMap<>();
     private static List<GemCombinationType> sortedGemCombinationDataList = null;
@@ -77,10 +78,12 @@ public class JsonConfig {
     public static Map<String, GemType> getGemData() {
         return gemTypesDataMap;
     }
+    
     public static Map<String, GemCombinationType> getGemCombinationData() {
         return gemCombinationDataMap;
     }
 
+    //TODO refresh command
     public static void refreshAllData() {
         Socketed.LOGGER.info("Clearing existing Socketed jsondata");
         gemTypesDataMap.clear();
@@ -96,7 +99,7 @@ public class JsonConfig {
         Map<String, GemType> defaultData = DefaultJsonConfig.getDefaultGemTypes();
         for(Map.Entry<String, GemType> entry : defaultData.entrySet()) {
             try {
-                Gson gson = new GsonBuilder().registerTypeAdapter(RandomValueRange.class,new RandomValueRange.Serializer()).setPrettyPrinting().create();
+                Gson gson = new GsonBuilder().registerTypeAdapter(RandomValueRange.class, new RandomValueRange.Serializer()).setPrettyPrinting().create();
                 JsonElement elem = gson.toJsonTree(entry.getValue());
                 String entryString = gson.toJson(elem);
                 File file = new File(gemTypesFolder, String.format("%s.json", entry.getKey()));
@@ -120,7 +123,7 @@ public class JsonConfig {
         Map<String, GemCombinationType> defaultCombinationData = DefaultJsonConfig.getDefaultGemCombinations();
         for(Map.Entry<String, GemCombinationType> entry : defaultCombinationData.entrySet()) {
             try {
-                Gson gson = new GsonBuilder().registerTypeAdapter(RandomValueRange.class,new RandomValueRange.Serializer()).setPrettyPrinting().create();
+                Gson gson = new GsonBuilder().registerTypeAdapter(RandomValueRange.class, new RandomValueRange.Serializer()).setPrettyPrinting().create();
                 JsonElement elem = gson.toJsonTree(entry.getValue());
                 String entryString = gson.toJson(elem);
                 File file = new File(gemCombinationFolder, String.format("%s.json", entry.getKey()));

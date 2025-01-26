@@ -9,12 +9,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.Socketed;
-import socketed.common.capabilities.CapabilityHasSockets;
-import socketed.common.capabilities.ICapabilityHasSockets;
+import socketed.common.capabilities.CapabilitySocketableHandler;
+import socketed.common.capabilities.ICapabilitySocketable;
 import socketed.common.container.ContainerSocketing;
 
 @SideOnly(Side.CLIENT)
 public class GuiSocketing extends GuiContainer {
+    
     private static final ResourceLocation SOCKETING_GUI_TEXTURE = new ResourceLocation(Socketed.MODID, "textures/gui/container/socketing.png");
     private final InventoryPlayer playerInventory;
 
@@ -41,9 +42,9 @@ public class GuiSocketing extends GuiContainer {
 
         ItemStack socketable = this.inventorySlots.getSlot(0).getStack();
         //technically checking for cap isn't needed, as slot only accepts items with the cap, just safety against desyncs maybe
-        boolean hasSocketable = !socketable.isEmpty() && socketable.hasCapability(CapabilityHasSockets.HAS_SOCKETS,null);
+        boolean hasSocketable = !socketable.isEmpty() && socketable.hasCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
         if(hasSocketable) {
-            ICapabilityHasSockets itemSockets = this.inventorySlots.getSlot(0).getStack().getCapability(CapabilityHasSockets.HAS_SOCKETS,null);
+            ICapabilitySocketable itemSockets = this.inventorySlots.getSlot(0).getStack().getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
             int socketCount = itemSockets.getSocketCount();
             int xCent = ContainerSocketing.xCent - 1;
             int yCent = ContainerSocketing.yCent - 1;

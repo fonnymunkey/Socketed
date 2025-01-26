@@ -6,9 +6,9 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.IForgeRegistryEntry;
-import socketed.common.capabilities.CapabilityHasSockets;
+import socketed.common.capabilities.CapabilitySocketableHandler;
 import socketed.common.capabilities.GemInstance;
-import socketed.common.capabilities.ICapabilityHasSockets;
+import socketed.common.capabilities.ICapabilitySocketable;
 import socketed.common.item.ItemSocketTool;
 
 import javax.annotation.Nonnull;
@@ -47,7 +47,7 @@ public class SocketRemoveRecipe extends IForgeRegistryEntry.Impl<IRecipe> implem
                     return false;
                 }
             }
-            if (inv.getStackInSlot(i).hasCapability(CapabilityHasSockets.HAS_SOCKETS, null)) {
+            if (inv.getStackInSlot(i).hasCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null)) {
                 recipientSlot = i;
             }
         }
@@ -55,11 +55,11 @@ public class SocketRemoveRecipe extends IForgeRegistryEntry.Impl<IRecipe> implem
             resetTempValues();
             return false;
         }
-        if(inv.getStackInSlot(recipientSlot).getCapability(CapabilityHasSockets.HAS_SOCKETS,null).getSocketCount()<1){
+        if(inv.getStackInSlot(recipientSlot).getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null).getSocketCount()<1){
             resetTempValues();
             return false;
         }
-        if(inv.getStackInSlot(recipientSlot).getCapability(CapabilityHasSockets.HAS_SOCKETS,null).getGemCount()<1){
+        if(inv.getStackInSlot(recipientSlot).getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null).getGemCount()<1){
             resetTempValues();
             return false;
         }
@@ -71,7 +71,7 @@ public class SocketRemoveRecipe extends IForgeRegistryEntry.Impl<IRecipe> implem
     @Nonnull
     public ItemStack getCraftingResult(InventoryCrafting inv) {
         ItemStack returnStack = inv.getStackInSlot(recipientSlot).copy();
-        ICapabilityHasSockets sockets = returnStack.getCapability(CapabilityHasSockets.HAS_SOCKETS, null);
+        ICapabilitySocketable sockets = returnStack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
         sockets.removeAllGems();
 
         resetTempValues();
@@ -107,7 +107,7 @@ public class SocketRemoveRecipe extends IForgeRegistryEntry.Impl<IRecipe> implem
     @Nonnull
     public NonNullList<ItemStack> getRemainingItems(@Nonnull InventoryCrafting inv) {
         ItemStack oldGemmedItem = inv.getStackInSlot(recipientSlot).copy();
-        List<GemInstance> gemsInItem = oldGemmedItem.getCapability(CapabilityHasSockets.HAS_SOCKETS,null).removeAllGems();
+        List<GemInstance> gemsInItem = oldGemmedItem.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null).removeAllGems();
 
         resetTempValues();
         NonNullList<ItemStack> remainingItems = net.minecraftforge.common.ForgeHooks.defaultRecipeGetRemainingItems(inv);

@@ -4,20 +4,19 @@ import net.minecraft.nbt.NBTTagCompound;
 import socketed.common.capabilities.GemInstance;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public class TieredSocket extends GenericSocket {
 
     private final int tier;
 
-    public TieredSocket(int tier){
+    public TieredSocket(int tier) {
         this.tier = tier;
     }
 
     /**
      * create socket holding the provided gem
      */
-    public TieredSocket(GemInstance gem, int tier){
+    public TieredSocket(GemInstance gem, int tier) {
         super(gem);
         this.tier = tier;
     }

@@ -1,6 +1,5 @@
 package socketed.common.socket;
 
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import socketed.common.capabilities.GemInstance;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
@@ -10,12 +9,13 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
-public class GenericSocket{
+public class GenericSocket {
+    
     private GemInstance gem = null;
     private boolean disabled = false;
 
-    public GenericSocket(){
-
+    public GenericSocket() {
+    
     }
 
     /**
@@ -29,10 +29,8 @@ public class GenericSocket{
      * Create socket from nbt
      */
     public GenericSocket(NBTTagCompound nbt) {
-        if(nbt.hasKey("Gem"))
-            this.gem = new GemInstance(nbt.getCompoundTag("Gem"));
-        if(nbt.hasKey("Disabled"))
-            this.disabled = nbt.getBoolean("Disabled");
+        if(nbt.hasKey("Gem")) this.gem = new GemInstance(nbt.getCompoundTag("Gem"));
+        if(nbt.hasKey("Disabled")) this.disabled = nbt.getBoolean("Disabled");
     }
 
     /**
@@ -46,14 +44,14 @@ public class GenericSocket{
     /**
      * Disable the socket (used for gem combinations that overwrite the original effects of their gems)
      */
-    public void setDisabled(boolean disabled){
+    public void setDisabled(boolean disabled) {
         this.disabled = disabled;
     }
 
     /**
      * Whether this socket accepts the given gem. Default socket accepts all gems
      */
-    public boolean acceptsGem(@Nonnull GemInstance gem){
+    public boolean acceptsGem(@Nonnull GemInstance gem) {
         return true;
     }
     
@@ -91,10 +89,8 @@ public class GenericSocket{
      */
     @Nonnull
     public List<GenericGemEffect> getEffects() {
-        if (gem != null)
-            return gem.getGemEffects();
-        else
-            return Collections.emptyList();
+        if(gem != null) return gem.getGemEffects();
+        else return Collections.emptyList();
     }
 
     /**
@@ -103,10 +99,9 @@ public class GenericSocket{
     @Nonnull
     public NBTTagCompound writeToNBT() {
         NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setString("SocketType","Generic");
-        if (this.gem != null)
-            nbt.setTag("Gem", this.gem.writeToNBT());
-        nbt.setBoolean("Disabled",this.disabled);
+        nbt.setString("SocketType", "Generic");
+        if(this.gem != null) nbt.setTag("Gem", this.gem.writeToNBT());
+        nbt.setBoolean("Disabled", this.disabled);
         return nbt;
     }
 }

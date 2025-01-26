@@ -15,7 +15,7 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import socketed.common.capabilities.CapabilityHasSockets;
+import socketed.common.capabilities.CapabilitySocketableHandler;
 import socketed.common.jsondata.entry.effect.AttributeGemEffect;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
 import socketed.common.jsondata.entry.effect.activatable.ActivatableGemEffect;
@@ -34,36 +34,43 @@ public class EffectHandler {
         if(event.getEntity().world.isRemote) return;
         //TODO: add activation types for ranged vs melee
         //TODO: same for indirect dmg sources
-        if(event.getEntity() instanceof EntityPlayer)
+        if(event.getEntity() instanceof EntityPlayer) {
             handleHitEffects((EntityPlayer)event.getEntityLiving(), (EntityPlayer)event.getSource().getTrueSource(), event.getSource(), true);
-        if(event.getSource().getTrueSource() instanceof EntityPlayer)
+        }
+        if(event.getSource().getTrueSource() instanceof EntityPlayer) {
             handleHitEffects((EntityPlayer)event.getSource().getTrueSource(), event.getEntityLiving(), event.getSource(), false);
+        }
     }
 
     private static void handleHitEffects(EntityPlayer player, EntityLivingBase other, DamageSource source, boolean received) {
         //Iterate active slots
-        for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
+        for(EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
             ItemStack stack = player.getItemStackFromSlot(slot);
-            if(!stack.hasCapability(CapabilityHasSockets.HAS_SOCKETS,null)) continue;
+            if(!stack.hasCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null)) continue;
 
-            List<GenericGemEffect> effects = stack.getCapability(CapabilityHasSockets.HAS_SOCKETS,null).getAllEffectsForSlot(slot);
-            for(GenericGemEffect effect : effects){
+            List<GenericGemEffect> effects = stack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null).getAllEffectsForSlot(slot);
+            for(GenericGemEffect effect : effects) {
                 //No attribute from hit effect currently
                 //Potion effect
-                if (effect instanceof PotionGemEffect) {
+                if(effect instanceof PotionGemEffect) {
                     PotionGemEffect potEffect = (PotionGemEffect) effect;
-                    if (potEffect.getPotion() == null) continue;
+                    if(potEffect.getPotion() == null) continue;
                     IActivationType activationType = potEffect.getActivationType();
                     if(received) {
-                        if(activationType == EnumActivationType.ON_ATTACKED_SELF)
+                        if(activationType == EnumActivationType.ON_ATTACKED_SELF) {
                             potEffect.getActivationType().triggerOnAttackEffect(potEffect, player, source);
-                        if(activationType == EnumActivationType.ON_ATTACKED_ATTACKER)
+                        }
+                        if(activationType == EnumActivationType.ON_ATTACKED_ATTACKER) {
                             potEffect.getActivationType().triggerOnAttackEffect(potEffect, other, source);
-                    } else {
-                        if(activationType == EnumActivationType.ON_ATTACKING_SELF)
+                        }
+                    }
+                    else {
+                        if(activationType == EnumActivationType.ON_ATTACKING_SELF) {
                             potEffect.getActivationType().triggerOnAttackEffect(potEffect, player, source);
-                        if(activationType == EnumActivationType.ON_ATTACKING_TARGET)
+                        }
+                        if(activationType == EnumActivationType.ON_ATTACKING_TARGET) {
                             potEffect.getActivationType().triggerOnAttackEffect(potEffect, other, source);
+                        }
                     }
                 }
             }
@@ -76,23 +83,26 @@ public class EffectHandler {
                 !(event.getEntityLiving() instanceof EntityPlayer) ||
                 event.getEntityLiving().ticksExisted%20 != 0
         ) return;
-        EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+        EntityPlayer player = (EntityPlayer)event.getEntityLiving();
 
         for(EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {//Iterate active slots
             ItemStack stack = player.getItemStackFromSlot(slot);
-            if(!stack.hasCapability(CapabilityHasSockets.HAS_SOCKETS,null)) continue;
+            if(!stack.hasCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null)) continue;
 
-            List<GenericGemEffect> effects = stack.getCapability(CapabilityHasSockets.HAS_SOCKETS,null).getAllEffectsForSlot(slot);
+            List<GenericGemEffect> effects = stack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null).getAllEffectsForSlot(slot);
             for(GenericGemEffect effect : effects){
                 //Activated effect
                 if(effect instanceof ActivatableGemEffect) {
                     ActivatableGemEffect actEffect = (ActivatableGemEffect)effect;
-                    if(actEffect.getActivationType() == EnumActivationType.PASSIVE_SELF)
+                    if(actEffect.getActivationType() == EnumActivationType.PASSIVE_SELF) {
                         actEffect.getActivationType().triggerPerSecondEffect(actEffect, player);
-                    if(actEffect.getActivationType() == EnumActivationType.PASSIVE_NEARBY)
+                    }
+                    if(actEffect.getActivationType() == EnumActivationType.PASSIVE_NEARBY) {
                         actEffect.getActivationType().triggerPerSecondEffect(actEffect, player);
-                    if(actEffect.getActivationType() == EnumActivationType.PASSIVE_FAR)
+                    }
+                    if(actEffect.getActivationType() == EnumActivationType.PASSIVE_FAR) {
                         actEffect.getActivationType().triggerPerSecondEffect(actEffect, player);
+                    }
                 }
             }
         }
@@ -105,7 +115,7 @@ public class EffectHandler {
     public static void onEquipmentChanged(LivingEquipmentChangeEvent event) {
         if(event.getEntityLiving().world.isRemote) return;
         if(!(event.getEntityLiving() instanceof EntityPlayer)) return;
-        EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+        EntityPlayer player = (EntityPlayer)event.getEntityLiving();
 
         EntityEquipmentSlot slot = event.getSlot();
         ItemStack stackOld = event.getFrom();
@@ -114,45 +124,51 @@ public class EffectHandler {
         //ItemStack stackNew = player.getItemStackFromSlot(slot);
 
         //Remove all modifiers that were on removed item
-        if(stackOld.hasCapability(CapabilityHasSockets.HAS_SOCKETS,null)){
-            List<GenericGemEffect> effectsOld = stackOld.getCapability(CapabilityHasSockets.HAS_SOCKETS, null).getAllEffectsForSlot(slot);
-            for (GenericGemEffect effect : effectsOld) {
-                if (effect instanceof AttributeGemEffect) {
-                    AttributeGemEffect attrEffect = (AttributeGemEffect) effect;
+        if(stackOld.hasCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null)) {
+            List<GenericGemEffect> effectsOld = stackOld.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null).getAllEffectsForSlot(slot);
+            for(GenericGemEffect effect : effectsOld) {
+                if(effect instanceof AttributeGemEffect) {
+                    AttributeGemEffect attrEffect = (AttributeGemEffect)effect;
 
                     String attribute = attrEffect.getAttribute();
                     IAttributeInstance attrInstance = player.getAttributeMap().getAttributeInstanceByName(attribute);
-                    if (attrInstance == null) continue;
+                    if(attrInstance == null) continue;
 
+                    //TODO RLCombat compat
                     //Skip damage/speed/reach attributes for offhand, let 2 hand mods like RLCombat handle the compat properly
-                    if (slot == EntityEquipmentSlot.OFFHAND && (offhandSkipAttributes.contains(attrInstance.getAttribute()) || attribute.contains("reachDistance")))
+                    if(slot == EntityEquipmentSlot.OFFHAND && (offhandSkipAttributes.contains(attrInstance.getAttribute()) || attribute.contains("reachDistance"))) {
                         continue;
+                    }
 
                     AttributeModifier modifier = attrEffect.getModifier();
-                    if (attrInstance.hasModifier(modifier))
+                    if(attrInstance.hasModifier(modifier)) {
                         attrInstance.removeModifier(modifier);
+                    }
                 }
             }
         }
 
         //Apply new modifiers from new item
-        if(stackNew.hasCapability(CapabilityHasSockets.HAS_SOCKETS,null)) {
-            List<GenericGemEffect> effectsNew = stackNew.getCapability(CapabilityHasSockets.HAS_SOCKETS, null).getAllEffectsForSlot(slot);
-            for (GenericGemEffect effect : effectsNew) {
-                if (effect instanceof AttributeGemEffect) {
-                    AttributeGemEffect attrEffect = (AttributeGemEffect) effect;
+        if(stackNew.hasCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null)) {
+            List<GenericGemEffect> effectsNew = stackNew.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null).getAllEffectsForSlot(slot);
+            for(GenericGemEffect effect : effectsNew) {
+                if(effect instanceof AttributeGemEffect) {
+                    AttributeGemEffect attrEffect = (AttributeGemEffect)effect;
 
                     String attribute = attrEffect.getAttribute();
                     IAttributeInstance attrInstance = player.getAttributeMap().getAttributeInstanceByName(attribute);
-                    if (attrInstance == null) continue;
-
+                    if(attrInstance == null) continue;
+                    
+                    //TODO RLCombat compat
                     //Skip damage/speed/reach attributes for offhand, let 2 hand mods like RLCombat handle the compat properly
-                    if (slot == EntityEquipmentSlot.OFFHAND && (offhandSkipAttributes.contains(attrInstance.getAttribute()) || attribute.contains("reachDistance")))
+                    if(slot == EntityEquipmentSlot.OFFHAND && (offhandSkipAttributes.contains(attrInstance.getAttribute()) || attribute.contains("reachDistance"))) {
                         continue;
+                    }
 
                     AttributeModifier modifier = attrEffect.getModifier();
-                    if (!attrInstance.hasModifier(modifier))
+                    if(!attrInstance.hasModifier(modifier)) {
                         attrInstance.applyModifier(modifier);
+                    }
                 }
             }
         }
