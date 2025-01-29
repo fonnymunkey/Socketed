@@ -52,11 +52,6 @@ public class CapabilitySocketableHandler {
         }
 
         @SubscribeEvent
-        public static void onCrafted(PlayerEvent.ItemCraftedEvent event){
-            AddSocketsOnGeneration.addSockets(event.crafting, AddSocketsOnGeneration.EnumItemCreationContext.CRAFTING);
-        }
-
-        @SubscribeEvent
         public static void onLivingDrops(LivingDropsEvent event){
             //TODO: stop socket farm where players just let mobs pick up unsocketed items until they get sockets
             for(EntityItem itemDrop : event.getDrops())

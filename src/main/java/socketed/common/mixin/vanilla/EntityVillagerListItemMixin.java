@@ -20,7 +20,7 @@ public class EntityVillagerListItemMixin {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/village/MerchantRecipeList;add(Ljava/lang/Object;)Z"),
             remap = false
     )
-    void socketed_entityVillagerListItem_addSockets(IMerchant merchant, MerchantRecipeList recipeList, Random random, CallbackInfo ci, @Local(ordinal = 1) ItemStack stack){
+    private void socketed_entityVillagerListItem_addSockets(IMerchant merchant, MerchantRecipeList recipeList, Random random, CallbackInfo ci, @Local(ordinal = 1) ItemStack stack){
         AddSocketsOnGeneration.addSockets(stack, AddSocketsOnGeneration.EnumItemCreationContext.MERCHANT);
     }
 }

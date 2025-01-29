@@ -16,7 +16,7 @@ public class EntityVillagerListEnchantedItemMixin {
             method = "addMerchantRecipe",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/enchantment/EnchantmentHelper;addRandomEnchantment(Ljava/util/Random;Lnet/minecraft/item/ItemStack;IZ)Lnet/minecraft/item/ItemStack;")
     )
-    ItemStack socketed_entityVillagerListEnchantedItem_addSockets(Random random, ItemStack stack, int level, boolean allowTreasure){
+    private ItemStack socketed_entityVillagerListEnchantedItem_addSockets(Random random, ItemStack stack, int level, boolean allowTreasure){
         AddSocketsOnGeneration.addSockets(stack, AddSocketsOnGeneration.EnumItemCreationContext.MERCHANT);
         return EnchantmentHelper.addRandomEnchantment(random, stack, level, allowTreasure);
     }

@@ -18,9 +18,6 @@ public class AddSocketsOnGeneration {
 
         //Just for testing:
         switch (context) {
-            case CRAFTING:
-                itemSockets.addSocket(new GenericSocket());
-                break;
             case MERCHANT:
                 itemSockets.addSocket(new GenericSocket());
                 itemSockets.addSocket(new GenericSocket());
@@ -42,7 +39,6 @@ public class AddSocketsOnGeneration {
     }
 
     public enum EnumItemCreationContext {
-        CRAFTING,
         MERCHANT,
         LOOT,
         MOB_DROP
