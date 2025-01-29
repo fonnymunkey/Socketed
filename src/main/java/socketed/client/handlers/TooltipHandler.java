@@ -62,6 +62,7 @@ public class TooltipHandler {
             //Sockets (x/y) Tooltip
             int socketCount = sockets.getSocketCount();
             int gemCount = sockets.getGemCount();
+            if(socketCount <= 0) return;
             insertTooltip(tooltips, TextFormatting.BOLD + I18n.format("socketed.tooltip.socket", gemCount, socketCount, TextFormatting.RESET));
 
             //Gem Combinations
