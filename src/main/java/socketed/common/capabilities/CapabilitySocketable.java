@@ -26,7 +26,22 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 	 * Ordered list of sockets, default size of 0 sockets
 	 */
 	private final List<GenericSocket> sockets = new ArrayList<>();
-	
+
+	/**
+	 * Every item should only ever get sockets assigned once, this flag shows if it has
+	 */
+	private boolean receivedInitialSockets = false;
+
+	@Override
+	public boolean getReceivedInitialSockets(){
+		return receivedInitialSockets;
+	}
+
+	@Override
+	public void setReceivedInitialSockets() {
+		this.receivedInitialSockets = true;
+	}
+
 	/**
 	 * List of GemCombinations this item has
 	 */

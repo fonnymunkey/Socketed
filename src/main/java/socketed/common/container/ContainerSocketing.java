@@ -221,7 +221,7 @@ public class ContainerSocketing extends Container {
             ICapabilitySocketable itemSockets = socketable.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
             if(itemSockets.getSocketCount() < this.getSlotIndex()) return false;
             GemInstance gem = new GemInstance(stack);
-            return itemSockets.getSocketAt(this.getSlotIndex() - 1).acceptsGem(gem);
+            return gem.hasGemEffectsForStack(socketable) && itemSockets.getSocketAt(this.getSlotIndex() - 1).acceptsGem(gem);
         }
         
         @Override

@@ -1,5 +1,6 @@
 package socketed.common.capabilities;
 
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -11,10 +12,13 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import socketed.Socketed;
 import socketed.common.socket.GenericSocket;
+import socketed.common.util.AddSocketsOnGeneration;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -45,6 +49,18 @@ public class CapabilitySocketableHandler {
             if(item instanceof ItemArmor || item instanceof ItemTool || item instanceof ItemHoe || item instanceof ItemSword) {
                 event.addCapability(CapabilitySocketableHandler.CAP_SOCKETABLE_KEY, new CapabilitySocketableHandler.Provider(stack));
             }
+        }
+
+        @SubscribeEvent
+        public static void onCrafted(PlayerEvent.ItemCraftedEvent event){
+            AddSocketsOnGeneration.addSockets(event.crafting, AddSocketsOnGeneration.EnumItemCreationContext.CRAFTING);
+        }
+
+        @SubscribeEvent
+        public static void onLivingDrops(LivingDropsEvent event){
+            //TODO: stop socket farm where players just let mobs pick up unsocketed items until they get sockets
+            for(EntityItem itemDrop : event.getDrops())
+                AddSocketsOnGeneration.addSockets(itemDrop.getItem(), AddSocketsOnGeneration.EnumItemCreationContext.MOB_DROP);
         }
     }
 

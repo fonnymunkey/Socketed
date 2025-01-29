@@ -14,6 +14,16 @@ public interface ICapabilitySocketable {
     // ----------------------------------
 
     /**
+     * @return whether this item already received sockets from various generation contexts
+     */
+    boolean getReceivedInitialSockets();
+
+    /**
+     * sets that this item already received sockets from various generation contexts
+     */
+    void setReceivedInitialSockets();
+
+    /**
      * @return the amount of sockets this item has
      */
     int getSocketCount();

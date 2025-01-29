@@ -6,7 +6,7 @@
   - +x lvl to specific enchant
   - whatever = slowness passive_nearby
   - lower merchant cost
-  - plus enchanting lvl (lapis)
+  - plus enchanting lvl (lapis, maybe SME attribute)
   - plus gold from mobs (lol)
   - lifesteal + life degen
   - plus durability
