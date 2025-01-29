@@ -8,6 +8,7 @@
   "mixins": [
     "EntityVillagerListEnchantedItemMixin",
     "EntityVillagerListItemMixin",
+    "ItemStackMixin",
     "LootEntryItemMixin"
   ],
   "injectors": {

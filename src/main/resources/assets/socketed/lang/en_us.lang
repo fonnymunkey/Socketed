@@ -59,3 +59,5 @@ socketed.modifier.take.take.1=-%s%% to -%s%% %s
 socketed.modifier.plus.plus.2=+%s%% to +%s%% %s
 socketed.modifier.take.plus.2=+%s%% to -%s%% %s
 socketed.modifier.take.take.2=-%s%% to -%s%% %s
+
+attribute.name.socketed.durability=Durability
