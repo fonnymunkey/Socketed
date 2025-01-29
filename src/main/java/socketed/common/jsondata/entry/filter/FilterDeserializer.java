@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FilterDeserializer implements JsonDeserializer<FilterEntry> {
+    
     private final Gson gson;
     private final Map<String, Class<? extends FilterEntry>> typeReg;
 
@@ -22,7 +23,7 @@ public class FilterDeserializer implements JsonDeserializer<FilterEntry> {
     @Override
     public FilterEntry deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject obj = json.getAsJsonObject();
-        Class<? extends FilterEntry> typeClass = typeReg.get(obj.get(FilterEntry.FILTER_NAME).getAsString());
+        Class<? extends FilterEntry> typeClass = typeReg.get(obj.get(FilterEntry.TYPE_FIELD).getAsString());
         return this.gson.fromJson(obj, typeClass);
     }
 }

@@ -16,12 +16,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import socketed.common.capabilities.CapabilitySocketableHandler;
+import socketed.common.capabilities.ICapabilitySocketable;
 import socketed.common.jsondata.entry.effect.AttributeGemEffect;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
 import socketed.common.jsondata.entry.effect.activatable.ActivatableGemEffect;
-import socketed.common.jsondata.entry.effect.activatable.EnumActivationType;
-import socketed.common.jsondata.entry.effect.activatable.IActivationType;
-import socketed.common.jsondata.entry.effect.activatable.PotionGemEffect;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,46 +29,31 @@ public class EffectHandler {
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onEntityHit(LivingAttackEvent event) {
-        if(event.getEntity().world.isRemote) return;
-        //TODO: add activation types for ranged vs melee
-        //TODO: same for indirect dmg sources
-        if(event.getEntity() instanceof EntityPlayer) {
-            handleHitEffects((EntityPlayer)event.getEntityLiving(), (EntityPlayer)event.getSource().getTrueSource(), event.getSource(), true);
+        if(event.getEntityLiving() == null) return;
+        if(event.getEntityLiving().world.isRemote) return;
+        if(event.getSource() == null) return;
+        
+        if(event.getEntityLiving() instanceof EntityPlayer) {
+            handleHitEffects((EntityPlayer)event.getEntityLiving(), event.getEntityLiving(), event.getSource(), true);
         }
         if(event.getSource().getTrueSource() instanceof EntityPlayer) {
             handleHitEffects((EntityPlayer)event.getSource().getTrueSource(), event.getEntityLiving(), event.getSource(), false);
         }
     }
 
-    private static void handleHitEffects(EntityPlayer player, EntityLivingBase other, DamageSource source, boolean received) {
+    private static void handleHitEffects(EntityPlayer player, EntityLivingBase victim, DamageSource source, boolean received) {
         //Iterate active slots
+        //TODO: handle iteration automatically from expanded SlotTypes?
         for(EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
             ItemStack stack = player.getItemStackFromSlot(slot);
-            if(!stack.hasCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null)) continue;
-
-            List<GenericGemEffect> effects = stack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null).getAllEffectsForSlot(slot);
-            for(GenericGemEffect effect : effects) {
-                //No attribute from hit effect currently
-                //Potion effect
-                if(effect instanceof PotionGemEffect) {
-                    PotionGemEffect potEffect = (PotionGemEffect) effect;
-                    if(potEffect.getPotion() == null) continue;
-                    IActivationType activationType = potEffect.getActivationType();
-                    if(received) {
-                        if(activationType == EnumActivationType.ON_ATTACKED_SELF) {
-                            potEffect.getActivationType().triggerOnAttackEffect(potEffect, player, source);
-                        }
-                        if(activationType == EnumActivationType.ON_ATTACKED_ATTACKER) {
-                            potEffect.getActivationType().triggerOnAttackEffect(potEffect, other, source);
-                        }
-                    }
-                    else {
-                        if(activationType == EnumActivationType.ON_ATTACKING_SELF) {
-                            potEffect.getActivationType().triggerOnAttackEffect(potEffect, player, source);
-                        }
-                        if(activationType == EnumActivationType.ON_ATTACKING_TARGET) {
-                            potEffect.getActivationType().triggerOnAttackEffect(potEffect, other, source);
-                        }
+            
+            ICapabilitySocketable cap = stack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
+            if(cap != null) {
+                List<GenericGemEffect> effects = cap.getAllEffectsForStackSlot();
+                for(GenericGemEffect effect : effects) {
+                    if(effect instanceof ActivatableGemEffect) {
+                        ActivatableGemEffect activatableEffect = (ActivatableGemEffect)effect;
+                        activatableEffect.getActivationType().triggerOnAttackEffect(activatableEffect, victim, source, received);
                     }
                 }
             }
@@ -79,29 +62,24 @@ public class EffectHandler {
 
     @SubscribeEvent
     public static void onPlayerUpdate(LivingEvent.LivingUpdateEvent event) {
-        if(event.getEntityLiving().world.isRemote ||
-                !(event.getEntityLiving() instanceof EntityPlayer) ||
-                event.getEntityLiving().ticksExisted%20 != 0
-        ) return;
+        if(!(event.getEntityLiving() instanceof EntityPlayer)) return;
+        if(event.getEntityLiving().world.isRemote) return;
+        //TODO: allow for sub-20 tick triggers/cache active effects as player capability for performance
+        if(event.getEntityLiving().ticksExisted%20 != 0) return;
         EntityPlayer player = (EntityPlayer)event.getEntityLiving();
-
-        for(EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {//Iterate active slots
+        
+        //Iterate active slots
+        //TODO: handle iteration automatically from expanded SlotTypes?
+        for(EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
             ItemStack stack = player.getItemStackFromSlot(slot);
-            if(!stack.hasCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null)) continue;
-
-            List<GenericGemEffect> effects = stack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null).getAllEffectsForSlot(slot);
-            for(GenericGemEffect effect : effects){
-                //Activated effect
-                if(effect instanceof ActivatableGemEffect) {
-                    ActivatableGemEffect actEffect = (ActivatableGemEffect)effect;
-                    if(actEffect.getActivationType() == EnumActivationType.PASSIVE_SELF) {
-                        actEffect.getActivationType().triggerPerSecondEffect(actEffect, player);
-                    }
-                    if(actEffect.getActivationType() == EnumActivationType.PASSIVE_NEARBY) {
-                        actEffect.getActivationType().triggerPerSecondEffect(actEffect, player);
-                    }
-                    if(actEffect.getActivationType() == EnumActivationType.PASSIVE_FAR) {
-                        actEffect.getActivationType().triggerPerSecondEffect(actEffect, player);
+            
+            ICapabilitySocketable cap = stack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
+            if(cap != null) {
+                List<GenericGemEffect> effects = cap.getAllEffectsForStackSlot();
+                for(GenericGemEffect effect : effects) {
+                    if(effect instanceof ActivatableGemEffect) {
+                        ActivatableGemEffect activatableEffect = (ActivatableGemEffect)effect;
+                        activatableEffect.getActivationType().triggerPerSecondEffect(activatableEffect, player);
                     }
                 }
             }
@@ -124,8 +102,9 @@ public class EffectHandler {
         //ItemStack stackNew = player.getItemStackFromSlot(slot);
 
         //Remove all modifiers that were on removed item
-        if(stackOld.hasCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null)) {
-            List<GenericGemEffect> effectsOld = stackOld.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null).getAllEffectsForSlot(slot);
+        ICapabilitySocketable capOld = stackOld.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
+        if(capOld != null) {
+            List<GenericGemEffect> effectsOld = capOld.getAllEffectsForStackSlot();
             for(GenericGemEffect effect : effectsOld) {
                 if(effect instanceof AttributeGemEffect) {
                     AttributeGemEffect attrEffect = (AttributeGemEffect)effect;
@@ -149,8 +128,9 @@ public class EffectHandler {
         }
 
         //Apply new modifiers from new item
-        if(stackNew.hasCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null)) {
-            List<GenericGemEffect> effectsNew = stackNew.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null).getAllEffectsForSlot(slot);
+        ICapabilitySocketable capNew = stackNew.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
+        if(capNew != null) {
+            List<GenericGemEffect> effectsNew = capNew.getAllEffectsForStackSlot();
             for(GenericGemEffect effect : effectsNew) {
                 if(effect instanceof AttributeGemEffect) {
                     AttributeGemEffect attrEffect = (AttributeGemEffect)effect;

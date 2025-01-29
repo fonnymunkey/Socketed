@@ -1,31 +1,28 @@
 package socketed.client.handlers;
 
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import socketed.common.jsondata.entry.effect.slot.ISlotType;
 import socketed.common.capabilities.CapabilitySocketableHandler;
 import socketed.common.capabilities.GemCombinationInstance;
 import socketed.common.capabilities.GemInstance;
 import socketed.common.capabilities.ICapabilitySocketable;
 import socketed.common.jsondata.GemCombinationType;
 import socketed.common.jsondata.GemType;
-import socketed.common.jsondata.entry.RandomValueRange;
-import socketed.common.jsondata.entry.effect.AttributeGemEffect;
-import socketed.common.jsondata.entry.effect.EnumSlots;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
-import socketed.common.jsondata.entry.effect.activatable.PotionGemEffect;
 
 import java.util.List;
 
+@SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber
 public class TooltipHandler {
 
@@ -62,22 +59,20 @@ public class TooltipHandler {
             ICapabilitySocketable sockets = stack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
             if(sockets == null) return;
 
-            List<EntityEquipmentSlot> slots = CapabilitySocketableHandler.getSlotsForItemStack(stack);
-
             //Sockets (x/y) Tooltip
             int socketCount = sockets.getSocketCount();
             int gemCount = sockets.getGemCount();
             insertTooltip(tooltips, TextFormatting.BOLD + I18n.format("socketed.tooltip.socket", gemCount, socketCount, TextFormatting.RESET));
 
             //Gem Combinations
-            for(GemCombinationInstance combination : sockets.getGemCombinations()){
+            for(GemCombinationInstance combination : sockets.getGemCombinations()) {
                 GemCombinationType combinationType = combination.getGemCombinationType();
                 //Display Name Tooltip
                 insertTooltip(tooltips, " " + TextFormatting.ITALIC + combinationType.getColor() + I18n.format(combinationType.getDisplayName()) + TextFormatting.RESET);
 
                 //Effect Tooltips
-                for(GenericGemEffect effect : combination.getGemEffectsForSlots(slots)) {
-                    insertTooltip(tooltips, "  " + combinationType.getColor() + getTooltipString(effect, true) + TextFormatting.RESET);
+                for(GenericGemEffect effect : combination.getGemEffectsForStack(stack)) {
+                    insertTooltip(tooltips, "  " + combinationType.getColor() + effect.getTooltipString(true) + TextFormatting.RESET);
                 }
             }
             //Gems
@@ -87,8 +82,8 @@ public class TooltipHandler {
                 insertTooltip(tooltips, " " + gemType.getColor() + I18n.format(gemType.getDisplayName()) + TextFormatting.RESET);
 
                 //Effect Tooltips
-                for(GenericGemEffect effect : gemInstance.getGemEffectsForSlots(slots)) {
-                    insertTooltip(tooltips, "  " + gemType.getColor() + getTooltipString(effect, true) + TextFormatting.RESET);
+                for(GenericGemEffect effect : gemInstance.getGemEffectsForStack(stack)) {
+                    insertTooltip(tooltips, "  " + gemType.getColor() + effect.getTooltipString(true) + TextFormatting.RESET);
                 }
             }
         }
@@ -100,56 +95,11 @@ public class TooltipHandler {
 
             //Effect Tooltips
             for(GenericGemEffect effect : gemType.getEffects()) {
-                String tooltip = "  " + gemType.getColor() + getTooltipString(effect,false);
-                tooltip += EnumSlots.getSlotTooltip(effect.getEnumSlots());
+                String tooltip = "  " + gemType.getColor() + effect.getTooltipString(false);
+                tooltip += " " + ISlotType.getSlotTooltip(effect.getSlotType());
                 insertTooltip(tooltips, tooltip + TextFormatting.RESET);
             }
         }
-    }
-
-    //TODO self define tooltip
-    private static String getTooltipString(GenericGemEffect entry, boolean onItem) {
-        if(entry instanceof AttributeGemEffect) return getAttributeString((AttributeGemEffect)entry, onItem);
-        else if(entry instanceof PotionGemEffect) return getPotionString((PotionGemEffect)entry, onItem);
-        else return "";
-    }
-
-    private static String getRandomRangeString(RandomValueRange range, int operation, String attributeString){
-        if(range.getMax() == range.getMin()) {
-            double amount = range.getMin() * (operation == 0 ? 1.0D : 100.0D);
-            if(amount > 0.0D) return I18n.format("attribute.modifier.plus." + operation, ItemStack.DECIMALFORMAT.format(amount), attributeString);
-            else if(amount < 0.0D) return I18n.format("attribute.modifier.take." + operation, ItemStack.DECIMALFORMAT.format(amount), attributeString);
-            else return "";
-        }
-        else {
-            double min = range.getMin() * (operation == 0 ? 1.0D : 100.0D);
-            double max = range.getMax() * (operation == 0 ? 1.0D : 100.0D);
-            if(min >= 0.0D) return I18n.format("socketed.modifier.plus.plus." + operation, ItemStack.DECIMALFORMAT.format(min), ItemStack.DECIMALFORMAT.format(max), attributeString);
-            else if(min < 0.0D && max >=0.0D) return I18n.format("socketed.modifier.take.plus." + operation, ItemStack.DECIMALFORMAT.format(min), ItemStack.DECIMALFORMAT.format(max), attributeString);
-            else if(min < 0.0D && max < 0.0D) return I18n.format("socketed.modifier.take.take." + operation, ItemStack.DECIMALFORMAT.format(min), ItemStack.DECIMALFORMAT.format(max), attributeString);
-            return "";
-        }
-    }
-
-    private static String getAttributeString(AttributeGemEffect entry, boolean onItem) {
-        if(onItem) {
-            AttributeModifier modifier = entry.getModifier();
-            double amount = modifier.getAmount() * (modifier.getOperation() == 0 ? 1.0D : 100.0D);
-            if(amount > 0.0D) return I18n.format("attribute.modifier.plus." + modifier.getOperation(), ItemStack.DECIMALFORMAT.format(amount), I18n.format("attribute.name." + entry.getAttribute()));
-            else if (amount < 0.0D) return I18n.format("attribute.modifier.take." + modifier.getOperation(), ItemStack.DECIMALFORMAT.format(amount), I18n.format("attribute.name." + entry.getAttribute()));
-            else return "";
-        }
-        else return getRandomRangeString(entry.getAmountRange(), entry.getOperation(), I18n.format("attribute.name." + entry.getAttribute()));
-    }
-
-    private static String getPotionString(PotionGemEffect entry, boolean onItem) {
-        Potion potion = entry.getPotion();
-        if(potion == null) return "";
-        String tooltip = I18n.format("socketed.tooltip.activationtype." + entry.getActivationType().getToolTipKey(), I18n.format(potion.getName()));
-        int potionLvl = entry.getAmplifier() + 1;
-        if(potionLvl == 1) return tooltip;
-        else if(potionLvl > 1 && potionLvl <= 10) return tooltip + " " + I18n.format("enchantment.level." + potionLvl);
-        else return tooltip + " " + potionLvl;
     }
 
     private static void insertTooltip(List<String> tooltips, String tooltip) {

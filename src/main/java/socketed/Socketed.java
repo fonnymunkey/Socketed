@@ -7,6 +7,7 @@ import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
@@ -44,6 +45,11 @@ public class Socketed {
         CapabilitySocketableHandler.registerCapability();
         LootFunctionManager.registerFunction(new SocketLootFunction.Serializer());
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandlerSocketing());
+    }
+    
+    @Mod.EventHandler
+    public static void init(FMLInitializationEvent event) {
+        JsonConfig.init();
     }
     
     @Mod.EventHandler

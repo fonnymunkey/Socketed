@@ -1,6 +1,5 @@
 package socketed.common.capabilities;
 
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.nbt.NBTTagCompound;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
 import socketed.common.socket.GenericSocket;
@@ -117,10 +116,10 @@ public interface ICapabilitySocketable {
     List<GenericGemEffect> getAllEffects();
 
     /**
-     * Gathers and returns a list of (instantiated) effects of all socketed gems that match the given equipment slot
+     * Gathers and returns a list of (instantiated) effects of all socketed gems that match this item's slot
      */
     @Nonnull
-    List<GenericGemEffect> getAllEffectsForSlot(EntityEquipmentSlot slot);
+    List<GenericGemEffect> getAllEffectsForStackSlot();
 
 
     // -----     GEM COMBINATION SECTION     -----

@@ -1,7 +1,5 @@
 package socketed.common.capabilities;
 
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,8 +18,6 @@ import socketed.common.socket.GenericSocket;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.List;
 
 public class CapabilitySocketableHandler {
     
@@ -32,11 +28,6 @@ public class CapabilitySocketableHandler {
     
     public static void registerCapability() {
         CapabilityManager.INSTANCE.register(ICapabilitySocketable.class, new Storage(), CapabilitySocketable::new);
-    }
-
-    public static List<EntityEquipmentSlot> getSlotsForItemStack(ItemStack stack){
-        //TODO: customisable via config
-        return Collections.singletonList(EntityLiving.getSlotForItemStack(stack));
     }
     
     @Mod.EventBusSubscriber

@@ -2,12 +2,12 @@ package socketed.common.jsondata.entry.filter;
 
 import net.minecraft.item.ItemStack;
 
-public class BlockAllFilterEntry extends FilterEntry {
+public class RejectAllEntry extends FilterEntry {
 
-    public static final String FILTER_NAME = "Block All";
+    public static final String TYPE_NAME = "Reject All";
 
-    public BlockAllFilterEntry() {
-        this.type = FILTER_NAME;
+    public RejectAllEntry() {
+        this.type = TYPE_NAME;
     }
 
     @Override

@@ -5,9 +5,9 @@ import net.minecraft.item.ItemStack;
 
 public abstract class FilterEntry {
 
-    public static final String FILTER_NAME = "Filter Type";
+    public static final String TYPE_FIELD = "Filter Type";
 
-    @SerializedName(FILTER_NAME)
+    @SerializedName(TYPE_FIELD)
     public String type;
 
     protected transient boolean parsed;
@@ -22,5 +22,4 @@ public abstract class FilterEntry {
     protected abstract void validate();
 
     public abstract boolean matches(ItemStack input);
-
 }

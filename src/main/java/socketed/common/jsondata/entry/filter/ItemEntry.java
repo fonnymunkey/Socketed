@@ -11,7 +11,7 @@ import socketed.Socketed;
 
 public class ItemEntry extends FilterEntry {
 
-    public static final String FILTER_NAME = "Item";
+    public static final String TYPE_NAME = "Item";
 
     @SerializedName("Item Name")
     private final String name;
@@ -32,7 +32,7 @@ public class ItemEntry extends FilterEntry {
         this.name = name;
         this.metadata = meta;
         this.strict = strict;
-        this.type = FILTER_NAME;
+        this.type = TYPE_NAME;
     }
 
     public ItemStack getItemStack() {

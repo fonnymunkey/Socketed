@@ -5,7 +5,7 @@ import net.minecraft.util.text.TextFormatting;
 import socketed.Socketed;
 import socketed.common.config.JsonConfig;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
-import socketed.common.jsondata.entry.filter.BlockAllFilterEntry;
+import socketed.common.jsondata.entry.filter.RejectAllEntry;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,7 +22,7 @@ public class GemCombinationType extends GemType {
     private final List<String> gemTypes;
 
     public GemCombinationType(String displayName, TextFormatting color, List<GenericGemEffect> effects, boolean isStrictOrder, boolean isStrictSocketCount, boolean replacesOriginalEffects, List<String> gemTypes) {
-        super(displayName, color, effects, Collections.singletonList(new BlockAllFilterEntry()), 0);
+        super(displayName, color, effects, Collections.singletonList(new RejectAllEntry()), 0);
         this.isStrictOrder = isStrictOrder;
         this.isStrictSocketCount = isStrictSocketCount;
         this.replacesOriginalEffects = replacesOriginalEffects;

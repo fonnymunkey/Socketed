@@ -3,13 +3,22 @@ item.socketed.socket_tool.name=Socketing Tool
 
 socketed.tooltip.socket=Sockets (%d/%d): %s
 socketed.tooltip.empty=Empty
+socketed.tooltip.activationtype.invalid=Invalid: %s
 socketed.tooltip.activationtype.passive_self=Passively: %s
 socketed.tooltip.activationtype.passive_nearby=Entities nearby:  %s
 socketed.tooltip.activationtype.passive_far=Entities in area:  %s
 socketed.tooltip.activationtype.on_attacked_self=When Attacked: %s
+socketed.tooltip.activationtype.on_attacked_self_melee=When Attacked (Melee): %s
+socketed.tooltip.activationtype.on_attacked_self_ranged=When Attacked (Ranged): %s
 socketed.tooltip.activationtype.on_attacked_attacker=Attacker Receives: %s
+socketed.tooltip.activationtype.on_attacked_attacker_melee=Attacker Receives (Melee): %s
+socketed.tooltip.activationtype.on_attacked_attacker_ranged=Attacker Receives (Ranged): %s
 socketed.tooltip.activationtype.on_attacking_self=When Attacking: %s
+socketed.tooltip.activationtype.on_attacking_self_melee=When Attacking (Melee): %s
+socketed.tooltip.activationtype.on_attacking_self_ranged=When Attacking (Ranged): %s
 socketed.tooltip.activationtype.on_attacking_target=Target Receives: %s
+socketed.tooltip.activationtype.on_attacking_target_melee=Target Receives (Melee): %s
+socketed.tooltip.activationtype.on_attacking_target_ranged=Target Receives (Ranged): %s
 
 socketed.tooltip.default.obsidian_damage=Obsidian Tipped
 socketed.tooltip.default.diamond=Diamond
@@ -27,14 +36,17 @@ socketed.tooltip.default.three_diamonds=Could've been a diamond pick
 socketed.tooltip.default.rgb=RGB Effects
 
 socketed.tooltip.gem=In Socket: %s
-socketed.tooltip.slotsbody=On Body
-socketed.tooltip.slotshead=On Head
-socketed.tooltip.slotschest=On Chest
-socketed.tooltip.slotslegs=On Legs
-socketed.tooltip.slotsfeet=On Feet
-socketed.tooltip.slotshands=In Hands
-socketed.tooltip.slotsmainhand=In Mainhand
-socketed.tooltip.slotsoffhand=In Offhand
+
+socketed.tooltip.slottype.all=
+socketed.tooltip.slottype.none=()
+socketed.tooltip.slottype.body=(On Body)
+socketed.tooltip.slottype.head=(On Head)
+socketed.tooltip.slottype.chest=(On Chest)
+socketed.tooltip.slottype.legs=(On Legs)
+socketed.tooltip.slottype.feet=(On Feet)
+socketed.tooltip.slottype.hand=(In Hand)
+socketed.tooltip.slottype.mainhand=(In Mainhand)
+socketed.tooltip.slottype.offhand=(In Offhand)
 
 socketed.socketinggui.displayname=Socketing
 

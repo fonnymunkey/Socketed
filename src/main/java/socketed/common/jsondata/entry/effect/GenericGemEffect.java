@@ -1,25 +1,26 @@
 package socketed.common.jsondata.entry.effect;
 
 import com.google.gson.annotations.SerializedName;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.nbt.NBTTagCompound;
-
-import java.util.List;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import socketed.common.jsondata.entry.effect.slot.ISlotType;
 
 public class GenericGemEffect {
-    public static final String FILTER_NAME = "Effect Type";
+    
+    public static final String TYPE_FIELD = "Effect Type";
 
-    @SerializedName(FILTER_NAME)
+    @SerializedName(TYPE_FIELD)
     protected String type;
     @SerializedName("Equipment Slots")
-    protected EnumSlots slots;
+    protected ISlotType slotType;
 
     protected transient boolean valid;
 
     protected transient boolean parsed;
 
-    public GenericGemEffect(EnumSlots slots){
-        this.slots = slots;
+    public GenericGemEffect(ISlotType slotType) {
+        this.slotType = slotType;
     }
 
     public boolean isValid() {
@@ -27,11 +28,8 @@ public class GenericGemEffect {
         return this.valid;
     }
 
-    public EnumSlots getEnumSlots(){
-        return slots;
-    }
-    public List<EntityEquipmentSlot> getSlots(){
-        return EnumSlots.getSlots(this.slots);
+    public ISlotType getSlotType() {
+        return this.slotType;
     }
 
     protected void validate() {
@@ -51,5 +49,10 @@ public class GenericGemEffect {
 
     public void readFromNBT(NBTTagCompound nbt) {
         //noop
+    }
+    
+    @SideOnly(Side.CLIENT)
+    public String getTooltipString(boolean onItem) {
+        return "";
     }
 }

@@ -9,7 +9,7 @@ import socketed.Socketed;
 
 public class OreEntry extends FilterEntry {
 
-    public static final String FILTER_NAME = "Ore Dictionary";
+    public static final String TYPE_NAME = "Ore Dictionary";
 
     @SerializedName("Ore Dictionary Name")
     private final String name;
@@ -24,7 +24,7 @@ public class OreEntry extends FilterEntry {
     public OreEntry(String name, boolean strict) {
         this.name = name;
         this.strict = strict;
-        this.type = FILTER_NAME;
+        this.type = TYPE_NAME;
     }
 
     public String getName() {

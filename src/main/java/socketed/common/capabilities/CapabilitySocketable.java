@@ -1,6 +1,5 @@
 package socketed.common.capabilities;
 
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import socketed.common.config.JsonConfig;
@@ -141,7 +140,7 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 	
 	@Override
 	public boolean addGem(@Nonnull GemInstance gem) {
-		if(!gem.hasEffectsForStackDefaultSlot(this.itemStack)) return false;
+		if(!gem.hasGemEffectsForStack(this.itemStack)) return false;
 		for(GenericSocket socket : sockets) {
 			if(socket.isEmpty() && socket.setGem(gem)) {
 				refreshCombinations();
@@ -155,7 +154,7 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 	@Nullable
 	public GemInstance replaceGemAt(@Nonnull GemInstance gem, int socketIndex) {
 		if(socketIndex < 0 || socketIndex >= sockets.size()) return null;
-		if(!gem.hasEffectsForStackDefaultSlot(this.itemStack)) return null;
+		if(!gem.hasGemEffectsForStack(this.itemStack)) return null;
 		GemInstance oldGem = sockets.get(socketIndex).getGem();
 		sockets.get(socketIndex).setGem(gem);
 		refreshCombinations();
@@ -200,9 +199,9 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 	
 	@Override
 	@Nonnull
-	public List<GenericGemEffect> getAllEffectsForSlot(EntityEquipmentSlot slot) {
+	public List<GenericGemEffect> getAllEffectsForStackSlot() {
 		return getAllEffects().stream()
-							  .filter(v -> v.getSlots().contains(slot))
+							  .filter(v -> v.getSlotType().isStackValid(this.itemStack))
 							  .collect(Collectors.toList());
 	}
 	
@@ -243,7 +242,7 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 		for(GemCombinationType gemCombination : JsonConfig.getSortedGemCombinationData()) {
 			if(gemCombination.matches(currentGemTypes)) {
 				GemCombinationInstance inst = new GemCombinationInstance(gemCombination);
-				if(!inst.hasEffectsForStackDefaultSlot(itemStack)) continue;
+				if(!inst.hasGemEffectsForStack(itemStack)) continue;
 				this.gemCombinations.add(inst);
 				//Remove gems that belong to a combination already and optionally disable sockets belonging to them
 				

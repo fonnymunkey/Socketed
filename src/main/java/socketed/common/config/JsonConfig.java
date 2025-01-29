@@ -12,10 +12,13 @@ import socketed.common.jsondata.entry.RandomValueRange;
 import socketed.common.jsondata.entry.effect.AttributeGemEffect;
 import socketed.common.jsondata.entry.effect.EffectDeserializer;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
-import socketed.common.jsondata.entry.effect.activatable.EnumActivationType;
+import socketed.common.jsondata.entry.effect.activatable.SocketedActivationTypes;
 import socketed.common.jsondata.entry.effect.activatable.IActivationType;
 import socketed.common.jsondata.entry.effect.activatable.PotionGemEffect;
 import socketed.common.jsondata.entry.filter.*;
+import socketed.common.jsondata.entry.effect.slot.SocketedSlotTypes;
+import socketed.common.jsondata.entry.effect.slot.ISlotType;
+import socketed.common.util.SocketedUtil;
 
 import javax.annotation.Nullable;
 import java.io.File;
@@ -34,17 +37,8 @@ public class JsonConfig {
 
     public static final Map<String, Class<? extends FilterEntry>> filterDeserializerMap = new HashMap<>();
     public static final Map<String, Class<? extends GenericGemEffect>> gemEffectDeserializerMap = new HashMap<>();
-    public static final Map<String, Class<? extends IActivationType>> activationDeserializerMap = new HashMap<>();
-
-    static {
-        filterDeserializerMap.put(BlockAllFilterEntry.FILTER_NAME, BlockAllFilterEntry.class);
-        filterDeserializerMap.put(ItemEntry.FILTER_NAME, ItemEntry.class);
-        filterDeserializerMap.put(OreEntry.FILTER_NAME, OreEntry.class);
-        gemEffectDeserializerMap.put(AttributeGemEffect.FILTER_NAME, AttributeGemEffect.class);
-        gemEffectDeserializerMap.put(PotionGemEffect.FILTER_NAME, PotionGemEffect.class);
-        activationDeserializerMap.put(Socketed.MODID, EnumActivationType.class);
-        //activationDeserializerMap.put("<ExampleMod.MODID>", ExampleModActivationTypes.class);
-    }
+    public static final Map<String, Class<? extends IActivationType>> activationTypeDeserializerMap = new HashMap<>();
+    public static final Map<String, Class<? extends ISlotType>> slotTypeDeserializerMap = new HashMap<>();
 
     public static void preInit(File file) {
         File modFolder = new File(file, Socketed.MODID);
@@ -69,8 +63,18 @@ public class JsonConfig {
             }
         }
     }
+    
+    public static void init() {
+        SocketedUtil.registerFilterType(RejectAllEntry.TYPE_NAME, RejectAllEntry.class);
+        SocketedUtil.registerFilterType(ItemEntry.TYPE_NAME, ItemEntry.class);
+        SocketedUtil.registerFilterType(OreEntry.TYPE_NAME, OreEntry.class);
+        SocketedUtil.registerEffectType(AttributeGemEffect.TYPE_NAME, AttributeGemEffect.class);
+        SocketedUtil.registerEffectType(PotionGemEffect.TYPE_NAME, PotionGemEffect.class);
+        SocketedUtil.registerActivationTypes(SocketedActivationTypes.class);
+        SocketedUtil.registerSlotTypes(SocketedSlotTypes.class);
+    }
 
-    public static void postInit(){
+    public static void postInit() {
         loadGemTypeData();
         loadGemCombinationData();
     }

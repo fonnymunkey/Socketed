@@ -1,6 +1,5 @@
 package socketed.common.capabilities;
 
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -76,12 +75,12 @@ public class GemInstance {
         return new ItemStack(item, 1, this.metadata);
     }
 
-    public boolean hasEffectsForStackDefaultSlot(ItemStack stack) {
-        if(this.gemType == null || this.effects.isEmpty()) return false;
+    public boolean hasGemEffectsForStack(ItemStack stack) {
+        if(this.gemType == null) return false;
 
         for(GenericGemEffect effect : this.effects) {
-            for(EntityEquipmentSlot itemslot : CapabilitySocketableHandler.getSlotsForItemStack(stack)) {
-                if(effect.getSlots().contains(itemslot)) return true;
+            if(effect.getSlotType().isStackValid(stack)) {
+                return true;
             }
         }
         return false;
@@ -91,15 +90,14 @@ public class GemInstance {
     public List<GenericGemEffect> getGemEffects() {
         return this.effects;
     }
-
-    public List<GenericGemEffect> getGemEffectsForSlots(List<EntityEquipmentSlot> slots) {
+    
+    @Nonnull
+    public List<GenericGemEffect> getGemEffectsForStack(ItemStack stack) {
         List<GenericGemEffect> effectsForSlot = new ArrayList<>();
-        for(GenericGemEffect effect : effects) {
-            for(EntityEquipmentSlot slot : slots) {
-                if(effect.getSlots().contains(slot)) {
-                    effectsForSlot.add(effect);
-                    break; //don't count the same effect multiple times
-                }
+        
+        for(GenericGemEffect effect : this.effects) {
+            if(effect.getSlotType().isStackValid(stack)) {
+                effectsForSlot.add(effect);
             }
         }
         return effectsForSlot;

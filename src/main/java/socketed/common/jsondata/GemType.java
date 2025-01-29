@@ -1,7 +1,6 @@
 package socketed.common.jsondata;
 
 import com.google.gson.annotations.SerializedName;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import socketed.Socketed;
@@ -10,7 +9,6 @@ import socketed.common.jsondata.entry.effect.GenericGemEffect;
 import socketed.common.jsondata.entry.filter.FilterEntry;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -123,17 +121,6 @@ public class GemType {
             this.valid = validEntries > 0 && validEffects > 0;
         }
         this.parsed = true;
-    }
-
-    public List<GenericGemEffect> getGemEffectsForSlots(List<EntityEquipmentSlot> slots) {
-        List<GenericGemEffect> effectsForSlot = new ArrayList<>();
-        for(GenericGemEffect effect : effects)
-            for(EntityEquipmentSlot slot : slots)
-                if(effect.getSlots().contains(slot)) {
-                    effectsForSlot.add(effect);
-                    break; //don't count the same effect multiple times
-                }
-        return effectsForSlot;
     }
 
     public static GemType getGemTypeFromItemStack(@Nullable ItemStack itemStack){

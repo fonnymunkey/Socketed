@@ -1,6 +1,5 @@
 package socketed.common.capabilities;
 
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -38,12 +37,12 @@ public class GemCombinationInstance extends GemInstance {
     }
 
     @Override
-    public boolean hasEffectsForStackDefaultSlot(ItemStack stack) {
-        if(this.gemCombinationType == null || this.effects.isEmpty()) return false;
+    public boolean hasGemEffectsForStack(ItemStack stack) {
+        if(this.gemCombinationType == null) return false;
 
         for(GenericGemEffect effect : this.effects) {
-            for(EntityEquipmentSlot itemslot : CapabilitySocketableHandler.getSlotsForItemStack(stack)) {
-                if(effect.getSlots().contains(itemslot)) return true;
+            if(effect.getSlotType().isStackValid(stack)) {
+                return true;
             }
         }
         return false;
