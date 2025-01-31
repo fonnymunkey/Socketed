@@ -68,16 +68,22 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 		}
 	}
 	
+	private void addSocketNoRefresh(GenericSocket socket) {
+		if(socket != null) {
+			this.sockets.add(socket);
+		}
+	}
+	
 	@Override
 	public void addSocketFromNBT(String socketType, NBTTagCompound tags) {
 		if(socketType == null || socketType.isEmpty() || tags == null) return;
 		
 		//TODO: Allow for registering and deserializing custom socket types
 		if(socketType.equals(GenericSocket.TYPE_NAME)) {
-			this.addSocket(new GenericSocket(tags));
+			this.addSocketNoRefresh(new GenericSocket(tags));
 		}
 		else if(socketType.equals(TieredSocket.TYPE_NAME)) {
-			this.addSocket(new TieredSocket(tags));
+			this.addSocketNoRefresh(new TieredSocket(tags));
 		}
 		//Don't fresh combinations here to avoid overwriting cached values before they are fully retrieved
 	}
