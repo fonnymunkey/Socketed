@@ -14,33 +14,21 @@ public interface ICapabilitySocketable {
     // ----------------------------------
 
     /**
-     * @return whether this item already received sockets from various generation contexts
-     */
-    boolean getReceivedInitialSockets();
-
-    /**
-     * sets that this item already received sockets from various generation contexts
-     */
-    void setReceivedInitialSockets();
-
-    /**
      * @return the amount of sockets this item has
      */
     int getSocketCount();
-
+    
+    /**
+     * @return the ordered list of sockets this item has
+     */
+    @Nonnull
+    List<GenericSocket> getSockets();
+    
     /**
      * @return the GenericSocket instance at the specified socket index. null if index out of range
      */
     @Nullable
     GenericSocket getSocketAt(int socketIndex);
-
-    /**
-     * Sets the socket amount
-     * @return a list of gems that have been removed if socket count has been reduced
-     */
-    @Nonnull
-    @Deprecated //TODO: replace lootfunction with tiered version via addSocket
-    List<GemInstance> setSocketCount(int socketCount);
 
     /**
      * Adds a socket at the end of the list of this item's sockets
@@ -51,7 +39,7 @@ public interface ICapabilitySocketable {
      * Creates and adds a socket instance inheriting from GenericSocket, built with the given nbt tags
      * @return true if successful
      */
-    boolean addSocketFromNBT(String socketType, NBTTagCompound tags);
+    void addSocketFromNBT(String socketType, NBTTagCompound tags);
 
     /**
      * Replaces the socket at the specified position with the supplied socket
@@ -61,8 +49,8 @@ public interface ICapabilitySocketable {
      */
     @Nullable
     GemInstance replaceSocketAt(GenericSocket socket, int socketIndex);
-
-
+    
+    
     // -----     GEM SECTION     -----
     // -------------------------------
 
@@ -90,7 +78,7 @@ public interface ICapabilitySocketable {
      * Adds a gem to the first available empty socket
      * @return true if gem was added, false if no available empty socket
      */
-    boolean addGem(@Nonnull GemInstance gem);
+    boolean addGem(GemInstance gem);
 
     /**
      * Replaces the gem in the specified socket with the provided gem.

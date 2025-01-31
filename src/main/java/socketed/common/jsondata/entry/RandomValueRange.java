@@ -12,8 +12,10 @@ import java.util.Random;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.math.MathHelper;
 
-public class RandomValueRange
-{
+public class RandomValueRange {
+    
+    private static final Random RAND = new Random();
+    
     private final float min;
     private final float max;
     private final boolean isInteger;
@@ -31,21 +33,21 @@ public class RandomValueRange
         this.isInteger = isInteger;
     }
 
-    public float getMin()
-    {
+    public float getMin() {
         return this.min;
     }
 
-    public float getMax()
-    {
+    public float getMax() {
         return this.max;
+    }
+    
+    public float generateValue() {
+        return this.generateValue(RAND);
     }
 
     public float generateValue(Random rand) {
-        if(this.isInteger)
-            return MathHelper.getInt(rand, MathHelper.floor(this.min), MathHelper.floor(this.max));
-        else
-            return MathHelper.nextFloat(rand, this.min, this.max);
+        if(this.isInteger) return MathHelper.getInt(rand, MathHelper.floor(this.min), MathHelper.floor(this.max));
+        else return MathHelper.nextFloat(rand, this.min, this.max);
     }
 
     public static class Serializer implements JsonDeserializer<RandomValueRange>, JsonSerializer<RandomValueRange> {

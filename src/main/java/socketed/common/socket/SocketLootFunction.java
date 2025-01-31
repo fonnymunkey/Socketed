@@ -11,6 +11,8 @@ import net.minecraft.world.storage.loot.RandomValueRange;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import socketed.common.capabilities.CapabilitySocketableHandler;
+import socketed.common.capabilities.ICapabilitySocketable;
+import socketed.common.config.ForgeConfig;
 
 import java.util.Random;
 
@@ -23,9 +25,14 @@ public class SocketLootFunction extends LootFunction {
         this.count = countIn;
     }
 
+    //TODO make this better
     public ItemStack apply(ItemStack stack, Random rand, LootContext context) {
-        if(stack.hasCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null)) {
-            stack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null).setSocketCount(count.generateInt(rand));
+        ICapabilitySocketable cap = stack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
+        if(cap != null) {
+            int socketCount = Math.max(0, Math.min(ForgeConfig.COMMON.maxSockets, count.generateInt(rand)));
+            for(int i = 0; i < socketCount; i++) {
+                cap.addSocket(new GenericSocket());
+            }
         }
         return stack;
     }

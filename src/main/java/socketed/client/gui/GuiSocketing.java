@@ -41,19 +41,19 @@ public class GuiSocketing extends GuiContainer {
         this.drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
 
         ItemStack socketable = this.inventorySlots.getSlot(0).getStack();
-        //technically checking for cap isn't needed, as slot only accepts items with the cap, just safety against desyncs maybe
-        boolean hasSocketable = !socketable.isEmpty() && socketable.hasCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
-        if(hasSocketable) {
-            ICapabilitySocketable itemSockets = this.inventorySlots.getSlot(0).getStack().getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
-            int socketCount = itemSockets.getSocketCount();
-            int xCent = ContainerSocketing.xCent - 1;
-            int yCent = ContainerSocketing.yCent - 1;
-            double angleIncr = 2. * Math.PI / Math.max(1,socketCount);
-            for (int socketIndex = 0; socketIndex < socketCount; socketIndex++) {
-                int x = this.guiLeft + xCent + (int) (ContainerSocketing.radius * Math.sin(socketIndex * angleIncr));
-                int y = this.guiTop + yCent - (int) (ContainerSocketing.radius * Math.cos(socketIndex * angleIncr));
-
-                this.drawTexturedModalRect(x, y, 0, 222, 18, 18);
+        if(!socketable.isEmpty()) {
+            ICapabilitySocketable itemSockets = socketable.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
+            if(itemSockets != null) {
+                int socketCount = itemSockets.getSocketCount();
+                int xCent = ContainerSocketing.xCent - 1;
+                int yCent = ContainerSocketing.yCent - 1;
+                double angleIncr = 2.0D * Math.PI / Math.max(1,socketCount);
+                for(int socketIndex = 0; socketIndex < socketCount; socketIndex++) {
+                    int x = this.guiLeft + xCent + (int) (ContainerSocketing.radius * Math.sin(socketIndex * angleIncr));
+                    int y = this.guiTop + yCent - (int) (ContainerSocketing.radius * Math.cos(socketIndex * angleIncr));
+                    
+                    this.drawTexturedModalRect(x, y, 0, 222, 18, 18);
+                }
             }
         }
         //TODO: draw socket tiers

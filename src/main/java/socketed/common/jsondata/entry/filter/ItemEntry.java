@@ -6,8 +6,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.OreDictionary;
-import org.apache.logging.log4j.Level;
 import socketed.Socketed;
+
+import javax.annotation.Nonnull;
 
 public class ItemEntry extends FilterEntry {
 
@@ -29,43 +30,39 @@ public class ItemEntry extends FilterEntry {
     }
 
     public ItemEntry(String name, int meta, boolean strict) {
+        super();
         this.name = name;
         this.metadata = meta;
         this.strict = strict;
-        this.type = TYPE_NAME;
     }
 
+    @Nonnull
     public ItemStack getItemStack() {
-        if(!this.isValid()) return ItemStack.EMPTY;
         return this.stack;
     }
 
     @Override
     public boolean matches(ItemStack input) {
-        if(!this.isValid()) return false;
         if(input == null || input.isEmpty()) return false;
         return this.stack.getItem().equals(input.getItem()) && (!this.strict || this.stack.getMetadata() == input.getMetadata());
     }
-
+    
     @Override
-    protected void validate() {
-        this.valid = false;
-        if(this.name == null || this.name.trim().isEmpty()) Socketed.LOGGER.log(Level.WARN, "Invalid Item entry, name null or empty");
+    public String getTypeName() {
+        return TYPE_NAME;
+    }
+    
+    @Override
+    public boolean validate() {
+        if(this.name == null || this.name.isEmpty()) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Filter entry, name null or empty");
         else {
-            String[] in = this.name.split(":");
-            ResourceLocation loc = null;
-            if(in.length == 1) loc = new ResourceLocation("minecraft", in[0].trim());
-            else if(in.length == 2) loc = new ResourceLocation(in[0].trim(), in[1].trim());
-            if(loc != null) {
-                Item item = ForgeRegistries.ITEMS.getValue(loc);
-                if(item != null) {
-                    this.stack = new ItemStack(item, 1, this.strict ? this.metadata : OreDictionary.WILDCARD_VALUE);
-                    this.valid = true;
-                }
-                else Socketed.LOGGER.log(Level.WARN, "Invalid Item entry, " + this.name + ", item does not exist: " + loc);
+            Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(this.name));
+            if(item == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Filter entry, " + this.name + ", item does not exist");
+            else {
+                this.stack = new ItemStack(item, 1, this.strict ? this.metadata : OreDictionary.WILDCARD_VALUE);
+                return true;
             }
-            else Socketed.LOGGER.log(Level.WARN, "Invalid Item entry, " + this.name + ", item name is not valid");
         }
-        this.parsed = true;
+        return false;
     }
 }

@@ -7,17 +7,21 @@ public class RejectAllEntry extends FilterEntry {
     public static final String TYPE_NAME = "Reject All";
 
     public RejectAllEntry() {
-        this.type = TYPE_NAME;
+        super();
     }
 
     @Override
     public boolean matches(ItemStack input) {
         return false;
     }
-
+    
     @Override
-    protected void validate() {
-        this.valid = true;
-        this.parsed = true;
+    public String getTypeName() {
+        return TYPE_NAME;
+    }
+    
+    @Override
+    public boolean validate() {
+        return true;
     }
 }

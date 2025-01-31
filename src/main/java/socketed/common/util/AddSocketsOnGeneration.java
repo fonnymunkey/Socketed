@@ -10,11 +10,12 @@ public class AddSocketsOnGeneration {
         //TODO: customisable by context and item type via config
         // amount, chance and tiers of sockets should be configable
         // somanyconfigs...
-        if (!stack.hasCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null)) return;
+        
         ICapabilitySocketable itemSockets = stack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
+        if(itemSockets == null) return;
         //Only add sockets to items that don't have sockets yet
-        if (itemSockets.getReceivedInitialSockets()) return;
-        if (itemSockets.getSocketCount() != 0) return;
+        //Adding alreadyBeenChecked tag *shouldn't* be needed currently, at least not with the given contexts yet
+        if(itemSockets.getSocketCount() != 0) return;
 
         //Just for testing:
         switch (context) {
@@ -34,8 +35,6 @@ public class AddSocketsOnGeneration {
                 itemSockets.addSocket(new GenericSocket());
                 break;
         }
-
-        itemSockets.setReceivedInitialSockets();
     }
 
     public enum EnumItemCreationContext {

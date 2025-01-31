@@ -8,136 +8,134 @@ import socketed.common.config.JsonConfig;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
 import socketed.common.jsondata.entry.filter.FilterEntry;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GemType {
-
-    //Serialized via file name
-    protected transient String name;
-    @SerializedName("Gem Tier")
-    private final Integer tier;
+    
+    /**
+     * Set prior to validation based on filename
+     */
+    protected transient String name = null;
+    
     @SerializedName("Display Name")
     private final String displayName;
+    
+    @SerializedName("Gem Tier")
+    private final Integer tier;
+    
     @SerializedName("Text Color")
     private final TextFormatting color;
+    
     @SerializedName("Effect Entries")
-    private final List<GenericGemEffect> effects;
+    private List<GenericGemEffect> effects;
+    
     @SerializedName("Filter Entries")
-    private final List<FilterEntry> filterEntries;
+    private List<FilterEntry> filterEntries;
 
-    protected transient boolean parsed;
-    protected transient boolean valid;
-
-    public GemType(String display, TextFormatting clr, List<GenericGemEffect> effects, List<FilterEntry> filters, Integer tier) {
-        this.displayName = display;
-        this.color = clr;
-        this.effects = effects;
-        this.filterEntries = filters;
+    public GemType(String displayName, Integer tier, TextFormatting color, List<GenericGemEffect> effects, List<FilterEntry> filterEntries) {
+        this.displayName = displayName;
         this.tier = tier;
+        this.color = color;
+        this.effects = effects;
+        this.filterEntries = filterEntries;
     }
 
-    public void setName(String name){
-        if(this.name == null)
-            this.name = name;
+    public void setName(String name) {
+        this.name = name;
     }
-
+    
+    @Nonnull
     public String getName() {
-        if(!this.isValid()) return "INVALID";
         return this.name;
     }
-
+    
+    @Nonnull
     public String getDisplayName() {
-        if(!this.isValid()) return "INVALID";
         return this.displayName;
     }
-
+    
+    public int getTier() {
+        return this.tier;
+    }
+    
+    @Nonnull
     public TextFormatting getColor() {
-        if(!this.isValid()) return TextFormatting.RESET;
         return this.color;
     }
-
+    
+    @Nonnull
     public List<GenericGemEffect> getEffects() {
-        if(this.effects == null || !this.isValid()) return Collections.emptyList();
         return this.effects;
     }
-
+    
+    @Nonnull
     public List<FilterEntry> getFilterEntries() {
-        if(this.filterEntries == null || !this.isValid()) return Collections.emptyList();
         return this.filterEntries;
     }
 
     public boolean matches(ItemStack input) {
-        if(!this.isValid()) return false;
         if(input == null || input.isEmpty()) return false;
         for(FilterEntry entry : this.getFilterEntries()) {
             if(entry.matches(input)) return true;
         }
         return false;
     }
-
-    public boolean isValid() {
-        if(!this.parsed) this.validate();
-        return this.valid;
-    }
-
-    protected void validate() {
-        this.valid = false;
-        if(this.name == null || this.name.isEmpty()) Socketed.LOGGER.warn("Invalid Gem Type name, null or empty");
-        else if(this.displayName == null || this.displayName.isEmpty()) Socketed.LOGGER.warn("Invalid Gem Type, " + this.name + ", null or empty display name");
-        else if(this.color == null) Socketed.LOGGER.warn("Invalid Gem Type, " + this.name + ", invalid color");
+    
+    public boolean validate() {
+        if(this.name == null || this.name.isEmpty()) Socketed.LOGGER.warn("Invalid Gem Type, name null or empty");
+        else if(this.displayName == null || this.displayName.isEmpty()) Socketed.LOGGER.warn("Invalid Gem Type, " + this.name + ", display name null or empty");
         else if(this.tier == null) Socketed.LOGGER.warn("Invalid Gem Type, " + this.name + ", invalid tier");
+        else if(this.color == null) Socketed.LOGGER.warn("Invalid Gem Type, " + this.name + ", invalid color");
+        else if(this.effects == null) Socketed.LOGGER.warn("Invalid Gem Type, " + this.name + ", invalid effect entry list");
+        else if(this.filterEntries == null) Socketed.LOGGER.warn("Invalid Gem Type, " + this.name + ", invalid filter entry list");
         else {
-            int validEffects = 0;
-            int totalEffects = 0;
-            List<GenericGemEffect> effects = this.effects;
-            if(effects != null) {
-                for(GenericGemEffect effect : effects) {
-                    totalEffects++;
-                    if(effect.isValid()) validEffects++;
-                }
+            List<GenericGemEffect> validEffects = new ArrayList<>();
+            for(GenericGemEffect effect : this.effects) {
+                if(effect.validate()) validEffects.add(effect);
             }
-
-            int validEntries = 0;
-            int totalEntries = 0;
-
-            List<FilterEntry> entries = this.filterEntries;
-            if(entries != null) {
-                for(FilterEntry entry : entries) {
-                    totalEntries++;
-                    if(entry.isValid()) validEntries++;
-                }
+            int totalEffectsSize = this.effects.size();
+            this.effects = validEffects;
+            int validEffectsSize = this.effects.size();
+            
+            List<FilterEntry> validFilters = new ArrayList<>();
+            for(FilterEntry filter : this.filterEntries) {
+                if(filter.validate()) validFilters.add(filter);
             }
-
-            Socketed.LOGGER.info("Effect Group Validating, Name: " + this.name +
-                            ", Display Name: " + this.displayName +
-                            ", Color: " + this.color.name() +
-                            ", Valid Effects: " + validEffects + "/" + totalEffects +
-                            ", Valid Entries: " + validEntries + "/" + totalEntries +
-                            ", Tier: " + this.tier);
-            if(validEffects <= 0) Socketed.LOGGER.warn("Invalid Gem Type, " + this.name + ", no valid effects");
-            if(validEntries <= 0) Socketed.LOGGER.warn("Invalid Gem Type, " + this.name + ", no valid entries");
-            this.valid = validEntries > 0 && validEffects > 0;
+            int totalFiltersSize = this.filterEntries.size();
+            this.filterEntries = validFilters;
+            int validFiltersSize = this.filterEntries.size();
+            
+            if(validEffectsSize == 0) Socketed.LOGGER.warn("Invalid Gem Type, " + this.name + ", no valid effects");
+            else if(validFiltersSize == 0) Socketed.LOGGER.warn("Invalid Gem Type, " + this.name + ", no valid filters");
+            else {
+                Socketed.LOGGER.info("Gem Type Validating, Name: " + this.name +
+                                             ", Display Name: " + this.displayName +
+                                             ", Tier: " + this.tier +
+                                             ", Color: " + this.color.name() +
+                                             ", Valid Effects: " + validEffectsSize + "/" + totalEffectsSize +
+                                             ", Valid Filters: " + validFiltersSize + "/" + totalFiltersSize);
+                return true;
+            }
         }
-        this.parsed = true;
+        return false;
     }
 
-    public static GemType getGemTypeFromItemStack(@Nullable ItemStack itemStack){
-        for (GemType gemType : JsonConfig.getGemData().values())
-            if (gemType.matches(itemStack))
-                return gemType;
+    @Nullable
+    public static GemType getGemTypeFromItemStack(ItemStack itemStack) {
+        if(itemStack.isEmpty()) return null;
+        for(GemType gemType : JsonConfig.getGemData().values()) {
+            //TODO: Issues with one item being valid for multiple gem types?
+            if(gemType.matches(itemStack)) return gemType;
+        }
         return null;
     }
-
-    public static GemType getGemTypeFromName(@Nullable String gemTypeName){
-        if(gemTypeName==null)
-            return null;
-        else
-            return JsonConfig.getGemData().get(gemTypeName);
-    }
-
-    public int getTier() {
-        return this.tier;
+    
+    @Nullable
+    public static GemType getGemTypeFromName(String gemTypeName) {
+        if(gemTypeName == null || gemTypeName.isEmpty()) return null;
+        return JsonConfig.getGemData().get(gemTypeName);
     }
 }

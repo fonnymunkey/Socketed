@@ -11,25 +11,31 @@ import java.util.List;
 
 public class GenericSocket {
     
+    public static final String TYPE_NAME = "Generic";
+    
     private GemInstance gem = null;
     private boolean disabled = false;
-
-    public GenericSocket() {
     
-    }
+    /**
+     * Constructs an empty socket
+     */
+    public GenericSocket() { }
 
     /**
-     * create socket holding the provided gem
+     * Constructs a socket holding the provided gem
      */
-    public GenericSocket(GemInstance gem){
+    public GenericSocket(GemInstance gem) {
         this.gem = gem;
     }
 
     /**
-     * Create socket from nbt
+     * Constructs a socket from provided nbt
      */
     public GenericSocket(NBTTagCompound nbt) {
-        if(nbt.hasKey("Gem")) this.gem = new GemInstance(nbt.getCompoundTag("Gem"));
+        if(nbt.hasKey("Gem")) {
+            GemInstance gem = new GemInstance(nbt.getCompoundTag("Gem"));
+            if(gem.validate()) this.gem = gem;
+        }
         if(nbt.hasKey("Disabled")) this.disabled = nbt.getBoolean("Disabled");
     }
 
@@ -49,17 +55,17 @@ public class GenericSocket {
     }
 
     /**
-     * Whether this socket accepts the given gem. Default socket accepts all gems
+     * Whether this socket accepts the given gem, accepts all by default
      */
-    public boolean acceptsGem(@Nonnull GemInstance gem) {
-        return true;
+    public boolean acceptsGem(GemInstance gem) {
+        return gem != null;
     }
     
     /**
      * Whether this socket has space for a gem or is already filled
      */
     public boolean isEmpty() {
-        return gem == null;
+        return this.gem == null;
     }
 
     /**
@@ -67,7 +73,7 @@ public class GenericSocket {
      */
     @Nullable
     public GemInstance getGem() {
-        return gem;
+        return this.gem;
     }
 
     /**
@@ -89,8 +95,8 @@ public class GenericSocket {
      */
     @Nonnull
     public List<GenericGemEffect> getEffects() {
-        if(gem != null) return gem.getGemEffects();
-        else return Collections.emptyList();
+        if(this.gem != null) return this.gem.getGemEffects();
+        return Collections.emptyList();
     }
 
     /**
@@ -99,7 +105,7 @@ public class GenericSocket {
     @Nonnull
     public NBTTagCompound writeToNBT() {
         NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setString("SocketType", "Generic");
+        nbt.setString("SocketType", GenericSocket.TYPE_NAME);
         if(this.gem != null) nbt.setTag("Gem", this.gem.writeToNBT());
         nbt.setBoolean("Disabled", this.disabled);
         return nbt;

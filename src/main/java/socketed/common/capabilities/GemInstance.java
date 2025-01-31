@@ -6,11 +6,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.oredict.OreDictionary;
 import socketed.common.jsondata.GemType;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,66 +18,61 @@ public class GemInstance {
 
     private final String itemId;
     private final int metadata;
-    @Nullable
     private final GemType gemType;
-
-    //Instantiated effects, do not use gemType.getEffects() to perform effects
-    protected final List<GenericGemEffect> effects = new ArrayList<>();
-
-    public GemInstance() {
-        this.itemId = "";
-        this.metadata = 0;
-        this.gemType = null;
-    }
-
-    public GemInstance(@Nullable ItemStack stack) {
-        if(stack != null) {
-            this.itemId = stack.getItem().getRegistryName().toString();
-            this.metadata = stack.getMetadata();
-            this.gemType = GemType.getGemTypeFromItemStack(stack);
-            if(this.gemType != null) {
-                for(int i = 0; i < this.gemType.getEffects().size(); i++) {
-                    this.effects.add(this.gemType.getEffects().get(i).instantiate());
-                }
+    
+    /**
+     * Instantiated effects for actual usage
+     */
+    private final List<GenericGemEffect> effects = new ArrayList<>();
+    
+    private Item item = null;
+    
+    /**
+     * Instantiate a new instance from an ItemStack
+     */
+    public GemInstance(ItemStack stack) {
+        this.itemId = stack.getItem().getRegistryName().toString();
+        this.metadata = stack.getMetadata();
+        this.gemType = GemType.getGemTypeFromItemStack(stack);
+        if(this.gemType != null) {
+            for(GenericGemEffect effect : this.gemType.getEffects()) {
+                this.effects.add(effect.instantiate());
             }
         }
-        else {
-            this.itemId = "";
-            this.metadata = 0;
-            this.gemType = null;
-        }
     }
-
+    
+    /**
+     * Instantiate a new instance from NBT
+     */
     public GemInstance(NBTTagCompound nbt) {
-        if(nbt.hasKey("ItemId")) this.itemId = nbt.getString("ItemId");
-        else this.itemId = "";
-        
-        if(nbt.hasKey("Metadata")) this.metadata = nbt.getInteger("Metadata");
-        else this.metadata = 0;
-
-        if(nbt.hasKey("GemType")) {
-            this.gemType = GemType.getGemTypeFromName(nbt.getString("GemType"));
-            if(this.gemType != null && nbt.hasKey("Effects")) {
-                NBTTagList effectsNBT = nbt.getTagList("Effects",10);
+        this.itemId = nbt.getString("ItemId");
+        this.metadata = nbt.getInteger("Metadata");
+        this.gemType = GemType.getGemTypeFromName(nbt.getString("GemType"));
+        if(this.gemType != null) {
+            NBTTagList effectsNBT = nbt.getTagList("Effects", 10);
+            //As effects are stored ordered, only read the effects if the stored NBT size is as expected
+            //Otherwise re-instantiate effects as the configuration was changed
+            //TODO: Handling for if effects are reordered in config/only ranges changed
+            if(this.gemType.getEffects().size() == effectsNBT.tagCount()) {
                 for(int i = 0; i < this.gemType.getEffects().size(); i++) {
                     this.effects.add(this.gemType.getEffects().get(i).instantiate());
-                    this.effects.get(i).readFromNBT((NBTTagCompound) effectsNBT.get(i));
+                    this.effects.get(i).readFromNBT((NBTTagCompound)effectsNBT.get(i));
+                }
+            }
+            else {
+                for(GenericGemEffect effect : this.gemType.getEffects()) {
+                    this.effects.add(effect.instantiate());
                 }
             }
         }
-        else this.gemType = null;
     }
 
     @Nonnull
     public ItemStack getItemStack() {
-        Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(this.itemId));
-        if(item == null) return ItemStack.EMPTY;
-        return new ItemStack(item, 1, this.metadata);
+        return new ItemStack(this.item, 1, this.metadata);
     }
 
     public boolean hasGemEffectsForStack(ItemStack stack) {
-        if(this.gemType == null) return false;
-
         for(GenericGemEffect effect : this.effects) {
             if(effect.getSlotType().isStackValid(stack)) {
                 return true;
@@ -103,18 +98,37 @@ public class GemInstance {
         return effectsForSlot;
     }
 
-    @Nullable
+    @Nonnull
     public GemType getGemType() {
         return this.gemType;
     }
     
+    /**
+     * Attempts to validate this instance and caches the stored Item reference
+     * @return false if any required value is invalid, which should result in discarding this instance
+     */
+    //TODO: Debug log output instead of warns like other validation, as warn may spam logs when existing worlds are loaded after updates?
+    public boolean validate() {
+        if(this.itemId == null || this.itemId.isEmpty()) return false;
+        else if(this.metadata < 0 || this.metadata > OreDictionary.WILDCARD_VALUE) return false;
+        //Gem Type does not need to be validated as it is a reference to an existing validated Gem Type from Json
+        else if(this.gemType == null) return false;
+        else if(this.effects.isEmpty()) return false;
+        this.item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(this.itemId));
+		return this.item != null;
+    }
+    
+    /**
+     * Writes this instance to NBT for storing on an ItemStack Capability
+     */
+    @Nonnull
     public NBTTagCompound writeToNBT() {
         NBTTagCompound nbt = new NBTTagCompound();
 
-        if(!this.itemId.isEmpty()) nbt.setString("ItemId", this.itemId);
-        if(this.metadata != 0) nbt.setInteger("Metadata", this.metadata);
-        if(this.gemType != null) nbt.setString("GemType", this.gemType.getName());
-
+        nbt.setString("ItemId", this.itemId);
+        nbt.setInteger("Metadata", this.metadata);
+        nbt.setString("GemType", this.gemType.getName());
+        
         NBTTagList effectsNBT = new NBTTagList();
         for(GenericGemEffect effect : this.effects) {
             effectsNBT.appendTag(effect.writeToNBT());
@@ -122,10 +136,5 @@ public class GemInstance {
         nbt.setTag("Effects", effectsNBT);
 
         return nbt;
-    }
-
-    public static boolean stackIsGem(ItemStack stack) {
-        if(stack.isEmpty()) return false;
-        return GemType.getGemTypeFromItemStack(stack) != null;
     }
 }

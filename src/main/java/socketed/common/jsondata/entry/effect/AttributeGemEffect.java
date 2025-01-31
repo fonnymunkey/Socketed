@@ -7,105 +7,63 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.logging.log4j.Level;
 import socketed.Socketed;
 import socketed.common.jsondata.entry.effect.slot.ISlotType;
 import socketed.common.jsondata.entry.RandomValueRange;
 
-import java.util.Random;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.UUID;
 
 public class AttributeGemEffect extends GenericGemEffect {
-    
-    public static final Random RAND = new Random();
-    
-    private static final AttributeModifier INVALID = new AttributeModifier(new UUID(1,1), "INVALID", 0, 0);
 
     public static final String TYPE_NAME = "Attribute";
-
+    
     @SerializedName("Attribute Name")
-    private final String attribute;
+    private final String attributeName;
 
     @SerializedName("Modifier Amount")
     private final RandomValueRange amountRange;
-    private transient float amount;
 
     @SerializedName("Modifier Operation")
     private final int operation;
-
-    private transient AttributeModifier modifier = INVALID;
+    
+    private transient AttributeModifier modifier = null;
 
     public AttributeGemEffect(ISlotType slotType, String attribute, RandomValueRange amountRange, int operation) {
         super(slotType);
-        this.attribute = attribute;
+        this.attributeName = attribute;
         this.amountRange = amountRange;
         this.operation = operation;
-        this.type = TYPE_NAME;
     }
 
     public AttributeGemEffect(AttributeGemEffect effect) {
         super(effect.getSlotType());
-        this.attribute = effect.attribute;
+        this.attributeName = effect.attributeName;
         this.amountRange = effect.amountRange;
         this.operation = effect.operation;
 
-        //Only instantiated AttributeGemEffects have valid modifiers and amounts
-        this.amount = this.amountRange.generateValue(RAND);
-        this.modifier = new AttributeModifier(UUID.randomUUID(),Socketed.MODID+"GemEffect", this.amount, this.operation);
+        //Only instantiated AttributeGemEffects have a valid modifier
+        this.modifier = new AttributeModifier(UUID.randomUUID(), Socketed.MODID + "GemEffect", this.amountRange.generateValue(), this.operation);
     }
-
-    public RandomValueRange getAmountRange(){
-        return amountRange;
+    
+    @Nonnull
+    public String getAttribute() {
+        return this.attributeName;
+    }
+    
+    @Nonnull
+    public RandomValueRange getAmountRange() {
+        return this.amountRange;
     }
 
     public int getOperation() {
         return this.operation;
     }
 
+    @Nullable
     public AttributeModifier getModifier() {
-        if(!this.isValid()) return INVALID;
         return this.modifier;
-    }
-
-    public String getAttribute() {
-        if(!this.isValid()) return "INVALID";
-        return this.attribute.trim();
-    }
-
-    @Override
-    protected void validate() {
-        this.valid = false;
-        if(this.attribute == null || this.attribute.trim().isEmpty()) Socketed.LOGGER.log(Level.WARN, "Invalid Attribute Effect entry, attribute null or empty");
-        else if(this.operation < 0 || this.operation > 2) Socketed.LOGGER.log(Level.WARN, "Invalid Attribute Effect entry, operation must be 0, 1, or 2");
-        else {
-            this.valid = true;
-        }
-        this.parsed = true;
-    }
-
-    @Override
-    public AttributeGemEffect instantiate(){
-        return new AttributeGemEffect(this);
-    }
-
-    @Override
-    public NBTTagCompound writeToNBT() {
-        NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setString("UUID",this.modifier.getID().toString());
-        nbt.setFloat("Amount",this.amount);
-        return nbt;
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound nbt) {
-        if(nbt.hasKey("Amount"))
-            this.amount = nbt.getFloat("Amount");
-        else
-            this.amount = 0;
-        if(nbt.hasKey("UUID"))
-            this.modifier = new AttributeModifier(UUID.fromString(nbt.getString("UUID")),Socketed.MODID+"GemEffect", this.amount, this.operation);
-        else
-            this.modifier = INVALID;
     }
     
     @SideOnly(Side.CLIENT)
@@ -113,6 +71,7 @@ public class AttributeGemEffect extends GenericGemEffect {
     public String getTooltipString(boolean onItem) {
         if(onItem) {
             AttributeModifier modifier = this.getModifier();
+            if(modifier == null) return "";
             double amount = modifier.getAmount() * (modifier.getOperation() == 0 ? 1.0D : 100.0D);
             if(amount > 0.0D) return I18n.format("attribute.modifier.plus." + modifier.getOperation(), ItemStack.DECIMALFORMAT.format(amount), I18n.format("attribute.name." + this.getAttribute()));
             else if (amount < 0.0D) return I18n.format("attribute.modifier.take." + modifier.getOperation(), ItemStack.DECIMALFORMAT.format(amount), I18n.format("attribute.name." + this.getAttribute()));
@@ -133,6 +92,44 @@ public class AttributeGemEffect extends GenericGemEffect {
                 else if(min < 0.0D && max < 0.0D) return I18n.format("socketed.modifier.take.take." + this.getOperation(), ItemStack.DECIMALFORMAT.format(min), ItemStack.DECIMALFORMAT.format(max), I18n.format("attribute.name." + this.getAttribute()));
                 return "";
             }
+        }
+    }
+    
+    @Override
+    public String getTypeName() {
+        return TYPE_NAME;
+    }
+    
+    @Override
+    public AttributeGemEffect instantiate() {
+        return new AttributeGemEffect(this);
+    }
+    
+    @Override
+    public boolean validate() {
+        if(super.validate()) {
+            if(this.attributeName == null || this.attributeName.isEmpty()) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect entry, attribute name null or empty");
+            else if(this.amountRange == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect entry, " + this.attributeName + ", amount range invalid");
+            else if(this.operation < 0 || this.operation > 2) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect entry, " + this.attributeName + ", operation must be 0, 1, or 2");
+            else return true;
+        }
+        return false;
+    }
+    
+    @Override
+    public NBTTagCompound writeToNBT() {
+        NBTTagCompound nbt = new NBTTagCompound();
+        if(this.modifier != null) {
+            nbt.setString("UUID", this.modifier.getID().toString());
+            nbt.setDouble("Amount", this.modifier.getAmount());
+        }
+        return nbt;
+    }
+    
+    @Override
+    public void readFromNBT(NBTTagCompound nbt) {
+        if(nbt.hasKey("UUID")) {
+            this.modifier = new AttributeModifier(UUID.fromString(nbt.getString("UUID")),Socketed.MODID + "GemEffect", nbt.getDouble("Amount"), this.operation);
         }
     }
 }

@@ -4,55 +4,68 @@ import com.google.gson.annotations.SerializedName;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import socketed.Socketed;
 import socketed.common.jsondata.entry.effect.slot.ISlotType;
 
-public class GenericGemEffect {
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+public abstract class GenericGemEffect {
     
     public static final String TYPE_FIELD = "Effect Type";
 
     @SerializedName(TYPE_FIELD)
-    protected String type;
-    @SerializedName("Equipment Slots")
-    protected ISlotType slotType;
-
-    protected transient boolean valid;
-
-    protected transient boolean parsed;
-
-    public GenericGemEffect(ISlotType slotType) {
+    protected final String type = this.getTypeName();
+    @SerializedName("Equipment Slot Type")
+    protected final ISlotType slotType;
+    
+    protected GenericGemEffect(ISlotType slotType) {
         this.slotType = slotType;
-    }
-
-    public boolean isValid() {
-        if(!this.parsed) this.validate();
-        return this.valid;
     }
 
     public ISlotType getSlotType() {
         return this.slotType;
     }
-
-    protected void validate() {
-        //noop, slots are already auto validated
-    }
-
+    
+    @SideOnly(Side.CLIENT)
+    public abstract String getTooltipString(boolean onItem);
+    
     /**
-     * Lazy instantiation. Returns the default instance if subclass doesn't overwrite this
+     * @return the user readable type name for the subclass used for deserialization
+     */
+    public abstract String getTypeName();
+    
+    /**
+     * Instantiates this effect for application to sockets
+     * Allows for storing variable values such as RandomValueRange if needed
+     * @return an instantiated copy of this, or this itself if instantiation is not needed
      */
     public GenericGemEffect instantiate() {
         return this;
     }
-
+    
+    /**
+     * Attempts to validate this effect and setup caches from parsed values, such as Potion references
+     * @return false if any required value is invalid, which should result in discarding this effect
+     */
+    public boolean validate() {
+        if(this.slotType == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect entry, invalid slot type");
+        else return true;
+        return false;
+    }
+    
+    /**
+     * Writes this effect to NBT to allow for storing values from instantiated effects
+     * @return null if this effect is non-instantiated
+     */
     public NBTTagCompound writeToNBT() {
         return new NBTTagCompound();
     }
-
-    public void readFromNBT(NBTTagCompound nbt) {
-        //noop
-    }
     
-    @SideOnly(Side.CLIENT)
-    public String getTooltipString(boolean onItem) {
-        return "";
+    /**
+     * Reads this effect from NBT to allow for storing values from instantiated effects
+     */
+    public void readFromNBT(NBTTagCompound nbt) {
+        /*noop*/
     }
 }

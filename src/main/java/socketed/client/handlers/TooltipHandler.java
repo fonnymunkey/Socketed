@@ -31,12 +31,12 @@ public class TooltipHandler {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onItemTooltipEvent(ItemTooltipEvent event) {
         ItemStack stack = event.getItemStack();
-
-        boolean hasSockets = stack.hasCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
+        if(stack.isEmpty()) return;
+        
+        ICapabilitySocketable sockets = stack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
         GemType gemType = GemType.getGemTypeFromItemStack(stack);
-        boolean isGem = gemType != null;
 
-        if(!hasSockets && !isGem) return;
+        if(sockets == null && gemType == null) return;
 
         List<String> tooltips = event.getToolTip();
         toolTipIndex = -1;
@@ -55,10 +55,7 @@ public class TooltipHandler {
             toolTipIndex--;
         }
 
-        if(hasSockets) {
-            ICapabilitySocketable sockets = stack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
-            if(sockets == null) return;
-
+        if(sockets != null) {
             //Sockets (x/y) Tooltip
             int socketCount = sockets.getSocketCount();
             int gemCount = sockets.getGemCount();

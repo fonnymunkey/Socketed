@@ -50,11 +50,13 @@ public class CapabilitySocketableHandler {
             }
         }
 
+        //TODO: Mixin into LootTable::generateLootForPools instead to apply to all loot only? Allows for context checks and avoids affecting equipment
         @SubscribeEvent
-        public static void onLivingDrops(LivingDropsEvent event){
+        public static void onLivingDrops(LivingDropsEvent event) {
             //TODO: stop socket farm where players just let mobs pick up unsocketed items until they get sockets
-            for(EntityItem itemDrop : event.getDrops())
+            for(EntityItem itemDrop : event.getDrops()) {
                 AddSocketsOnGeneration.addSockets(itemDrop.getItem(), AddSocketsOnGeneration.EnumItemCreationContext.MOB_DROP);
+            }
         }
     }
 
@@ -90,14 +92,15 @@ public class CapabilitySocketableHandler {
 
     public static class Storage implements Capability.IStorage<ICapabilitySocketable> {
         
+        //TODO: Why does this get called every tick for every item in player inventory?
+        //TODO: Syncing to client for servers for tooltip rendering
         @Override
         public NBTBase writeNBT(Capability<ICapabilitySocketable> capability, ICapabilitySocketable instance, EnumFacing side) {
             NBTTagCompound nbt = new NBTTagCompound();
 
             NBTTagList socketTagList = new NBTTagList();
-            for(int socketIndex = 0; socketIndex < instance.getSocketCount(); socketIndex++) {
-                GenericSocket socket = instance.getSocketAt(socketIndex);
-                if(socket != null) socketTagList.appendTag(socket.writeToNBT());
+            for(GenericSocket socket : instance.getSockets()) {
+                socketTagList.appendTag(socket.writeToNBT());
             }
             //Don't store NBT to stacks that could get sockets but don't have anything yet
             if(!socketTagList.isEmpty()) nbt.setTag("Sockets", socketTagList);
@@ -115,22 +118,26 @@ public class CapabilitySocketableHandler {
         @Override
         public void readNBT(Capability<ICapabilitySocketable> capability, ICapabilitySocketable instance, EnumFacing side, NBTBase nbt) {
             NBTTagCompound tags = (NBTTagCompound)nbt;
-
+            
+            boolean read = false;
             if(tags.hasKey("Sockets")) {
                 NBTTagList socketsNBT = tags.getTagList("Sockets",10);
                 for(int socketIndex = 0; socketIndex < socketsNBT.tagCount(); socketIndex++) {
                     NBTTagCompound socketNBT = socketsNBT.getCompoundTagAt(socketIndex);
                     String socketType = socketNBT.getString("SocketType");
                     instance.addSocketFromNBT(socketType, socketNBT);
+                    read = true;
                 }
             }
-
             if(tags.hasKey("GemCombinations")) {
                 NBTTagList combinationsNBT = tags.getTagList("GemCombinations",10);
                 for(int combinationIndex = 0; combinationIndex < combinationsNBT.tagCount(); combinationIndex++) {
                     instance.addCombinationFromNBT(combinationsNBT.getCompoundTagAt(combinationIndex));
+                    read = true;
                 }
             }
+            //Refresh combinations after reading to account for combination changes on update
+            if(read) instance.refreshCombinations();
         }
     }
 }

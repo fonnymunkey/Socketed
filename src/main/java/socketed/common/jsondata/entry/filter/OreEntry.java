@@ -4,8 +4,9 @@ import com.google.gson.annotations.SerializedName;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
-import org.apache.logging.log4j.Level;
 import socketed.Socketed;
+
+import javax.annotation.Nonnull;
 
 public class OreEntry extends FilterEntry {
 
@@ -22,21 +23,20 @@ public class OreEntry extends FilterEntry {
     }
 
     public OreEntry(String name, boolean strict) {
+        super();
         this.name = name;
         this.strict = strict;
-        this.type = TYPE_NAME;
     }
-
+    
+    @Nonnull
     public String getName() {
-        if(!this.isValid()) return "INVALID";
-        return this.name.trim();
+        return this.name;
     }
 
     @Override
     public boolean matches(ItemStack input) {
-        if(!this.isValid()) return false;
         if(input == null || input.isEmpty()) return false;
-        NonNullList<ItemStack> list = OreDictionary.getOres(this.name.trim(), false);
+        NonNullList<ItemStack> list = OreDictionary.getOres(this.name, false);
         for(ItemStack stack : list) {
             if(stack.getItem().equals(input.getItem()) && (!this.strict || stack.getMetadata() == input.getMetadata())) {
                 return true;
@@ -44,14 +44,18 @@ public class OreEntry extends FilterEntry {
         }
         return false;
     }
-
+    
     @Override
-    protected void validate() {
-        this.valid = false;
-        if(this.name == null || this.name.trim().isEmpty()) Socketed.LOGGER.log(Level.WARN, "Invalid Ore Dictionary entry, name null or empty");
-        else if(!OreDictionary.doesOreNameExist(this.name.trim())) Socketed.LOGGER.log(Level.WARN, "Invalid Ore Dictionary entry, " + this.name.trim() + ", does not exist");
-        else if(OreDictionary.getOres(this.name.trim(), false).isEmpty()) Socketed.LOGGER.log(Level.WARN, "Invalid Ore Dictionary entry, " + this.name.trim() + ", exists but is empty");
-        else this.valid = true;
-        this.parsed = true;
+    public String getTypeName() {
+        return TYPE_NAME;
+    }
+    
+    @Override
+    public boolean validate() {
+        if(this.name == null || this.name.isEmpty()) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Filter entry, name null or empty");
+        else if(!OreDictionary.doesOreNameExist(this.name)) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Filter entry, " + this.name + ", dictionary does not exist");
+        else if(OreDictionary.getOres(this.name, false).isEmpty()) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Filter entry, " + this.name.trim() + ", dictionary exists but is empty");
+        else return true;
+        return false;
     }
 }

@@ -10,15 +10,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import java.util.List;
 
 public enum SocketedActivationTypes implements IActivationType {
-    
-    @SerializedName("INVALID")
-    INVALID {
-        
-        @Override
-        public String getTooltipKey() {
-            return "invalid";
-        }
-    },
 
     @SerializedName("PASSIVE_SELF")
     PASSIVE_SELF {

@@ -1,8 +1,10 @@
 package socketed.common.util;
 
+import net.minecraft.item.ItemStack;
 import org.apache.logging.log4j.Level;
 import socketed.Socketed;
 import socketed.common.config.JsonConfig;
+import socketed.common.jsondata.GemType;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
 import socketed.common.jsondata.entry.effect.activatable.IActivationType;
 import socketed.common.jsondata.entry.filter.FilterEntry;
@@ -32,5 +34,10 @@ public abstract class SocketedUtil {
             Socketed.LOGGER.log(Level.INFO, "Registering Slot Type " + type.name() + " from " + typeClass.getSimpleName());
             JsonConfig.slotTypeDeserializerMap.put(type.name(), typeClass);
         }
+    }
+    
+    public static boolean stackIsGem(ItemStack stack) {
+        if(stack.isEmpty()) return false;
+        return GemType.getGemTypeFromItemStack(stack) != null;
     }
 }

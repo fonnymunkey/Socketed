@@ -3,43 +3,58 @@ package socketed.common.capabilities;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import socketed.common.config.JsonConfig;
 import socketed.common.jsondata.GemCombinationType;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
-public class GemCombinationInstance extends GemInstance {
+public class GemCombinationInstance {
     
     private final GemCombinationType gemCombinationType;
-
-    public GemCombinationInstance(@Nullable GemCombinationType combination) {
+    
+    /**
+     * Instantiated effects for actual usage
+     */
+    private final List<GenericGemEffect> effects = new ArrayList<>();
+    
+    /**
+     * Instantiate a new instance from a GemCombinationType
+     */
+    public GemCombinationInstance(GemCombinationType combination) {
         this.gemCombinationType = combination;
-        if(this.gemCombinationType != null) {
-            for(int i = 0; i < this.gemCombinationType.getEffects().size(); i++) {
-                this.effects.add(this.gemCombinationType.getEffects().get(i).instantiate());
-            }
+        for(GenericGemEffect effect : this.gemCombinationType.getEffects()) {
+            this.effects.add(effect.instantiate());
         }
     }
-
+    
+    /**
+     * Instantiate a new instance from NBT
+     */
     public GemCombinationInstance(NBTTagCompound nbt) {
-        if(nbt.hasKey("GemCombinationType")) {
-            this.gemCombinationType = JsonConfig.getGemCombinationData().get(nbt.getString("GemCombinationType"));
-            if(this.gemCombinationType != null && nbt.hasKey("Effects")) {
-                NBTTagList effectsNBT = nbt.getTagList("Effects",10);
+        this.gemCombinationType = GemCombinationType.getGemCombinationTypeFromName(nbt.getString("GemCombinationType"));
+        if(this.gemCombinationType != null) {
+            NBTTagList effectsNBT = nbt.getTagList("Effects",10);
+            //As effects are stored ordered, only read the effects if the stored NBT size is as expected
+            //Otherwise re-instantiate effects as the configuration was changed
+            //TODO: Handling for if effects are reordered in config/only ranges changed
+            if(this.gemCombinationType.getEffects().size() == effectsNBT.tagCount()) {
                 for(int i = 0; i < this.gemCombinationType.getEffects().size(); i++) {
                     this.effects.add(this.gemCombinationType.getEffects().get(i).instantiate());
-                    this.effects.get(i).readFromNBT((NBTTagCompound) effectsNBT.get(i));
+                    this.effects.get(i).readFromNBT((NBTTagCompound)effectsNBT.get(i));
+                }
+            }
+            else {
+                for(GenericGemEffect effect : this.gemCombinationType.getEffects()) {
+                    this.effects.add(effect.instantiate());
                 }
             }
         }
-        else this.gemCombinationType = null;
     }
 
-    @Override
     public boolean hasGemEffectsForStack(ItemStack stack) {
-        if(this.gemCombinationType == null) return false;
-
         for(GenericGemEffect effect : this.effects) {
             if(effect.getSlotType().isStackValid(stack)) {
                 return true;
@@ -47,19 +62,48 @@ public class GemCombinationInstance extends GemInstance {
         }
         return false;
     }
-
+    
+    @Nonnull
+    public List<GenericGemEffect> getGemEffects() {
+        return this.effects;
+    }
+    
+    @Nonnull
+    public List<GenericGemEffect> getGemEffectsForStack(ItemStack stack) {
+        List<GenericGemEffect> effectsForSlot = new ArrayList<>();
+        
+        for(GenericGemEffect effect : this.effects) {
+            if(effect.getSlotType().isStackValid(stack)) {
+                effectsForSlot.add(effect);
+            }
+        }
+        return effectsForSlot;
+    }
+    
     @Nullable
     public GemCombinationType getGemCombinationType() {
         return this.gemCombinationType;
     }
-
-    @Override
+    
+    /**
+     * Attempts to validate this instance
+     * @return false if any required value is invalid, which should result in discarding this instance
+     */
+    //TODO: Debug log output instead of warns like other validation, as warn may spam logs when existing worlds are loaded after updates?
+    public boolean validate() {
+        //Gem Combination Type does not need to be validated as it is a reference to an existing validated Gem Combination Type from Json
+        if(this.gemCombinationType == null) return false;
+        return !this.effects.isEmpty();
+	}
+    
+    /**
+     * Writes this instance to NBT for storing on an ItemStack Capability
+     */
+    @Nonnull
     public NBTTagCompound writeToNBT() {
         NBTTagCompound nbt = new NBTTagCompound();
-
-        if(this.gemCombinationType != null) {
-            nbt.setString("GemCombinationType", this.gemCombinationType.getName());
-        }
+        
+        nbt.setString("GemCombinationType", this.gemCombinationType.getName());
 
         NBTTagList effectsNBT = new NBTTagList();
         for(GenericGemEffect effect : this.effects) {

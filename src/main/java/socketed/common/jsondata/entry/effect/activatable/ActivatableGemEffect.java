@@ -2,24 +2,35 @@ package socketed.common.jsondata.entry.effect.activatable;
 
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.entity.EntityLivingBase;
+import socketed.Socketed;
 import socketed.common.jsondata.entry.effect.slot.ISlotType;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
 
+import javax.annotation.Nonnull;
+
 public abstract class ActivatableGemEffect extends GenericGemEffect {
+
+    @SerializedName("Activation Type")
+    protected final IActivationType activationType;
     
-    public static final String FILTER_NAME = "Activation Type";
-
-    @SerializedName(ActivatableGemEffect.FILTER_NAME)
-    protected IActivationType activation;
-
-    public ActivatableGemEffect(ISlotType slotType) {
+    protected ActivatableGemEffect(ISlotType slotType, IActivationType activationType) {
         super(slotType);
+        this.activationType = activationType;
     }
-
+    
+    @Nonnull
     public IActivationType getActivationType() {
-        if(!this.isValid()) return SocketedActivationTypes.INVALID;
-        return this.activation;
+        return this.activationType;
     }
 
-    protected abstract void performEffect(EntityLivingBase entity);
+    public abstract void performEffect(EntityLivingBase entity);
+    
+    @Override
+    public boolean validate() {
+        if(super.validate()) {
+            if(this.activationType == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect entry, invalid activation type");
+            else return true;
+        }
+        return false;
+    }
 }

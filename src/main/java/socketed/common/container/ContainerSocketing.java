@@ -10,6 +10,8 @@ import socketed.common.capabilities.CapabilitySocketableHandler;
 import socketed.common.capabilities.GemInstance;
 import socketed.common.capabilities.ICapabilitySocketable;
 import socketed.common.config.ForgeConfig;
+import socketed.common.socket.GenericSocket;
+import socketed.common.util.SocketedUtil;
 
 import javax.annotation.Nonnull;
 
@@ -106,7 +108,7 @@ public class ContainerSocketing extends Container {
                     return ItemStack.EMPTY;
                 }
             }
-            else if(GemInstance.stackIsGem(stackFrom)) {
+            else if(SocketedUtil.stackIsGem(stackFrom)) {
                 //Take gem from player inventory, merge into a socket (todo: this should probably be harder to do to have no accidents)
                 //Fail if cant put gem item in gem slots
                 if(!this.mergeItemStack(stackFrom, 1, indexPlayerSlotsStart, false)) {
@@ -218,10 +220,17 @@ public class ContainerSocketing extends Container {
         public boolean isItemValid(@Nonnull ItemStack stack) {
             ItemStack socketable = this.inventory.getStackInSlot(0);
             if(socketable.isEmpty()) return false;
-            ICapabilitySocketable itemSockets = socketable.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
-            if(itemSockets.getSocketCount() < this.getSlotIndex()) return false;
+            
+            ICapabilitySocketable cap = socketable.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
+            if(cap == null) return false;
+            if(cap.getSocketCount() < this.getSlotIndex()) return false;
+            
             GemInstance gem = new GemInstance(stack);
-            return gem.hasGemEffectsForStack(socketable) && itemSockets.getSocketAt(this.getSlotIndex() - 1).acceptsGem(gem);
+            if(gem.validate() && gem.hasGemEffectsForStack(socketable)) {
+                GenericSocket socket = cap.getSocketAt(this.getSlotIndex() - 1);
+                return socket != null && socket.acceptsGem(gem);
+            }
+            return false;
         }
         
         @Override
@@ -231,10 +240,16 @@ public class ContainerSocketing extends Container {
 
         @Override
         public void onSlotChanged() {
-            if(!this.inventory.getStackInSlot(0).isEmpty()) {
-                ICapabilitySocketable sockets = this.inventory.getStackInSlot(0).getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
-                if(this.getHasStack()) sockets.replaceGemAt(new GemInstance(this.getStack()),this.getSlotIndex() - 1);
-                else sockets.removeGemAt(this.getSlotIndex() - 1);
+            ItemStack socketable = this.inventory.getStackInSlot(0);
+            if(!socketable.isEmpty()) {
+                ICapabilitySocketable cap = socketable.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
+                if(cap != null) {
+                    if(this.getHasStack()) {
+                        GemInstance gem = new GemInstance(this.getStack());
+                        if(gem.validate()) cap.replaceGemAt(gem, this.getSlotIndex() - 1);
+                    }
+                    else cap.removeGemAt(this.getSlotIndex() - 1);
+                }
             }
             this.inventory.markDirty();
         }

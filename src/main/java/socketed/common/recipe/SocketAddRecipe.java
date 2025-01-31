@@ -64,7 +64,7 @@ public class SocketAddRecipe extends IForgeRegistryEntry.Impl<IRecipe> implement
             boolean isGem = false;
             if (gem == null){
                 gem = new GemInstance(itemStack);
-                isGem = gem.getGemType() != null;
+                isGem = gem.validate();
                 if(!isGem)
                     gem = null;
             }

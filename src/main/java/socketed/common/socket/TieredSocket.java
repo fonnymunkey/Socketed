@@ -7,22 +7,27 @@ import javax.annotation.Nonnull;
 
 public class TieredSocket extends GenericSocket {
 
+    public static final String TYPE_NAME = "Tiered";
+    
     private final int tier;
-
+    
+    /**
+     * Constructs an empty socket with the provided tier
+     */
     public TieredSocket(int tier) {
         this.tier = tier;
     }
 
     /**
-     * create socket holding the provided gem
+     * Constructs a socket holding the provided gem with the provided tier
      */
     public TieredSocket(GemInstance gem, int tier) {
         super(gem);
         this.tier = tier;
     }
-
+    
     /**
-     * Create socket from nbt
+     * Constructs a socket from provided nbt
      */
     public TieredSocket(NBTTagCompound nbt) {
         super(nbt);
@@ -30,20 +35,22 @@ public class TieredSocket extends GenericSocket {
     }
 
     /**
-     * Whether this socket accepts the given gem.
+     * Whether this socket accepts the given gem
      */
-    public boolean acceptsGem(@Nonnull GemInstance gem) {
-        return gem.getGemType() != null && gem.getGemType().getTier() <= this.tier;
+    @Override
+    public boolean acceptsGem(GemInstance gem) {
+        return super.acceptsGem(gem) && gem.getGemType().getTier() <= this.tier;
     }
 
     /**
      * @return NBTTagCompound of the socket including its gem NBT if not empty
      */
     @Nonnull
+    @Override
     public NBTTagCompound writeToNBT() {
         NBTTagCompound nbt = super.writeToNBT();
-        nbt.setString("SocketType","Tiered");
-        nbt.setInteger("Tier",this.tier);
+        nbt.setString("SocketType", TieredSocket.TYPE_NAME);
+        nbt.setInteger("Tier", this.tier);
         return nbt;
     }
 }
