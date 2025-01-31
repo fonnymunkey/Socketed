@@ -2,6 +2,7 @@ package socketed.common.socket;
 
 import net.minecraft.nbt.NBTTagCompound;
 import socketed.common.capabilities.GemInstance;
+import socketed.common.jsondata.GemType;
 
 import javax.annotation.Nonnull;
 
@@ -33,6 +34,13 @@ public class TieredSocket extends GenericSocket {
         super(nbt);
         this.tier = nbt.getInteger("Tier");
     }
+    
+    /**
+     * @return the tier of this socket
+     */
+    public int getTier() {
+        return this.tier;
+    }
 
     /**
      * Whether this socket accepts the given gem
@@ -41,7 +49,17 @@ public class TieredSocket extends GenericSocket {
     public boolean acceptsGem(GemInstance gem) {
         return super.acceptsGem(gem) && gem.getGemType().getTier() <= this.tier;
     }
-
+    
+    /**
+     * Whether this socket accepts the given gem type
+     * Note: prefer only using this for quick checks such as gui rendering and not actual socketing
+     * Currently it is fine but there may be cases where the GemType on a GemInstance ends up different than expected
+     */
+    @Override
+    public boolean acceptsGemType(GemType gemType) {
+        return super.acceptsGemType(gemType) && gemType.getTier() <= this.tier;
+    }
+    
     /**
      * @return NBTTagCompound of the socket including its gem NBT if not empty
      */

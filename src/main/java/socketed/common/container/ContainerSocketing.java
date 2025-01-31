@@ -10,6 +10,7 @@ import socketed.common.capabilities.CapabilitySocketableHandler;
 import socketed.common.capabilities.GemInstance;
 import socketed.common.capabilities.ICapabilitySocketable;
 import socketed.common.config.ForgeConfig;
+import socketed.common.jsondata.GemType;
 import socketed.common.socket.GenericSocket;
 import socketed.common.util.SocketedUtil;
 
@@ -232,10 +233,10 @@ public class ContainerSocketing extends Container {
             if(cap == null) return false;
             if(cap.getSocketCount() < this.getSlotIndex()) return false;
             
-            GemInstance gem = new GemInstance(stack);
-            if(gem.validate() && gem.hasGemEffectsForStack(socketable)) {
+            GemType gemType = GemType.getGemTypeFromItemStack(stack);
+            if(gemType != null && gemType.hasEffectsForStack(socketable)) {
                 GenericSocket socket = cap.getSocketAt(this.getSlotIndex() - 1);
-                return socket != null && socket.acceptsGem(gem);
+                return socket != null && socket.acceptsGemType(gemType);
             }
             return false;
         }

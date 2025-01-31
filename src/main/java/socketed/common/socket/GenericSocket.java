@@ -2,6 +2,7 @@ package socketed.common.socket;
 
 import net.minecraft.nbt.NBTTagCompound;
 import socketed.common.capabilities.GemInstance;
+import socketed.common.jsondata.GemType;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
 
 import javax.annotation.Nonnull;
@@ -55,10 +56,19 @@ public class GenericSocket {
     }
 
     /**
-     * Whether this socket accepts the given gem, accepts all by default
+     * Whether this socket accepts the given gem
      */
     public boolean acceptsGem(GemInstance gem) {
         return gem != null;
+    }
+    
+    /**
+     * Whether this socket accepts the given gem type
+     * Note: prefer only using this for quick checks such as gui rendering and not actual socketing
+     * Currently it is fine but there may be cases where the GemType on a GemInstance ends up different than expected
+     */
+    public boolean acceptsGemType(GemType gemType) {
+        return gemType != null;
     }
     
     /**

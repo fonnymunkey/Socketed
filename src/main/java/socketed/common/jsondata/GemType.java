@@ -75,7 +75,18 @@ public class GemType {
     public List<FilterEntry> getFilterEntries() {
         return this.filterEntries;
     }
-
+    
+    //Instantiation shouldn't affect validity
+    public boolean hasEffectsForStack(ItemStack stack) {
+        if(stack.isEmpty()) return false;
+        for(GenericGemEffect effect : this.effects) {
+            if(effect.getSlotType().isStackValid(stack)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     public boolean matches(ItemStack input) {
         if(input == null || input.isEmpty()) return false;
         for(FilterEntry entry : this.getFilterEntries()) {

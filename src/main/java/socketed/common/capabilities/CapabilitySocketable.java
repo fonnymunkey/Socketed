@@ -139,7 +139,7 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 	@Override
 	public boolean addGem(GemInstance gem) {
 		if(gem == null) return false;
-		if(!gem.hasGemEffectsForStack(this.itemStack)) return false;
+		if(!gem.getGemType().hasEffectsForStack(this.itemStack)) return false;
 		for(GenericSocket socket : this.sockets) {
 			if(socket.isEmpty() && socket.setGem(gem)) {
 				this.refreshCombinations();
@@ -154,7 +154,7 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 	public GemInstance replaceGemAt(GemInstance gem, int socketIndex) {
 		if(socketIndex < 0 || socketIndex >= this.sockets.size()) return null;
 		if(gem == null) return null;
-		if(!gem.hasGemEffectsForStack(this.itemStack)) return null;
+		if(!gem.getGemType().hasEffectsForStack(this.itemStack)) return null;
 		GemInstance oldGem = this.sockets.get(socketIndex).getGem();
 		this.sockets.get(socketIndex).setGem(gem);
 		this.refreshCombinations();

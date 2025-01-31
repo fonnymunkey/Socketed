@@ -72,15 +72,6 @@ public class GemInstance {
         return new ItemStack(this.item, 1, this.metadata);
     }
 
-    public boolean hasGemEffectsForStack(ItemStack stack) {
-        for(GenericGemEffect effect : this.effects) {
-            if(effect.getSlotType().isStackValid(stack)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     @Nonnull
     public List<GenericGemEffect> getGemEffects() {
         return this.effects;
