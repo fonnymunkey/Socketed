@@ -1,7 +1,7 @@
 ## Todos + Ideas
 - GUI socket tier draw
 - gem tooltip tier draw
-- collect identical effects on tooltip
+- collect identical effects on tooltip?
 - Config for what items can get sockets and how many
 - additional effect types: 
   - +x lvl to specific enchant
@@ -10,7 +10,6 @@
   - plus enchanting lvl (lapis, maybe SME attribute)
   - plus gold from mobs (lol)
   - lifesteal + life degen
-  - plus durability
 - Maybe make jsons shorter
   - put all of the same filter entries in a list instead of one entry per item
   - make attributes shorter as "generic.attackDamage +2 @0"

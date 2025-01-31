@@ -179,6 +179,7 @@ public class ContainerSocketing extends Container {
         @Override
         public void onSlotChanged() {
             if(this.getHasStack()){
+                //New content is item with sockets
                 ICapabilitySocketable sockets = this.getStack().getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
                 int socketCount = sockets.getSocketCount();
 
@@ -191,6 +192,12 @@ public class ContainerSocketing extends Container {
                     inventorySlots.get(socketIndex+1).xPos = x;
                     inventorySlots.get(socketIndex+1).yPos = y;
                 }
+                //Remove all the other sockets if we swapped from one item to another
+                for(int socketIndex = socketCount; socketIndex < ForgeConfig.COMMON.maxSockets; socketIndex++){
+                    this.inventory.setInventorySlotContents(socketIndex + 1, ItemStack.EMPTY);
+                    inventorySlots.get(socketIndex+1).xPos = Integer.MAX_VALUE;
+                    inventorySlots.get(socketIndex+1).yPos = Integer.MAX_VALUE;
+                }
 
                 for(int i = 0; i < socketCount; i++) {
                     GemInstance gem = sockets.getGemAt(i);
@@ -198,8 +205,8 @@ public class ContainerSocketing extends Container {
                         this.inventory.setInventorySlotContents(i + 1, gem.getItemStack());
                     }
                 }
-            }
-            else {
+            } else {
+                //New stack is empty, remove socket slots
                 for(int socketIndex = 0; socketIndex < ForgeConfig.COMMON.maxSockets; socketIndex++){
                     this.inventory.setInventorySlotContents(socketIndex + 1, ItemStack.EMPTY);
                     inventorySlots.get(socketIndex+1).xPos = Integer.MAX_VALUE;
