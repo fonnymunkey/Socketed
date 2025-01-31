@@ -16,6 +16,7 @@ import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import socketed.Socketed;
+import socketed.common.config.ForgeConfig;
 import socketed.common.socket.GenericSocket;
 import socketed.common.util.AddSocketsOnGeneration;
 
@@ -42,12 +43,10 @@ public class CapabilitySocketableHandler {
             if(stack.isEmpty()) return;
             if(stack.hasCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null)) return;
             if(stack.getMaxStackSize() > 1) return;
-            Item item = stack.getItem();
+
             //Allowed item types that can get sockets
-            //TODO: add custom config to add more items to this
-            if(item instanceof ItemArmor || item instanceof ItemTool || item instanceof ItemHoe || item instanceof ItemSword) {
+            if(ForgeConfig.SOCKETABLES.canSocket(stack))
                 event.addCapability(CapabilitySocketableHandler.CAP_SOCKETABLE_KEY, new CapabilitySocketableHandler.Provider(stack));
-            }
         }
 
         //TODO: Mixin into LootTable::generateLootForPools instead to apply to all loot only? Allows for context checks and avoids affecting equipment
