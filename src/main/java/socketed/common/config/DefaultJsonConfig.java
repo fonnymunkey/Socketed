@@ -69,7 +69,7 @@ public abstract class DefaultJsonConfig {
         //TODO: Add enchanting attribute/add attribute to SME
         registerDefaultGemType("lapis", new GemType("socketed.tooltip.default.lapis", 2, TextFormatting.BLUE,
                                      Collections.singletonList(new AttributeGemEffect(SocketedSlotTypes.ALL, "socketed.attributes.enchantingpower", new RandomValueRange(2, false), 0)),
-                                     Collections.singletonList(new OreEntry("gemLapis"))));
+                                     Collections.singletonList(new OreEntry("gemLapis", true))));
         registerDefaultGemType("glowstone", new GemType("socketed.tooltip.default.glowstone", 1, TextFormatting.YELLOW,
                                          Collections.singletonList(new PotionGemEffect(SocketedSlotTypes.HEAD, SocketedActivationTypes.PASSIVE_FAR, MobEffects.GLOWING.getRegistryName().toString(), 0, 60)),
                                          Collections.singletonList(new OreEntry("dustGlowstone"))));
@@ -80,7 +80,7 @@ public abstract class DefaultJsonConfig {
                 Arrays.asList("diamond", "diamond", "diamond"),
                 Collections.singletonList(new AttributeGemEffect(SocketedSlotTypes.HAND, SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new RandomValueRange(9, false), 0))));
         registerDefaultGemCombinationType("rgb", new GemCombinationType(
-                "socketed.tooltip.default.rgb", TextFormatting.GOLD, true,true, false,
+                "socketed.tooltip.default.rgb", TextFormatting.GOLD, true,false, false,
                 Arrays.asList("redstone", "lucky", "lapis"),
                 Arrays.asList(new PotionGemEffect(SocketedSlotTypes.ALL, SocketedActivationTypes.PASSIVE_SELF, MobEffects.GLOWING.getRegistryName().toString(), 0, 60),
                               new PotionGemEffect(SocketedSlotTypes.ALL, SocketedActivationTypes.PASSIVE_NEARBY, MobEffects.GLOWING.getRegistryName().toString(), 0, 60))));
