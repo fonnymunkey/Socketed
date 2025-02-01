@@ -16,6 +16,11 @@ public enum SocketedSlotTypes implements ISlotType {
 		}
 		
 		@Override
+		public boolean isSlotValid(EntityEquipmentSlot slot) {
+			return true;
+		}
+		
+		@Override
 		public String getTooltipKey() {
 			return "all";
 		}
@@ -25,6 +30,11 @@ public enum SocketedSlotTypes implements ISlotType {
 		
 		@Override
 		public boolean isStackValid(ItemStack stack) {
+			return false;
+		}
+		
+		@Override
+		public boolean isSlotValid(EntityEquipmentSlot slot) {
 			return false;
 		}
 		
@@ -44,6 +54,11 @@ public enum SocketedSlotTypes implements ISlotType {
 		}
 		
 		@Override
+		public boolean isSlotValid(EntityEquipmentSlot slot) {
+			return slot == EntityEquipmentSlot.HEAD || slot == EntityEquipmentSlot.CHEST || slot == EntityEquipmentSlot.LEGS || slot == EntityEquipmentSlot.FEET;
+		}
+		
+		@Override
 		public String getTooltipKey() {
 			return "body";
 		}
@@ -54,6 +69,11 @@ public enum SocketedSlotTypes implements ISlotType {
 		@Override
 		public boolean isStackValid(ItemStack stack) {
 			return EntityLiving.getSlotForItemStack(stack) == EntityEquipmentSlot.HEAD;
+		}
+		
+		@Override
+		public boolean isSlotValid(EntityEquipmentSlot slot) {
+			return slot == EntityEquipmentSlot.HEAD;
 		}
 		
 		@Override
@@ -70,6 +90,11 @@ public enum SocketedSlotTypes implements ISlotType {
 		}
 		
 		@Override
+		public boolean isSlotValid(EntityEquipmentSlot slot) {
+			return slot == EntityEquipmentSlot.CHEST;
+		}
+		
+		@Override
 		public String getTooltipKey() {
 			return "chest";
 		}
@@ -83,6 +108,11 @@ public enum SocketedSlotTypes implements ISlotType {
 		}
 		
 		@Override
+		public boolean isSlotValid(EntityEquipmentSlot slot) {
+			return slot == EntityEquipmentSlot.LEGS;
+		}
+		
+		@Override
 		public String getTooltipKey() {
 			return "legs";
 		}
@@ -93,6 +123,11 @@ public enum SocketedSlotTypes implements ISlotType {
 		@Override
 		public boolean isStackValid(ItemStack stack) {
 			return EntityLiving.getSlotForItemStack(stack) == EntityEquipmentSlot.FEET;
+		}
+		
+		@Override
+		public boolean isSlotValid(EntityEquipmentSlot slot) {
+			return slot == EntityEquipmentSlot.FEET;
 		}
 		
 		@Override
@@ -111,6 +146,11 @@ public enum SocketedSlotTypes implements ISlotType {
 		}
 		
 		@Override
+		public boolean isSlotValid(EntityEquipmentSlot slot) {
+			return slot == EntityEquipmentSlot.MAINHAND || slot == EntityEquipmentSlot.OFFHAND;
+		}
+		
+		@Override
 		public String getTooltipKey() {
 			return "hand";
 		}
@@ -124,6 +164,11 @@ public enum SocketedSlotTypes implements ISlotType {
 		}
 		
 		@Override
+		public boolean isSlotValid(EntityEquipmentSlot slot) {
+			return slot == EntityEquipmentSlot.MAINHAND;
+		}
+		
+		@Override
 		public String getTooltipKey() {
 			return "mainhand";
 		}
@@ -134,6 +179,11 @@ public enum SocketedSlotTypes implements ISlotType {
 		@Override
 		public boolean isStackValid(ItemStack stack) {
 			return EntityLiving.getSlotForItemStack(stack) == EntityEquipmentSlot.OFFHAND;
+		}
+		
+		@Override
+		public boolean isSlotValid(EntityEquipmentSlot slot) {
+			return slot == EntityEquipmentSlot.OFFHAND;
 		}
 		
 		@Override

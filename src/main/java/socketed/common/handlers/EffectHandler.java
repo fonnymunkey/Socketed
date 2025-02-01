@@ -49,7 +49,7 @@ public class EffectHandler {
             
             ICapabilitySocketable cap = stack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
             if(cap != null) {
-                List<GenericGemEffect> effects = cap.getAllEffectsForStackSlot();
+                List<GenericGemEffect> effects = cap.getAllEffectsValidForSlot(slot);
                 for(GenericGemEffect effect : effects) {
                     if(effect instanceof ActivatableGemEffect) {
                         ActivatableGemEffect activatableEffect = (ActivatableGemEffect)effect;
@@ -75,7 +75,7 @@ public class EffectHandler {
             
             ICapabilitySocketable cap = stack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
             if(cap != null) {
-                List<GenericGemEffect> effects = cap.getAllEffectsForStackSlot();
+                List<GenericGemEffect> effects = cap.getAllEffectsValidForSlot(slot);
                 for(GenericGemEffect effect : effects) {
                     if(effect instanceof ActivatableGemEffect) {
                         ActivatableGemEffect activatableEffect = (ActivatableGemEffect)effect;
@@ -104,7 +104,7 @@ public class EffectHandler {
         //Remove all modifiers that were on removed item
         ICapabilitySocketable capOld = stackOld.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
         if(capOld != null) {
-            List<GenericGemEffect> effectsOld = capOld.getAllEffectsForStackSlot();
+            List<GenericGemEffect> effectsOld = capOld.getAllEffectsValidForStack();
             for(GenericGemEffect effect : effectsOld) {
                 if(effect instanceof AttributeGemEffect) {
                     AttributeGemEffect attrEffect = (AttributeGemEffect)effect;
@@ -130,7 +130,7 @@ public class EffectHandler {
         //Apply new modifiers from new item
         ICapabilitySocketable capNew = stackNew.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
         if(capNew != null) {
-            List<GenericGemEffect> effectsNew = capNew.getAllEffectsForStackSlot();
+            List<GenericGemEffect> effectsNew = capNew.getAllEffectsValidForSlot(slot);
             for(GenericGemEffect effect : effectsNew) {
                 if(effect instanceof AttributeGemEffect) {
                     AttributeGemEffect attrEffect = (AttributeGemEffect)effect;

@@ -1,5 +1,6 @@
 package socketed.common.capabilities;
 
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.nbt.NBTTagCompound;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
 import socketed.common.socket.GenericSocket;
@@ -109,15 +110,28 @@ public interface ICapabilitySocketable {
 
     /**
      * Gathers and returns a list of (instantiated) effects of all socketed gems
+     * Will not return effects from disabled/overridden sockets
      */
     @Nonnull
-    List<GenericGemEffect> getAllEffects();
+    List<GenericGemEffect> getAllEffectsRaw();
 
     /**
-     * Gathers and returns a list of (instantiated) effects of all socketed gems that match this item's slot
+     * Gathers and returns a list of (instantiated) effects of all socketed gems
+     * Will not return effects from disabled/overridden sockets
+     * Will not return effects that don't match this itemstacks slot type
      */
     @Nonnull
-    List<GenericGemEffect> getAllEffectsForStackSlot();
+    List<GenericGemEffect> getAllEffectsValidForStack();
+    
+    /**
+     * Gathers and returns a list of (instantiated) effects of all socketed gems
+     * Will not return effects from disabled/overridden sockets
+     * Will not return effects that don't match this itemstacks slot type
+     * Will not return effects with slot types that don't match the given equipment slot
+     */
+    //TODO: Better method of handling this for non-equipmentslot slots
+    @Nonnull
+    List<GenericGemEffect> getAllEffectsValidForSlot(EntityEquipmentSlot slot);
 
 
     // -----     GEM COMBINATION SECTION     -----

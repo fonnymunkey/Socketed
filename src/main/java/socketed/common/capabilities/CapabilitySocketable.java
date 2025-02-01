@@ -1,5 +1,6 @@
 package socketed.common.capabilities;
 
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import socketed.common.config.JsonConfig;
@@ -188,7 +189,7 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 	
 	@Override
 	@Nonnull
-	public List<GenericGemEffect> getAllEffects() {
+	public List<GenericGemEffect> getAllEffectsRaw() {
 		List<GenericGemEffect> effects = new ArrayList<>();
 		for(GenericSocket socket : this.sockets) {
 			effects.addAll(socket.getActiveEffects());
@@ -201,10 +202,19 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 	
 	@Override
 	@Nonnull
-	public List<GenericGemEffect> getAllEffectsForStackSlot() {
-		return this.getAllEffects().stream()
-							  .filter(v -> v.getSlotType().isStackValid(this.itemStack))
-							  .collect(Collectors.toList());
+	public List<GenericGemEffect> getAllEffectsValidForStack() {
+		return this.getAllEffectsRaw().stream()
+				   .filter(v -> v.getSlotType().isStackValid(this.itemStack))
+				   .collect(Collectors.toList());
+	}
+	
+	@Override
+	@Nonnull
+	public List<GenericGemEffect> getAllEffectsValidForSlot(EntityEquipmentSlot slot) {
+		return this.getAllEffectsRaw().stream()
+				   .filter(v -> v.getSlotType().isStackValid(this.itemStack))
+				   .filter(v -> v.getSlotType().isSlotValid(slot))
+				   .collect(Collectors.toList());
 	}
 	
 	@Override
