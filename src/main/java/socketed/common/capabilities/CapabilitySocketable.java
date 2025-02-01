@@ -98,7 +98,7 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 		//Check if a gem exists in the socket being replaced
 		if(gemInOldSocket != null) {
 			//Check if the new socket is filled, otherwise attempt to place the gem into the new socket
-			if(!newSocket.isEmpty() || !newSocket.setGem(gemInOldSocket)) {
+			if(!newSocket.isEmpty() || !newSocket.setGem(gemInOldSocket, false)) {
 				//If the new socket is filled, or the gem can't be placed into the new socket, return the gem
 				returnGem = gemInOldSocket;
 			}
@@ -131,7 +131,9 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 	public List<GemInstance> getAllGems(boolean includeDisabled) {
 		List<GemInstance> gems = new ArrayList<>();
 		for(GenericSocket socket : this.sockets) {
-			if(socket.getGem() != null && (includeDisabled || !socket.isDisabled())) gems.add(socket.getGem());
+			if(socket.getGem() != null) {
+				if(includeDisabled || (!socket.isDisabled() && !socket.isOverridden())) gems.add(socket.getGem());
+			}
 		}
 		return gems;
 	}
@@ -141,7 +143,7 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 		if(gem == null) return false;
 		if(!gem.getGemType().hasEffectsForStack(this.itemStack)) return false;
 		for(GenericSocket socket : this.sockets) {
-			if(socket.isEmpty() && socket.setGem(gem)) {
+			if(socket.isEmpty() && socket.setGem(gem, false)) {
 				this.refreshCombinations();
 				return true;
 			}
@@ -150,27 +152,27 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 	}
 	
 	@Override
-	@Nullable
-	public GemInstance replaceGemAt(GemInstance gem, int socketIndex) {
-		if(socketIndex < 0 || socketIndex >= this.sockets.size()) return null;
-		if(gem == null) return null;
-		if(!gem.getGemType().hasEffectsForStack(this.itemStack)) return null;
-		GemInstance oldGem = this.sockets.get(socketIndex).getGem();
-		this.sockets.get(socketIndex).setGem(gem);
-		this.refreshCombinations();
-		return oldGem;
+	public boolean replaceGemAt(GemInstance gem, int socketIndex) {
+		if(socketIndex < 0 || socketIndex >= this.sockets.size()) return false;
+		if(gem == null) return false;
+		if(!gem.getGemType().hasEffectsForStack(this.itemStack)) return false;
+		if(this.sockets.get(socketIndex).setGem(gem, false)) {
+			this.refreshCombinations();
+			return true;
+		}
+		return false;
 	}
 	
 	@Override
-	@Nullable
-	public GemInstance removeGemAt(int socketIndex) {
-		if(socketIndex < 0 || socketIndex >= this.sockets.size()) return null;
+	public boolean removeGemAt(int socketIndex) {
+		if(socketIndex < 0 || socketIndex >= this.sockets.size()) return false;
 		GenericSocket socket = this.sockets.get(socketIndex);
-		if(socket.isEmpty()) return null;
-		GemInstance returnGem = socket.getGem();
-		socket.setGem(null);
-		this.refreshCombinations();
-		return returnGem;
+		if(socket.isEmpty()) return true;
+		if(socket.setGem(null, false)) {
+			this.refreshCombinations();
+			return true;
+		}
+		return false;
 	}
 	
 	@Override
@@ -178,7 +180,7 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 	public List<GemInstance> removeAllGems() {
 		List<GemInstance> gems = this.getAllGems(true);
 		for(GenericSocket socket : this.sockets) {
-			socket.setGem(null);
+			socket.setGem(null, true);
 		}
 		this.refreshCombinations();
 		return gems;
@@ -189,7 +191,7 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 	public List<GenericGemEffect> getAllEffects() {
 		List<GenericGemEffect> effects = new ArrayList<>();
 		for(GenericSocket socket : this.sockets) {
-			if(!socket.isDisabled()) effects.addAll(socket.getEffects());
+			effects.addAll(socket.getActiveEffects());
 		}
 		for(GemCombinationInstance combination : this.gemCombinations) {
 			effects.addAll(combination.getGemEffects());
@@ -226,7 +228,7 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 		int gemCount = 0;
 		for(GenericSocket socket : this.sockets) {
 			GemInstance gem = socket.getGem();
-			if(gem == null) currentGemTypes.add("");
+			if(gem == null || socket.isDisabled()) currentGemTypes.add("");
 			else {
 				currentGemTypes.add(gem.getGemType().getName());
 				gemCount++;
@@ -237,7 +239,7 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 		List<GemCombinationInstance> gemCombinationsOld = new ArrayList<>(this.gemCombinations);
 		this.gemCombinations.clear();
 		for(GenericSocket socket : this.sockets) {
-			socket.setDisabled(false);
+			socket.setOverridden(false);
 		}
 		
 		//Don't bother checking combinations if there are no gems to check
@@ -281,7 +283,7 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 		//Disable sockets overwritten by combinations
 		for(int socketIndex : socketsToDisable) {
 			GenericSocket socket = this.getSocketAt(socketIndex);
-			if(socket != null) socket.setDisabled(true);
+			if(socket != null) socket.setOverridden(true);
 		}
 	}
 }

@@ -81,23 +81,23 @@ public interface ICapabilitySocketable {
     boolean addGem(GemInstance gem);
 
     /**
-     * Replaces the gem in the specified socket with the provided gem.
-     * Will not add the gem and return null if socketIndex is out of range or if the provided gem is null
-     * @return the gem that was in the same socket before, can be null if socket was empty.
+     * Attempts to replace the gem in the specified socket with the provided gem.
+     * Will not accept null values, use removeGemAt instead for removing gems
+     * Get the gem in the provided slot index first before replacement if it is needed
+     * @return true if the operation was successful and the given gem was inserted
      */
-    @Nullable
-    GemInstance replaceGemAt(GemInstance gem, int socketIndex);
+    boolean replaceGemAt(GemInstance gem, int socketIndex);
 
     /**
-     * Removes the gem in the specified socket
-     * Will return null if socketIndex is out of range or if the socket is empty
-     * @return the gem that was in the socket before, if not empty
+     * Attempts to remove the gem in the specified socket
+     * Get the gem in the provided slot index first before replacement if it is needed
+     * @return true if the operation was successful and the socket is now empty, or if the socket was already empty
      */
-    @Nullable
-    GemInstance removeGemAt(int socketIndex);
+    boolean removeGemAt(int socketIndex);
 
     /**
      * Removes all gems from the sockets of this item and returns a List of them
+     * Warning: this will ignore locks and should be avoided if possible
      * @return List of non-null gems, can be size 0 if there are no gems
      */
     @Nonnull

@@ -46,8 +46,8 @@ public class TieredSocket extends GenericSocket {
      * Whether this socket accepts the given gem
      */
     @Override
-    public boolean acceptsGem(GemInstance gem) {
-        return super.acceptsGem(gem) && gem.getGemType().getTier() <= this.tier;
+    public boolean acceptsGem(GemInstance gem, boolean ignoreLocked) {
+        return super.acceptsGem(gem, ignoreLocked) && gem.getGemType().getTier() <= this.tier;
     }
     
     /**
@@ -56,8 +56,8 @@ public class TieredSocket extends GenericSocket {
      * Currently it is fine but there may be cases where the GemType on a GemInstance ends up different than expected
      */
     @Override
-    public boolean acceptsGemType(GemType gemType) {
-        return super.acceptsGemType(gemType) && gemType.getTier() <= this.tier;
+    public boolean acceptsGemType(GemType gemType, boolean ignoreLocked) {
+        return super.acceptsGemType(gemType, ignoreLocked) && gemType.getTier() <= this.tier;
     }
     
     /**

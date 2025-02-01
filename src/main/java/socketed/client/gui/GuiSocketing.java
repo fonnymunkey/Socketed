@@ -81,7 +81,7 @@ public class GuiSocketing extends GuiContainer {
                     int x = this.guiLeft + xCent + (int)(ContainerSocketing.radius * Math.sin(socketIndex * angleIncr));
                     int y = this.guiTop + yCent - (int)(ContainerSocketing.radius * Math.cos(socketIndex * angleIncr));
                     
-                    if(cursorStack.isEmpty() || (gemType != null && socket.acceptsGemType(GemType.getGemTypeFromItemStack(cursorStack)) && gemType.hasEffectsForStack(socketable))) {
+                    if(!socket.isLocked() && (cursorStack.isEmpty() || (gemType != null && socket.acceptsGemType(gemType, false) && gemType.hasEffectsForStack(socketable)))) {
                         this.drawTexturedModalRect(x, y, texSlotActive.getFirst(), texSlotActive.getSecond(), 18, 18);
                     }
                     else {

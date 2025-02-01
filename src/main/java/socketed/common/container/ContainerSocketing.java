@@ -10,7 +10,6 @@ import socketed.common.capabilities.CapabilitySocketableHandler;
 import socketed.common.capabilities.GemInstance;
 import socketed.common.capabilities.ICapabilitySocketable;
 import socketed.common.config.ForgeConfig;
-import socketed.common.jsondata.GemType;
 import socketed.common.socket.GenericSocket;
 import socketed.common.util.SocketedUtil;
 
@@ -233,12 +232,27 @@ public class ContainerSocketing extends Container {
             if(cap == null) return false;
             if(cap.getSocketCount() < this.getSlotIndex()) return false;
             
-            GemType gemType = GemType.getGemTypeFromItemStack(stack);
-            if(gemType != null && gemType.hasEffectsForStack(socketable)) {
-                GenericSocket socket = cap.getSocketAt(this.getSlotIndex() - 1);
-                return socket != null && socket.acceptsGemType(gemType);
+            GenericSocket socket = cap.getSocketAt(this.getSlotIndex() - 1);
+            if(socket != null) {
+                //Creating a new instance isn't the best for performance but better safe than sorry for using GemType check here
+                GemInstance gem = new GemInstance(stack);
+                if(gem.validate() && gem.getGemType().hasEffectsForStack(socketable)) {
+                    return socket.acceptsGem(gem, false);
+                }
             }
             return false;
+        }
+        
+        @Override
+        public boolean canTakeStack(EntityPlayer playerIn) {
+            ItemStack socketable = this.inventory.getStackInSlot(0);
+            if(socketable.isEmpty()) return false;
+            
+            ICapabilitySocketable cap = socketable.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
+            if(cap == null) return false;
+            
+            GenericSocket socket = cap.getSocketAt(this.getSlotIndex() - 1);
+            return socket != null && !socket.isLocked();
         }
         
         @Override
@@ -255,7 +269,7 @@ public class ContainerSocketing extends Container {
                     if(this.getHasStack()) {
                         GemInstance gem = new GemInstance(this.getStack());
                         if(gem.validate()) cap.replaceGemAt(gem, this.getSlotIndex() - 1);
-                    }
+                    }//Replace/Remove results are ignored, have to hope isItemValid/canTakeStack are handled properly by this point
                     else cap.removeGemAt(this.getSlotIndex() - 1);
                 }
             }

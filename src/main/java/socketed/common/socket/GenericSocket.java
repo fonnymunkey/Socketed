@@ -1,6 +1,7 @@
 package socketed.common.socket;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.common.capabilities.GemInstance;
 import socketed.common.jsondata.GemType;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
@@ -15,7 +16,9 @@ public class GenericSocket {
     public static final String TYPE_NAME = "Generic";
     
     private GemInstance gem = null;
+    private boolean overridden = false;
     private boolean disabled = false;
+    private boolean locked = false;
     
     /**
      * Constructs an empty socket
@@ -37,38 +40,72 @@ public class GenericSocket {
             GemInstance gem = new GemInstance(nbt.getCompoundTag("Gem"));
             if(gem.validate()) this.gem = gem;
         }
+        if(nbt.hasKey("Overridden")) this.overridden = nbt.getBoolean("Overridden");
         if(nbt.hasKey("Disabled")) this.disabled = nbt.getBoolean("Disabled");
+        if(nbt.hasKey("Locked")) this.locked = nbt.getBoolean("Locked");
     }
 
     /**
-     * Gems in disabled sockets will not have effects (used for gem combinations overwriting gem effects)
-     * @return Disabled state of socket
+     * Sockets marked as overridden will not have effects
+     * Used when Gem Combinations are set to override
+     * Value will change dependent on combination refresh checks
+     */
+    public boolean isOverridden() {
+        return this.overridden;
+    }
+
+    /**
+     * Marks the socket as overridden
+     */
+    public void setOverridden(boolean overridden) {
+        this.overridden = overridden;
+    }
+    
+    /**
+     * Sockets marked as disabled will not have effects
+     * Used when sockets are broken or otherwise should not function
      */
     public boolean isDisabled() {
         return this.disabled;
     }
-
+    
     /**
-     * Disable the socket (used for gem combinations that overwrite the original effects of their gems)
+     * Marks the socket as disabled
      */
     public void setDisabled(boolean disabled) {
         this.disabled = disabled;
     }
-
+    
     /**
-     * Whether this socket accepts the given gem
+     * Sockets marked as locked can not have gems added or removed
+     * Used when sockets are broken or otherwise should not be modifiable
      */
-    public boolean acceptsGem(GemInstance gem) {
-        return gem != null;
+    public boolean isLocked() {
+        return this.locked;
     }
     
     /**
-     * Whether this socket accepts the given gem type
+     * Marks the socket as locked
+     */
+    public void setLocked(boolean locked) {
+        this.locked = locked;
+    }
+
+    /**
+     * Whether this socket would accept the given gem
+     * The results of this should match as expected with setGem, except for removing gems
+     */
+    public boolean acceptsGem(GemInstance gem, boolean ignoreLocked) {
+        return gem != null && (ignoreLocked || !this.isLocked());
+    }
+    
+    /**
+     * Whether this socket would accept the given gem type
      * Note: prefer only using this for quick checks such as gui rendering and not actual socketing
      * Currently it is fine but there may be cases where the GemType on a GemInstance ends up different than expected
      */
-    public boolean acceptsGemType(GemType gemType) {
-        return gemType != null;
+    public boolean acceptsGemType(GemType gemType, boolean ignoreLocked) {
+        return gemType != null && (ignoreLocked || !this.isLocked());
     }
     
     /**
@@ -87,12 +124,15 @@ public class GenericSocket {
     }
 
     /**
-     * Fills the socket with the given gem.
-     * @param gem The gem this socket should get filled with
-     * @return true if socket accepts the gem, false if not. Will not set the gem if it doesn't accept it
+     * Attempts to fill the socket with the given gem
+     * The results of this should match as expected with acceptsGem, except for removing gems
+     * @param gem The gem this socket should get filled with, null to empty the socket
+     * @param ignoreLocked if this operation should bypass the locked state of the socket
+     * @return true if the operation is successful, false if not
      */
-    public boolean setGem(@Nullable GemInstance gem) {
-        if(gem == null || this.acceptsGem(gem)) {
+    public boolean setGem(@Nullable GemInstance gem, boolean ignoreLocked) {
+        if(!ignoreLocked && this.isLocked()) return false;
+        if(gem == null || this.acceptsGem(gem, ignoreLocked)) {
             this.gem = gem;
             return true;
         }
@@ -100,12 +140,12 @@ public class GenericSocket {
     }
 
     /**
-     * Get all effect entries of this socket's gem. Override this method if you want to make a special socket vary the effects of its gem
-     * Return an empty list if socket is empty
+     * Gets the current active effects of this socket
+     * Will return empty if there is no gem or if the socket is overridden or disabled
      */
     @Nonnull
-    public List<GenericGemEffect> getEffects() {
-        if(this.gem != null) return this.gem.getGemEffects();
+    public List<GenericGemEffect> getActiveEffects() {
+        if(this.gem != null && !this.isOverridden() && !this.isDisabled()) return this.gem.getGemEffects();
         return Collections.emptyList();
     }
 
@@ -117,7 +157,10 @@ public class GenericSocket {
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setString("SocketType", GenericSocket.TYPE_NAME);
         if(this.gem != null) nbt.setTag("Gem", this.gem.writeToNBT());
+        nbt.setBoolean("Overridden", this.overridden);
         nbt.setBoolean("Disabled", this.disabled);
+        nbt.setBoolean("Locked", this.locked);
         return nbt;
     }
+    
 }
