@@ -1,7 +1,8 @@
 package socketed.common.socket;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.util.ResourceLocation;
+import socketed.Socketed;
 import socketed.common.capabilities.GemInstance;
 import socketed.common.jsondata.GemType;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
@@ -163,4 +164,15 @@ public class GenericSocket {
         return nbt;
     }
     
+    protected static final ResourceLocation GENERIC_EMPTY_TEXTURE = new ResourceLocation(Socketed.MODID, "textures/gui/container/socket_generic_empty.png");
+    protected static final ResourceLocation GENERIC_FILLED_TEXTURE = new ResourceLocation(Socketed.MODID, "textures/gui/container/socket_generic_filled.png");
+    
+    /**
+     * @return The resourcelocation of the texture to render in the socketing gui
+     */
+    @Nonnull
+    public ResourceLocation getSocketTexture() {
+        if(this.isEmpty()) return GENERIC_EMPTY_TEXTURE;
+        return GENERIC_FILLED_TEXTURE;
+    }
 }

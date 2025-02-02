@@ -1,6 +1,8 @@
 package socketed.common.socket;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+import socketed.Socketed;
 import socketed.common.capabilities.GemInstance;
 import socketed.common.jsondata.GemType;
 
@@ -70,5 +72,28 @@ public class TieredSocket extends GenericSocket {
         nbt.setString("SocketType", TieredSocket.TYPE_NAME);
         nbt.setInteger("Tier", this.tier);
         return nbt;
+    }
+    
+    protected static final ResourceLocation TIER_0_EMPTY_TEXTURE = new ResourceLocation(Socketed.MODID, "textures/gui/container/socket_tier_0_empty.png");
+    protected static final ResourceLocation TIER_0_FILLED_TEXTURE = new ResourceLocation(Socketed.MODID, "textures/gui/container/socket_tier_0_filled.png");
+    protected static final ResourceLocation TIER_1_EMPTY_TEXTURE = new ResourceLocation(Socketed.MODID, "textures/gui/container/socket_tier_1_empty.png");
+    protected static final ResourceLocation TIER_1_FILLED_TEXTURE = new ResourceLocation(Socketed.MODID, "textures/gui/container/socket_tier_1_filled.png");
+    protected static final ResourceLocation TIER_2_EMPTY_TEXTURE = new ResourceLocation(Socketed.MODID, "textures/gui/container/socket_tier_2_empty.png");
+    protected static final ResourceLocation TIER_2_FILLED_TEXTURE = new ResourceLocation(Socketed.MODID, "textures/gui/container/socket_tier_2_filled.png");
+    protected static final ResourceLocation TIER_3_EMPTY_TEXTURE = new ResourceLocation(Socketed.MODID, "textures/gui/container/socket_tier_3_empty.png");
+    protected static final ResourceLocation TIER_3_FILLED_TEXTURE = new ResourceLocation(Socketed.MODID, "textures/gui/container/socket_tier_3_filled.png");
+    
+    /**
+     * @return The resourcelocation of the texture to render in the socketing gui
+     */
+    @Nonnull
+    public ResourceLocation getSocketTexture() {
+        switch(this.getTier()) {
+            case 0: return this.isEmpty() ? TIER_0_EMPTY_TEXTURE : TIER_0_FILLED_TEXTURE;
+            case 1: return this.isEmpty() ? TIER_1_EMPTY_TEXTURE : TIER_1_FILLED_TEXTURE;
+            case 2: return this.isEmpty() ? TIER_2_EMPTY_TEXTURE : TIER_2_FILLED_TEXTURE;
+            case 3: return this.isEmpty() ? TIER_3_EMPTY_TEXTURE : TIER_3_FILLED_TEXTURE;
+        }
+        return super.getSocketTexture();
     }
 }
