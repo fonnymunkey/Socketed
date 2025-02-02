@@ -3,6 +3,7 @@ package socketed.common.capabilities;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import socketed.common.config.ForgeConfig;
 import socketed.common.config.JsonConfig;
 import socketed.common.jsondata.GemCombinationType;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
@@ -63,14 +64,14 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 	
 	@Override
 	public void addSocket(GenericSocket socket) {
-		if(socket != null) {
+		if(socket != null && this.sockets.size() < ForgeConfig.COMMON.maxSockets) {
 			this.sockets.add(socket);
 			this.refreshCombinations();
 		}
 	}
 	
 	private void addSocketNoRefresh(GenericSocket socket) {
-		if(socket != null) {
+		if(socket != null && this.sockets.size() < ForgeConfig.COMMON.maxSockets) {
 			this.sockets.add(socket);
 		}
 	}
