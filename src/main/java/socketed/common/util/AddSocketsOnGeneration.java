@@ -1,8 +1,8 @@
 package socketed.common.util;
 
 import net.minecraft.item.ItemStack;
-import socketed.common.capabilities.CapabilitySocketableHandler;
-import socketed.common.capabilities.ICapabilitySocketable;
+import socketed.common.capabilities.socketable.CapabilitySocketableHandler;
+import socketed.common.capabilities.socketable.ICapabilitySocketable;
 import socketed.common.config.ForgeConfig;
 import socketed.common.socket.TieredSocket;
 

@@ -6,8 +6,8 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
-import socketed.common.capabilities.CapabilitySocketableHandler;
-import socketed.common.capabilities.ICapabilitySocketable;
+import socketed.common.capabilities.socketable.CapabilitySocketableHandler;
+import socketed.common.capabilities.socketable.ICapabilitySocketable;
 
 public class AddSocketCommand extends CommandBase {
     

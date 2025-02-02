@@ -1,7 +1,9 @@
-package socketed.common.capabilities;
+package socketed.common.capabilities.socketable;
 
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.nbt.NBTTagCompound;
+import socketed.common.instances.GemCombinationInstance;
+import socketed.common.instances.GemInstance;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
 import socketed.common.socket.GenericSocket;
 

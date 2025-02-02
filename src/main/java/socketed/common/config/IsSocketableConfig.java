@@ -9,8 +9,6 @@ import net.minecraftforge.common.config.Config;
 import java.util.HashMap;
 
 public class IsSocketableConfig {
-	//TODO: doing it this way wont allow for extending to all baubles in general
-
 	@Config.Comment("There are some predefined item types shown in default config. Pattern for any additional types: Name to use;Regex to exactly match item ids.")
 	@Config.Name("Item Types that can get sockets")
 	public String[] itemTypesConfig = {

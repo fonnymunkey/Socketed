@@ -10,8 +10,8 @@ import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.RandomValueRange;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
-import socketed.common.capabilities.CapabilitySocketableHandler;
-import socketed.common.capabilities.ICapabilitySocketable;
+import socketed.common.capabilities.socketable.CapabilitySocketableHandler;
+import socketed.common.capabilities.socketable.ICapabilitySocketable;
 import socketed.common.config.ForgeConfig;
 
 import java.util.Random;

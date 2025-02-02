@@ -1,4 +1,4 @@
-package socketed.common.capabilities;
+package socketed.common.instances;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

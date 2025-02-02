@@ -1,4 +1,4 @@
-package socketed.common.capabilities;
+package socketed.common.capabilities.socketable;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.*;
@@ -16,6 +16,7 @@ import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import socketed.Socketed;
+import socketed.common.instances.GemCombinationInstance;
 import socketed.common.config.ForgeConfig;
 import socketed.common.socket.GenericSocket;
 import socketed.common.util.AddSocketsOnGeneration;

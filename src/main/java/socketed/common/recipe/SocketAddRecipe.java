@@ -6,9 +6,9 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.IForgeRegistryEntry;
-import socketed.common.capabilities.CapabilitySocketableHandler;
-import socketed.common.capabilities.GemInstance;
-import socketed.common.capabilities.ICapabilitySocketable;
+import socketed.common.capabilities.socketable.CapabilitySocketableHandler;
+import socketed.common.instances.GemInstance;
+import socketed.common.capabilities.socketable.ICapabilitySocketable;
 import socketed.common.item.ItemSocketTool;
 
 import javax.annotation.Nonnull;

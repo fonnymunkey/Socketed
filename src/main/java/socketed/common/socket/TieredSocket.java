@@ -3,7 +3,7 @@ package socketed.common.socket;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import socketed.Socketed;
-import socketed.common.capabilities.GemInstance;
+import socketed.common.instances.GemInstance;
 import socketed.common.jsondata.GemType;
 
 import javax.annotation.Nonnull;

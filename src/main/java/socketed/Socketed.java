@@ -14,7 +14,8 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import org.apache.logging.log4j.Logger;
-import socketed.common.capabilities.CapabilitySocketableHandler;
+import socketed.common.capabilities.effectscache.CapabilityEffectsCacheHandler;
+import socketed.common.capabilities.socketable.CapabilitySocketableHandler;
 import socketed.common.config.JsonConfig;
 import socketed.common.container.GuiHandlerSocketing;
 import socketed.common.init.ModItems;
@@ -43,6 +44,7 @@ public class Socketed {
         JsonConfig.preInit(event.getModConfigurationDirectory());
 
         CapabilitySocketableHandler.registerCapability();
+        CapabilityEffectsCacheHandler.registerCapability();
         LootFunctionManager.registerFunction(new SocketLootFunction.Serializer());
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandlerSocketing());
     }
