@@ -18,7 +18,7 @@ public class TieredSocket extends GenericSocket {
      * Constructs an empty socket with the provided tier
      */
     public TieredSocket(int tier) {
-        this.tier = tier;
+        this.tier = Math.max(0, Math.min(3, tier));
     }
 
     /**
@@ -26,7 +26,7 @@ public class TieredSocket extends GenericSocket {
      */
     public TieredSocket(GemInstance gem, int tier) {
         super(gem);
-        this.tier = tier;
+        this.tier = Math.max(0, Math.min(3, tier));
     }
     
     /**
@@ -34,7 +34,7 @@ public class TieredSocket extends GenericSocket {
      */
     public TieredSocket(NBTTagCompound nbt) {
         super(nbt);
-        this.tier = nbt.getInteger("Tier");
+        this.tier = Math.max(0, Math.min(3, nbt.getInteger("Tier")));
     }
     
     /**
