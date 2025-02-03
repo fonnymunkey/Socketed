@@ -11,7 +11,6 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import socketed.common.jsondata.entry.effect.slot.ISlotType;
 import socketed.common.capabilities.socketable.CapabilitySocketableHandler;
 import socketed.common.instances.GemCombinationInstance;
 import socketed.common.instances.GemInstance;
@@ -19,6 +18,7 @@ import socketed.common.capabilities.socketable.ICapabilitySocketable;
 import socketed.common.jsondata.GemCombinationType;
 import socketed.common.jsondata.GemType;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
+import socketed.common.util.SocketedUtil;
 
 import java.util.List;
 
@@ -34,8 +34,8 @@ public class TooltipHandler {
         if(stack.isEmpty()) return;
         
         ICapabilitySocketable sockets = stack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
-        GemType gemType = GemType.getGemTypeFromItemStack(stack);
-
+        GemType gemType = null;
+        if(sockets == null) gemType = GemType.getGemTypeFromItemStack(stack);
         if(sockets == null && gemType == null) return;
 
         List<String> tooltips = event.getToolTip();
@@ -55,11 +55,12 @@ public class TooltipHandler {
             toolTipIndex--;
         }
 
+        //Socketed item tooltip
         if(sockets != null) {
             //Sockets (x/y) Tooltip
             int socketCount = sockets.getSocketCount();
-            int gemCount = sockets.getGemCount();
             if(socketCount <= 0) return;
+            int gemCount = sockets.getGemCount();
             insertTooltip(tooltips, TextFormatting.BOLD + I18n.format("socketed.tooltip.socket", gemCount, socketCount, TextFormatting.RESET));
 
             //Gem Combinations
@@ -85,6 +86,7 @@ public class TooltipHandler {
                 }
             }
         }
+        //Gem tooltip
         else {
             //In socket Tooltip
             insertTooltip(tooltips, TextFormatting.BOLD + I18n.format("socketed.tooltip.gem", TextFormatting.RESET));
@@ -94,7 +96,7 @@ public class TooltipHandler {
             //Effect Tooltips
             for(GenericGemEffect effect : gemType.getEffects()) {
                 String tooltip = "  " + gemType.getColor() + effect.getTooltipString(false);
-                tooltip += " " + ISlotType.getSlotTooltip(effect.getSlotType());
+                tooltip += " " + SocketedUtil.getSlotTooltip(effect.getSlotType());
                 insertTooltip(tooltips, tooltip + TextFormatting.RESET);
             }
         }

@@ -5,6 +5,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import socketed.common.jsondata.GemCombinationType;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
+import socketed.common.util.SocketedUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -56,7 +57,7 @@ public class GemCombinationInstance {
 
     public boolean hasGemEffectsForStack(ItemStack stack) {
         for(GenericGemEffect effect : this.effects) {
-            if(effect.getSlotType().isStackValid(stack)) {
+            if(SocketedUtil.isStackValidForSlot(stack, effect.getSlotType())) {
                 return true;
             }
         }
@@ -73,7 +74,7 @@ public class GemCombinationInstance {
         List<GenericGemEffect> effectsForSlot = new ArrayList<>();
         
         for(GenericGemEffect effect : this.effects) {
-            if(effect.getSlotType().isStackValid(stack)) {
+            if(SocketedUtil.isStackValidForSlot(stack, effect.getSlotType())) {
                 effectsForSlot.add(effect);
             }
         }

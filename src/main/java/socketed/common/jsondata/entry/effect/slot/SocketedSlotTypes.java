@@ -2,8 +2,14 @@ package socketed.common.jsondata.entry.effect.slot;
 
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import socketed.common.util.SocketedUtil;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public enum SocketedSlotTypes implements ISlotType {
 	
@@ -16,8 +22,17 @@ public enum SocketedSlotTypes implements ISlotType {
 		}
 		
 		@Override
-		public boolean isSlotValid(EntityEquipmentSlot slot) {
-			return true;
+		public boolean isSlotValid(ISlotType type) {
+			return type != NONE;
+		}
+		
+		@Override
+		public Set<ItemStack> getEquippedStacks(EntityPlayer player) {
+			HashSet<ItemStack> set = new HashSet<>();
+			for(ISlotType type : SocketedUtil.registeredSlots) {
+				if(this != type) set.addAll(type.getEquippedStacks(player));
+			}
+			return set;
 		}
 		
 		@Override
@@ -34,8 +49,13 @@ public enum SocketedSlotTypes implements ISlotType {
 		}
 		
 		@Override
-		public boolean isSlotValid(EntityEquipmentSlot slot) {
-			return false;
+		public boolean isSlotValid(ISlotType type) {
+			return type == this;
+		}
+		
+		@Override
+		public Set<ItemStack> getEquippedStacks(EntityPlayer player) {
+			return Collections.singleton(ItemStack.EMPTY);
 		}
 		
 		@Override
@@ -54,8 +74,18 @@ public enum SocketedSlotTypes implements ISlotType {
 		}
 		
 		@Override
-		public boolean isSlotValid(EntityEquipmentSlot slot) {
-			return slot == EntityEquipmentSlot.HEAD || slot == EntityEquipmentSlot.CHEST || slot == EntityEquipmentSlot.LEGS || slot == EntityEquipmentSlot.FEET;
+		public boolean isSlotValid(ISlotType type) {
+			return type == this || type == HEAD || type == CHEST || type == LEGS || type == FEET || type == ALL;
+		}
+		
+		@Override
+		public Set<ItemStack> getEquippedStacks(EntityPlayer player) {
+			HashSet<ItemStack> set = new HashSet<>();
+			set.addAll(HEAD.getEquippedStacks(player));
+			set.addAll(CHEST.getEquippedStacks(player));
+			set.addAll(LEGS.getEquippedStacks(player));
+			set.addAll(FEET.getEquippedStacks(player));
+			return set;
 		}
 		
 		@Override
@@ -72,8 +102,13 @@ public enum SocketedSlotTypes implements ISlotType {
 		}
 		
 		@Override
-		public boolean isSlotValid(EntityEquipmentSlot slot) {
-			return slot == EntityEquipmentSlot.HEAD;
+		public boolean isSlotValid(ISlotType type) {
+			return type == this || type == BODY || type == ALL;
+		}
+		
+		@Override
+		public Set<ItemStack> getEquippedStacks(EntityPlayer player) {
+			return Collections.singleton(player.getItemStackFromSlot(EntityEquipmentSlot.HEAD));
 		}
 		
 		@Override
@@ -90,8 +125,13 @@ public enum SocketedSlotTypes implements ISlotType {
 		}
 		
 		@Override
-		public boolean isSlotValid(EntityEquipmentSlot slot) {
-			return slot == EntityEquipmentSlot.CHEST;
+		public boolean isSlotValid(ISlotType type) {
+			return type == this || type == BODY || type == ALL;
+		}
+		
+		@Override
+		public Set<ItemStack> getEquippedStacks(EntityPlayer player) {
+			return Collections.singleton(player.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
 		}
 		
 		@Override
@@ -108,8 +148,13 @@ public enum SocketedSlotTypes implements ISlotType {
 		}
 		
 		@Override
-		public boolean isSlotValid(EntityEquipmentSlot slot) {
-			return slot == EntityEquipmentSlot.LEGS;
+		public boolean isSlotValid(ISlotType type) {
+			return type == this || type == BODY || type == ALL;
+		}
+		
+		@Override
+		public Set<ItemStack> getEquippedStacks(EntityPlayer player) {
+			return Collections.singleton(player.getItemStackFromSlot(EntityEquipmentSlot.LEGS));
 		}
 		
 		@Override
@@ -126,8 +171,13 @@ public enum SocketedSlotTypes implements ISlotType {
 		}
 		
 		@Override
-		public boolean isSlotValid(EntityEquipmentSlot slot) {
-			return slot == EntityEquipmentSlot.FEET;
+		public boolean isSlotValid(ISlotType type) {
+			return type == this || type == BODY || type == ALL;
+		}
+		
+		@Override
+		public Set<ItemStack> getEquippedStacks(EntityPlayer player) {
+			return Collections.singleton(player.getItemStackFromSlot(EntityEquipmentSlot.FEET));
 		}
 		
 		@Override
@@ -146,8 +196,16 @@ public enum SocketedSlotTypes implements ISlotType {
 		}
 		
 		@Override
-		public boolean isSlotValid(EntityEquipmentSlot slot) {
-			return slot == EntityEquipmentSlot.MAINHAND || slot == EntityEquipmentSlot.OFFHAND;
+		public boolean isSlotValid(ISlotType type) {
+			return type == this || type == MAINHAND || type == OFFHAND || type == ALL;
+		}
+		
+		@Override
+		public Set<ItemStack> getEquippedStacks(EntityPlayer player) {
+			HashSet<ItemStack> set = new HashSet<>();
+			set.addAll(MAINHAND.getEquippedStacks(player));
+			set.addAll(OFFHAND.getEquippedStacks(player));
+			return set;
 		}
 		
 		@Override
@@ -164,8 +222,13 @@ public enum SocketedSlotTypes implements ISlotType {
 		}
 		
 		@Override
-		public boolean isSlotValid(EntityEquipmentSlot slot) {
-			return slot == EntityEquipmentSlot.MAINHAND;
+		public boolean isSlotValid(ISlotType type) {
+			return type == this || type == HAND || type == ALL;
+		}
+		
+		@Override
+		public Set<ItemStack> getEquippedStacks(EntityPlayer player) {
+			return Collections.singleton(player.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND));
 		}
 		
 		@Override
@@ -182,8 +245,13 @@ public enum SocketedSlotTypes implements ISlotType {
 		}
 		
 		@Override
-		public boolean isSlotValid(EntityEquipmentSlot slot) {
-			return slot == EntityEquipmentSlot.OFFHAND;
+		public boolean isSlotValid(ISlotType type) {
+			return type == this || type == HAND || type == ALL;
+		}
+		
+		@Override
+		public Set<ItemStack> getEquippedStacks(EntityPlayer player) {
+			return Collections.singleton(player.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND));
 		}
 		
 		@Override

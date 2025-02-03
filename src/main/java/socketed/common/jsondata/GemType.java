@@ -7,6 +7,7 @@ import socketed.Socketed;
 import socketed.common.config.JsonConfig;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
 import socketed.common.jsondata.entry.filter.FilterEntry;
+import socketed.common.util.SocketedUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -80,7 +81,7 @@ public class GemType {
     public boolean hasEffectsForStack(ItemStack stack) {
         if(stack.isEmpty()) return false;
         for(GenericGemEffect effect : this.effects) {
-            if(effect.getSlotType().isStackValid(stack)) {
+            if(SocketedUtil.isStackValidForSlot(stack, effect.getSlotType())) {
                 return true;
             }
         }

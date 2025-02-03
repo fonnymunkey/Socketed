@@ -1,10 +1,10 @@
 package socketed.common.capabilities.socketable;
 
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.nbt.NBTTagCompound;
 import socketed.common.instances.GemCombinationInstance;
 import socketed.common.instances.GemInstance;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
+import socketed.common.jsondata.entry.effect.slot.ISlotType;
 import socketed.common.socket.GenericSocket;
 
 import javax.annotation.Nonnull;
@@ -113,28 +113,21 @@ public interface ICapabilitySocketable {
     /**
      * Gathers and returns a list of (instantiated) effects of all socketed gems
      * Will not return effects from disabled/overridden sockets
+     * Will not return effects that are not valid for this ItemStacks ISlotType
      */
     @Nonnull
-    List<GenericGemEffect> getAllEffectsRaw();
-
-    /**
-     * Gathers and returns a list of (instantiated) effects of all socketed gems
-     * Will not return effects from disabled/overridden sockets
-     * Will not return effects that don't match this itemstacks slot type
-     */
-    @Nonnull
-    List<GenericGemEffect> getAllEffectsValidForStack();
+    List<GenericGemEffect> getAllPossibleEffects();
     
     /**
      * Gathers and returns a list of (instantiated) effects of all socketed gems
      * Will not return effects from disabled/overridden sockets
-     * Will not return effects that don't match this itemstacks slot type
-     * Will not return effects with slot types that don't match the given equipment slot
+     * Will not return effects that are not valid for this ItemStacks ISlotType
+     * Will not return effects that are not valid for the provided ISlotType
+     * @param slotType the ISlotType representation of where this ItemStack currently is
      */
-    //TODO: Better method of handling this for non-equipmentslot slots
     @Nonnull
-    List<GenericGemEffect> getAllEffectsValidForSlot(EntityEquipmentSlot slot);
-
+    List<GenericGemEffect> getAllActiveEffects(ISlotType slotType);
+    
 
     // -----     GEM COMBINATION SECTION     -----
     // -------------------------------------------

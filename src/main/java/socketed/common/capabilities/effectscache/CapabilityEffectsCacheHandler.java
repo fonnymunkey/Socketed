@@ -32,6 +32,8 @@ public class CapabilityEffectsCacheHandler {
         @SubscribeEvent
         public static void attachCapabilitiesEventPlayer(AttachCapabilitiesEvent<Entity> event) {
             if(!(event.getObject() instanceof EntityPlayer)) return;
+            //For now, assume effects being cached are server-side only
+            if(event.getObject().world.isRemote) return;
             if(event.getObject().hasCapability(CapabilityEffectsCacheHandler.CAP_EFFECTS_CACHE, null)) return;
             event.addCapability(CapabilityEffectsCacheHandler.CAP_EFFECTS_CACHE_KEY, new CapabilityEffectsCacheHandler.Provider());
         }

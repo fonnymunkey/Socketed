@@ -9,6 +9,7 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.OreDictionary;
 import socketed.common.jsondata.GemType;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
+import socketed.common.util.SocketedUtil;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -82,7 +83,7 @@ public class GemInstance {
         List<GenericGemEffect> effectsForSlot = new ArrayList<>();
         
         for(GenericGemEffect effect : this.effects) {
-            if(effect.getSlotType().isStackValid(stack)) {
+            if(SocketedUtil.isStackValidForSlot(stack, effect.getSlotType())) {
                 effectsForSlot.add(effect);
             }
         }

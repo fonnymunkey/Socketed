@@ -1,6 +1,5 @@
 package socketed.common.capabilities.socketable;
 
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import socketed.common.instances.GemCombinationInstance;
@@ -9,8 +8,10 @@ import socketed.common.config.ForgeConfig;
 import socketed.common.config.JsonConfig;
 import socketed.common.jsondata.GemCombinationType;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
+import socketed.common.jsondata.entry.effect.slot.ISlotType;
 import socketed.common.socket.GenericSocket;
 import socketed.common.socket.TieredSocket;
+import socketed.common.util.SocketedUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -190,9 +191,7 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 		return gems;
 	}
 	
-	@Override
-	@Nonnull
-	public List<GenericGemEffect> getAllEffectsRaw() {
+	private List<GenericGemEffect> getAllEffectsRaw() {
 		List<GenericGemEffect> effects = new ArrayList<>();
 		for(GenericSocket socket : this.sockets) {
 			effects.addAll(socket.getActiveEffects());
@@ -205,18 +204,18 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 	
 	@Override
 	@Nonnull
-	public List<GenericGemEffect> getAllEffectsValidForStack() {
+	public List<GenericGemEffect> getAllPossibleEffects() {
 		return this.getAllEffectsRaw().stream()
-				   .filter(v -> v.getSlotType().isStackValid(this.itemStack))
+				   .filter(v -> SocketedUtil.isStackValidForSlot(this.itemStack, v.getSlotType()))
 				   .collect(Collectors.toList());
 	}
 	
 	@Override
 	@Nonnull
-	public List<GenericGemEffect> getAllEffectsValidForSlot(EntityEquipmentSlot slot) {
+	public List<GenericGemEffect> getAllActiveEffects(ISlotType slotType) {
 		return this.getAllEffectsRaw().stream()
-				   .filter(v -> v.getSlotType().isStackValid(this.itemStack))
-				   .filter(v -> v.getSlotType().isSlotValid(slot))
+				   .filter(v -> SocketedUtil.isStackValidForSlot(this.itemStack, v.getSlotType()))
+				   .filter(v -> SocketedUtil.doSlotsMatch(slotType, v.getSlotType()))
 				   .collect(Collectors.toList());
 	}
 	
