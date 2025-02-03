@@ -77,7 +77,7 @@ public class EffectHandler {
         }
     }
 
-    private static final List<IAttribute> offhandSkipAttributes = Arrays.asList(SharedMonsterAttributes.ATTACK_DAMAGE, SharedMonsterAttributes.ATTACK_SPEED);
+    private static final List<IAttribute> handSkipAttributes = Arrays.asList(SharedMonsterAttributes.ATTACK_DAMAGE, SharedMonsterAttributes.ATTACK_SPEED, EntityPlayer.REACH_DISTANCE);
 
     //This handling assumes that gems cant be added or removed while wearing the item
     //This doesn't fire when swapping from one item to another of same item type in creative mode for whatever reason
@@ -125,9 +125,8 @@ public class EffectHandler {
                     IAttributeInstance attrInstance = player.getAttributeMap().getAttributeInstanceByName(attribute);
                     if(attrInstance == null) continue;
 
-                    //TODO RLCombat compat
-                    //Skip damage/speed/reach attributes for offhand, let 2 hand mods like RLCombat handle the compat properly
-                    if(slot == EntityEquipmentSlot.OFFHAND && (offhandSkipAttributes.contains(attrInstance.getAttribute()) || attribute.contains("reachDistance"))) {
+                    //Damage/Speed/Reach Attributes applied on weapons themselves are handled in ItemMixin for proper handling/compat with offhand mods like RLCombat
+                    if((slot == EntityEquipmentSlot.MAINHAND || slot == EntityEquipmentSlot.OFFHAND) && handSkipAttributes.contains(attrInstance.getAttribute())) {
                         continue;
                     }
 
@@ -158,9 +157,8 @@ public class EffectHandler {
                     IAttributeInstance attrInstance = player.getAttributeMap().getAttributeInstanceByName(attribute);
                     if(attrInstance == null) continue;
                     
-                    //TODO RLCombat compat
-                    //Skip damage/speed/reach attributes for offhand, let 2 hand mods like RLCombat handle the compat properly
-                    if(slot == EntityEquipmentSlot.OFFHAND && (offhandSkipAttributes.contains(attrInstance.getAttribute()) || attribute.contains("reachDistance"))) {
+                    //Damage/Speed/Reach Attributes applied on weapons themselves are handled in ItemMixin for proper handling/compat with offhand mods like RLCombat
+                    if((slot == EntityEquipmentSlot.MAINHAND || slot == EntityEquipmentSlot.OFFHAND) && handSkipAttributes.contains(attrInstance.getAttribute())) {
                         continue;
                     }
 
