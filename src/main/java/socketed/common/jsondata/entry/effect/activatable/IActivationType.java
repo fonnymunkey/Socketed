@@ -8,8 +8,6 @@ public interface IActivationType {
     
     default void triggerPerTickEffect(ActivatableGemEffect entry, EntityPlayer player) { /*noop*/ }
     
-    default void triggerPerSecondEffect(ActivatableGemEffect actEffect, EntityPlayer player) { /*noop*/ }
-    
     default void triggerOnAttackEffect(ActivatableGemEffect entry, EntityLivingBase victim, DamageSource source, boolean received) { /*noop*/ }
 
     String getTooltipKey();

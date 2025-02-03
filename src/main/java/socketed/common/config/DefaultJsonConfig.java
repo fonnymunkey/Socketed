@@ -48,7 +48,7 @@ public abstract class DefaultJsonConfig {
                                             Arrays.asList(new OreEntry("stone"),
                                                           new OreEntry("cobblestone"))));
         registerDefaultGemType("sticky", new GemType("socketed.tooltip.default.sticky", 0, TextFormatting.DARK_GREEN,
-                                      Collections.singletonList(new PotionGemEffect(SocketedSlotTypes.BODY, SocketedActivationTypes.PASSIVE_SELF, MobEffects.SLOWNESS.getRegistryName().toString(), 0, 60)),
+                                      Collections.singletonList(new PotionGemEffect(SocketedSlotTypes.BODY, SocketedActivationTypes.PASSIVE_SELF, 9, MobEffects.SLOWNESS.getRegistryName().toString(), 0, 10)),
                                       Collections.singletonList(new OreEntry("slimeball"))));
         registerDefaultGemType("lucky", new GemType("socketed.tooltip.default.lucky", 2, TextFormatting.GREEN,
                                      Collections.singletonList(new AttributeGemEffect(SocketedSlotTypes.ALL, SharedMonsterAttributes.LUCK.getName(), new RandomValueRange(2, false), 0)),
@@ -71,7 +71,7 @@ public abstract class DefaultJsonConfig {
                                      Collections.singletonList(new AttributeGemEffect(SocketedSlotTypes.ALL, "socketed.attributes.enchantingpower", new RandomValueRange(2, false), 0)),
                                      Collections.singletonList(new OreEntry("gemLapis", true))));
         registerDefaultGemType("glowstone", new GemType("socketed.tooltip.default.glowstone", 1, TextFormatting.YELLOW,
-                                         Collections.singletonList(new PotionGemEffect(SocketedSlotTypes.HEAD, SocketedActivationTypes.PASSIVE_FAR, MobEffects.GLOWING.getRegistryName().toString(), 0, 60)),
+                                         Collections.singletonList(new PotionGemEffect(SocketedSlotTypes.HEAD, SocketedActivationTypes.PASSIVE_FAR, 40, MobEffects.GLOWING.getRegistryName().toString(), 0, 41)),
                                          Collections.singletonList(new OreEntry("dustGlowstone"))));
         
         //Gem Combination Types
@@ -82,7 +82,7 @@ public abstract class DefaultJsonConfig {
         registerDefaultGemCombinationType("rgb", new GemCombinationType(
                 "socketed.tooltip.default.rgb", TextFormatting.GOLD, true,false, false,
                 Arrays.asList("redstone", "lucky", "lapis"),
-                Arrays.asList(new PotionGemEffect(SocketedSlotTypes.ALL, SocketedActivationTypes.PASSIVE_SELF, MobEffects.GLOWING.getRegistryName().toString(), 0, 60),
-                              new PotionGemEffect(SocketedSlotTypes.ALL, SocketedActivationTypes.PASSIVE_NEARBY, MobEffects.GLOWING.getRegistryName().toString(), 0, 60))));
+                Arrays.asList(new PotionGemEffect(SocketedSlotTypes.ALL, SocketedActivationTypes.PASSIVE_SELF, 9, MobEffects.GLOWING.getRegistryName().toString(), 0, 10),
+                              new PotionGemEffect(SocketedSlotTypes.ALL, SocketedActivationTypes.PASSIVE_NEARBY, 40, MobEffects.GLOWING.getRegistryName().toString(), 0, 41))));
     }
 }

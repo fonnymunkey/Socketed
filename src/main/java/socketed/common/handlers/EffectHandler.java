@@ -62,17 +62,15 @@ public class EffectHandler {
     public static void onPlayerUpdate(LivingEvent.LivingUpdateEvent event) {
         if(!(event.getEntityLiving() instanceof EntityPlayer)) return;
         if(event.getEntityLiving().world.isRemote) return;
-        //TODO: allow for sub-20 tick triggers/cache active effects as player capability for performance
-        if (event.getEntityLiving().ticksExisted % 20 != 0) return;
-        EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+        EntityPlayer player = (EntityPlayer)event.getEntityLiving();
 
-        //TODO: handle iteration automatically from expanded SlotTypes?
         ICapabilityEffectsCache cachedEffects = player.getCapability(CapabilityEffectsCacheHandler.CAP_EFFECTS_CACHE, null);
-        if (cachedEffects == null) return;
-        for (GenericGemEffect effect : cachedEffects.getActiveEffects()) {
-            if (effect instanceof ActivatableGemEffect) {
-                ActivatableGemEffect activatableEffect = (ActivatableGemEffect) effect;
-                activatableEffect.getActivationType().triggerPerSecondEffect(activatableEffect, player);
+        if(cachedEffects == null) return;
+        
+        for(GenericGemEffect effect : cachedEffects.getActiveEffects()) {
+            if(effect instanceof ActivatableGemEffect) {
+                ActivatableGemEffect activatableEffect = (ActivatableGemEffect)effect;
+                activatableEffect.getActivationType().triggerPerTickEffect(activatableEffect, player);
             }
         }
     }

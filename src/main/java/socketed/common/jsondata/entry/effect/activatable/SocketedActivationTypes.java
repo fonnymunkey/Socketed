@@ -15,7 +15,9 @@ public enum SocketedActivationTypes implements IActivationType {
     PASSIVE_SELF {
         
         @Override
-        public void triggerPerSecondEffect(ActivatableGemEffect entry, EntityPlayer player) {
+        public void triggerPerTickEffect(ActivatableGemEffect entry, EntityPlayer player) {
+            if(entry.getActivationFrequency() <= 0) return;
+            if(player.ticksExisted%entry.getActivationFrequency() != 0) return;
             entry.performEffect(player);
         }
         
@@ -28,7 +30,9 @@ public enum SocketedActivationTypes implements IActivationType {
     PASSIVE_NEARBY {
         
         @Override
-        public void triggerPerSecondEffect(ActivatableGemEffect entry, EntityPlayer player) {
+        public void triggerPerTickEffect(ActivatableGemEffect entry, EntityPlayer player) {
+            if(entry.getActivationFrequency() <= 0) return;
+            if(player.ticksExisted%entry.getActivationFrequency() != 0) return;
             List<EntityLivingBase> entitiesNearby = player.world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(player.getPosition()).grow(8.0D));
             for(EntityLivingBase entity : entitiesNearby) {
                 if(entity != player) entry.performEffect(entity);
@@ -44,7 +48,9 @@ public enum SocketedActivationTypes implements IActivationType {
     PASSIVE_FAR {
         
         @Override
-        public void triggerPerSecondEffect(ActivatableGemEffect entry, EntityPlayer player) {
+        public void triggerPerTickEffect(ActivatableGemEffect entry, EntityPlayer player) {
+            if(entry.getActivationFrequency() <= 0) return;
+            if(player.ticksExisted%entry.getActivationFrequency() != 0) return;
             List<EntityLivingBase> entitiesNearby = player.world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(player.getPosition()).grow(16.0D));
             for(EntityLivingBase entity : entitiesNearby) {
                 if(entity != player) entry.performEffect(entity);
