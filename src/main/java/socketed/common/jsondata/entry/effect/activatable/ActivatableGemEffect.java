@@ -16,10 +16,14 @@ public abstract class ActivatableGemEffect extends GenericGemEffect {
     @SerializedName("Activation Frequency")
     protected final int activationFrequency;
     
-    protected ActivatableGemEffect(ISlotType slotType, IActivationType activationType, int activationFrequency) {
+    @SerializedName("Requires Direct Activation")
+    protected final boolean requiresDirectActivation;
+    
+    protected ActivatableGemEffect(ISlotType slotType, IActivationType activationType, int activationFrequency, boolean requiresDirectActivation) {
         super(slotType);
         this.activationType = activationType;
         this.activationFrequency = activationFrequency;
+        this.requiresDirectActivation = requiresDirectActivation;
     }
     
     @Nonnull
@@ -29,6 +33,10 @@ public abstract class ActivatableGemEffect extends GenericGemEffect {
     
     public int getActivationFrequency() {
         return this.activationFrequency;
+    }
+    
+    public boolean getRequiresDirectActivation() {
+        return this.requiresDirectActivation;
     }
 
     public abstract void performEffect(EntityLivingBase entity);

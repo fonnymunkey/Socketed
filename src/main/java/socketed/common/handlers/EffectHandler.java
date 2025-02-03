@@ -50,10 +50,28 @@ public class EffectHandler {
         ICapabilityEffectsCache cachedEffects = player.getCapability(CapabilityEffectsCacheHandler.CAP_EFFECTS_CACHE, null);
         if(cachedEffects == null) return;
         
+        //Handle cached effects for activations that don't require direct activation
         for(GenericGemEffect effect : cachedEffects.getActiveEffects()) {
             if(effect instanceof ActivatableGemEffect) {
                 ActivatableGemEffect activatableEffect = (ActivatableGemEffect)effect;
                 activatableEffect.getActivationType().triggerOnAttackEffect(activatableEffect, victim, source, received);
+            }
+        }
+        
+        //Handle effects from the weapon being attacked with (direct activation)
+        ItemStack weaponStack = player.getHeldItemMainhand();
+        if(weaponStack.isEmpty()) return;
+        
+        ICapabilitySocketable sockets = weaponStack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
+        if(sockets == null) return;
+        
+        //TODO: RLCombat compat to get whether the attack is being posted from mainhand or offhand
+        for(GenericGemEffect effect : sockets.getAllActiveEffects(SocketedSlotTypes.HAND)) {
+            if(effect instanceof ActivatableGemEffect) {
+                ActivatableGemEffect activatableEffect = (ActivatableGemEffect)effect;
+                if(activatableEffect.getRequiresDirectActivation()) {
+                    activatableEffect.getActivationType().triggerOnAttackEffect(activatableEffect, victim, source, received);
+                }
             }
         }
     }
@@ -165,6 +183,8 @@ public class EffectHandler {
                     }
                 }
                 else {
+                    //Do not cache activatable effects marked as direct activation, handlers will need to check for those effects themselves for special handling
+                    if(effect instanceof ActivatableGemEffect && ((ActivatableGemEffect)effect).getRequiresDirectActivation()) continue;
                     //Attribute effects are cached by default, so only non-attribute effects are cached in the player capability
                     effectsToCache.add(effect);
                 }

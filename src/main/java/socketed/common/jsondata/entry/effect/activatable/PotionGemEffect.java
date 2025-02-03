@@ -26,9 +26,17 @@ public class PotionGemEffect extends ActivatableGemEffect {
     private final int duration;
 
     private transient Potion potion;
-
+    
+    public PotionGemEffect(ISlotType slotType, IActivationType activationType, boolean requiresDirectActivation, String potionName, int amplifier, int duration) {
+        this(slotType, activationType, 0, requiresDirectActivation, potionName, amplifier, duration);
+    }
+    
     public PotionGemEffect(ISlotType slotType, IActivationType activationType, int activationFrequency, String potionName, int amplifier, int duration) {
-        super(slotType, activationType, activationFrequency);
+        this(slotType, activationType, activationFrequency, false, potionName, amplifier, duration);
+    }
+    
+    public PotionGemEffect(ISlotType slotType, IActivationType activationType, int activationFrequency, boolean requiresDirectActivation, String potionName, int amplifier, int duration) {
+        super(slotType, activationType, activationFrequency, requiresDirectActivation);
         this.potionName = potionName;
         this.amplifier = amplifier;
         this.duration = duration;

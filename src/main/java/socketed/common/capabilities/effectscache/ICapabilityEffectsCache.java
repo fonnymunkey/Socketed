@@ -1,6 +1,5 @@
 package socketed.common.capabilities.effectscache;
 
-import net.minecraft.entity.player.EntityPlayer;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
 
 import java.util.List;
