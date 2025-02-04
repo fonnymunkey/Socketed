@@ -63,6 +63,12 @@ public class IsSocketableConfig {
 		}
 	}
 
+	public String getSocketableType(ItemStack stack){
+		for(HashMap.Entry<String,SocketableType> entry : enabledItemTypes.entrySet())
+			if(entry.getValue().canSocket(stack)) return entry.getKey();
+		return null;
+	}
+
 	private static class SocketableType {
 		Predicate<ItemStack> canSocket;
 

@@ -7,9 +7,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.Socketed;
 import socketed.common.jsondata.entry.effect.slot.ISlotType;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 public abstract class GenericGemEffect {
     
     public static final String TYPE_FIELD = "Effect Type";

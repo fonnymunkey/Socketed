@@ -2,7 +2,6 @@
 - GUI socket tier draw
 - gem tooltip tier draw
 - collect identical effects on tooltip?
-- Config for what items can get sockets and how many
 - additional effect types: 
   - +x lvl to specific enchant
   - whatever = slowness passive_nearby

@@ -18,6 +18,9 @@ public class ForgeConfig {
     @Config.Name("Socketable Items")
     public static IsSocketableConfig SOCKETABLES = new IsSocketableConfig();
 
+    @Config.Name("Socket Rolls")
+    public static AddSocketsConfig ADD_SOCKETS = new AddSocketsConfig();
+
     public static class Common {
         
         @Config.Comment("Maximum amount of sockets any item can have")

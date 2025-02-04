@@ -1,6 +1,7 @@
 package socketed.common.util;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
+import net.minecraft.util.ResourceLocation;
 import socketed.common.capabilities.socketable.CapabilitySocketableHandler;
 import socketed.common.capabilities.socketable.ICapabilitySocketable;
 import socketed.common.config.ForgeConfig;
@@ -8,8 +9,8 @@ import socketed.common.socket.TieredSocket;
 
 import java.util.Random;
 
-public class AddSocketsOnGeneration {
-    private static final Random RAND = new Random();
+public class AddSocketsHelper {
+    public static final Random RAND = new Random();
 
     public static void addSockets(ItemStack stack, EnumItemCreationContext context) {
         ICapabilitySocketable itemSockets = stack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
@@ -18,34 +19,52 @@ public class AddSocketsOnGeneration {
         //Adding alreadyBeenChecked tag *shouldn't* be needed currently, at least not with the given contexts yet
         if(itemSockets.getSocketCount() != 0) return;
 
-        //IDEA
+        // default behavior
         // - creation context (merchant, loot, drops) gives base chance and max sockets that can be rolled
-        // - distribution between tiers is fixed in config (for example 10 5 2 1 for tiers 0-3)
+        // - distribution between tiers is fixed in config (for example 1 5 2 1 for tiers 0-3)
         // - item type gives amount of rolls
-        // - and item material gives chance for the rolls
+        // - and item material enchantability gives chance for the rolls
         // - example helmet: 3 rolls, diamond: each 50% chance
 
-        float chance = context.getChance();
-        if(RAND.nextFloat() >= chance) return;
+        float rollChance = getRollChance(stack);
+        int rollAmount = getRollAmount(stack);
 
-        int maxSockets = context.getMaxSockets();
+        addSocketsRandomly(stack, context.getChance(), context.getMaxSockets(), rollAmount, rollChance);
+    }
 
-        float rollsChance = getRollChance(stack);
-        for(int i = 0; i < getRollAmount(stack); i++){
+    public static void addSocketsRandomly(ItemStack socketable, float socketChance, int maxSockets, int rollAmount, float rollChance){
+        if(RAND.nextFloat() >= socketChance) return;
+
+        ICapabilitySocketable itemSockets = socketable.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
+        if(itemSockets == null) return;
+
+        for(int i = 0; i < rollAmount; i++){
             if(itemSockets.getSocketCount() >= maxSockets) break;
-            if(RAND.nextFloat() < rollsChance)
+            if(RAND.nextFloat() < rollChance)
                 itemSockets.addSocket(new TieredSocket(getRandomTierForSocket()));
         }
     }
 
     private static int getRollAmount(ItemStack stack) {
-        //Not fully sure yet how to do this
-        return 10;
+        String socketableType = ForgeConfig.SOCKETABLES.getSocketableType(stack);
+        return ForgeConfig.ADD_SOCKETS.getSocketRollCount(socketableType);
     }
 
     private static float getRollChance(ItemStack stack) {
-        //Not fully sure yet how to do this
-        return 1F;
+        Item item = stack.getItem();
+
+        //Override by item id
+        ResourceLocation itemReg = item.getRegistryName();
+        if(itemReg != null){
+            float chance = ForgeConfig.ADD_SOCKETS.getSocketRollChance(itemReg.toString());
+            if(chance >= 0) return chance;
+        }
+
+        //Vanilla enchanting always uses enchantability divided by 4, so we do the same.
+        //Items without a material will have tier 0 and use base chance only
+        int enchantabilityTier = item.getItemEnchantability(stack) / 4;
+
+        return ForgeConfig.ADD_SOCKETS.socketRollBaseChance + enchantabilityTier * ForgeConfig.ADD_SOCKETS.socketRollChancePerEnchantabilityTier;
     }
 
     private static int getRandomTierForSocket() {
@@ -63,7 +82,7 @@ public class AddSocketsOnGeneration {
         return 0;
     }
 
-    public enum EnumItemCreationContext implements IGivesSockets {
+    public enum EnumItemCreationContext implements IAddSocketsCreationContext {
         MERCHANT{
             @Override public float getChance() {
                 return ForgeConfig.COMMON.chanceOnMerchant;
@@ -87,6 +106,6 @@ public class AddSocketsOnGeneration {
             @Override public int getMaxSockets() {
                 return ForgeConfig.COMMON.maxSocketsOnMobDrop;
             }
-        };
+        }
     }
 }

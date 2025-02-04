@@ -1,6 +1,6 @@
 package socketed.common.util;
 
-public interface IGivesSockets {
+public interface IAddSocketsCreationContext {
     float getChance();
     int getMaxSockets();
 }

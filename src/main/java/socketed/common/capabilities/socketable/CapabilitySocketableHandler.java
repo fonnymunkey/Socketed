@@ -19,7 +19,7 @@ import socketed.Socketed;
 import socketed.common.instances.GemCombinationInstance;
 import socketed.common.config.ForgeConfig;
 import socketed.common.socket.GenericSocket;
-import socketed.common.util.AddSocketsOnGeneration;
+import socketed.common.util.AddSocketsHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -55,7 +55,7 @@ public class CapabilitySocketableHandler {
         public static void onLivingDrops(LivingDropsEvent event) {
             //TODO: stop socket farm where players just let mobs pick up unsocketed items until they get sockets
             for(EntityItem itemDrop : event.getDrops()) {
-                AddSocketsOnGeneration.addSockets(itemDrop.getItem(), AddSocketsOnGeneration.EnumItemCreationContext.MOB_DROP);
+                AddSocketsHelper.addSockets(itemDrop.getItem(), AddSocketsHelper.EnumItemCreationContext.MOB_DROP);
             }
         }
     }

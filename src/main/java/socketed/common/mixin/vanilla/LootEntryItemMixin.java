@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import socketed.common.util.AddSocketsOnGeneration;
+import socketed.common.util.AddSocketsHelper;
 
 import java.util.Collection;
 import java.util.Random;
@@ -20,8 +20,8 @@ public class LootEntryItemMixin {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isEmpty()Z")
     )
     private void socketed_lootEntryItem_addSockets(Collection<ItemStack> stacks, Random rand, LootContext context, CallbackInfo ci, @Local ItemStack stack){
-        //Additionally to the LootFunction to also be able to set some default sockets
+        //Additionally to the LootFunctions to also be able to set some default sockets
         //This is not only for chest loot but also mob drops if they have socketable items in their loot table (none in vanilla, as the local difficulty gear is set outside of loot tables)
-        AddSocketsOnGeneration.addSockets(stack, AddSocketsOnGeneration.EnumItemCreationContext.LOOT);
+        AddSocketsHelper.addSockets(stack, AddSocketsHelper.EnumItemCreationContext.LOOT);
     }
 }

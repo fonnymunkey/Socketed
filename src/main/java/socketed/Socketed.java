@@ -22,7 +22,8 @@ import socketed.common.init.ModItems;
 import socketed.common.init.ModRecipes;
 import socketed.common.proxy.IProxy;
 import socketed.common.socket.AddSocketCommand;
-import socketed.common.socket.SocketLootFunction;
+import socketed.common.socket.LootFunctionAddSocketsRandomly;
+import socketed.common.socket.LootFunctionSetSockets;
 
 @Mod(modid = Socketed.MODID, name = Socketed.MODNAME, version = Socketed.VERSION)
 public class Socketed {
@@ -45,7 +46,10 @@ public class Socketed {
 
         CapabilitySocketableHandler.registerCapability();
         CapabilityEffectsCacheHandler.registerCapability();
-        LootFunctionManager.registerFunction(new SocketLootFunction.Serializer());
+
+        LootFunctionManager.registerFunction(new LootFunctionSetSockets.Serializer());
+        LootFunctionManager.registerFunction(new LootFunctionAddSocketsRandomly.Serializer());
+
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandlerSocketing());
     }
     

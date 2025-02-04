@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import socketed.common.util.AddSocketsOnGeneration;
+import socketed.common.util.AddSocketsHelper;
 
 import java.util.Random;
 
@@ -21,6 +21,6 @@ public class EntityVillagerListItemMixin {
             remap = false
     )
     private void socketed_entityVillagerListItem_addSockets(IMerchant merchant, MerchantRecipeList recipeList, Random random, CallbackInfo ci, @Local(ordinal = 1) ItemStack stack){
-        AddSocketsOnGeneration.addSockets(stack, AddSocketsOnGeneration.EnumItemCreationContext.MERCHANT);
+        AddSocketsHelper.addSockets(stack, AddSocketsHelper.EnumItemCreationContext.MERCHANT);
     }
 }
