@@ -26,15 +26,15 @@ public class AddSocketsHelper {
         // - and item material enchantability gives chance for the rolls
         // - example helmet: 3 rolls, diamond: each 50% chance
 
+        if(RAND.nextFloat() >= context.getChance()) return;
+
         float rollChance = getRollChance(stack);
         int rollAmount = getRollAmount(stack);
 
-        addSocketsRandomly(stack, context.getChance(), context.getMaxSockets(), rollAmount, rollChance);
+        addSocketsRandomly(stack, context.getMaxSockets(), rollAmount, rollChance);
     }
 
-    public static void addSocketsRandomly(ItemStack socketable, float socketChance, int maxSockets, int rollAmount, float rollChance){
-        if(RAND.nextFloat() >= socketChance) return;
-
+    public static void addSocketsRandomly(ItemStack socketable, int maxSockets, int rollAmount, float rollChance){
         ICapabilitySocketable itemSockets = socketable.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
         if(itemSockets == null) return;
 

@@ -18,14 +18,12 @@ import java.util.Random;
 
 public class LootFunctionAddSocketsRandomly extends LootFunction {
 
-    private final float socketChance;
     private final int maxSockets;
     private final int rollCount;
     private final float rollChance;
 
-    public LootFunctionAddSocketsRandomly(LootCondition[] conditions, float socketChance, int maxSockets, int rollCount, float rollChance) {
+    public LootFunctionAddSocketsRandomly(LootCondition[] conditions, int maxSockets, int rollCount, float rollChance) {
         super(conditions);
-        this.socketChance = socketChance;
         this.maxSockets = maxSockets;
         this.rollCount = rollCount;
         this.rollChance = rollChance;
@@ -36,7 +34,7 @@ public class LootFunctionAddSocketsRandomly extends LootFunction {
     public ItemStack apply(@Nonnull ItemStack stack, @Nonnull Random rand, @Nonnull LootContext context) {
         ICapabilitySocketable cap = stack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
         if(cap != null)
-            AddSocketsHelper.addSocketsRandomly(stack, socketChance, maxSockets, rollCount, rollChance);
+            AddSocketsHelper.addSocketsRandomly(stack, maxSockets, rollCount, rollChance);
         return stack;
     }
 
@@ -48,7 +46,6 @@ public class LootFunctionAddSocketsRandomly extends LootFunction {
 
         @Override
         public void serialize(JsonObject object, LootFunctionAddSocketsRandomly functionClazz, @Nonnull JsonSerializationContext serializationContext) {
-            object.addProperty("chance_for_sockets", functionClazz.socketChance);
             object.addProperty("maxSockets", functionClazz.maxSockets);
             object.addProperty("rollCount", functionClazz.rollCount);
             object.addProperty("rollChance", functionClazz.rollChance);
@@ -57,11 +54,10 @@ public class LootFunctionAddSocketsRandomly extends LootFunction {
         @Override
         @Nonnull
         public LootFunctionAddSocketsRandomly deserialize(@Nonnull JsonObject object, @Nonnull JsonDeserializationContext deserializationContext, @Nonnull LootCondition[] conditionsIn) {
-            float socketChance = JsonUtils.getFloat(object, "chance_for_sockets", 0F);
             int maxSockets = JsonUtils.getInt(object, "maxSockets", 0);
             int rollCount = JsonUtils.getInt(object, "rollCount", 0);
             float rollChance = JsonUtils.getFloat(object, "rollChance", 0F);
-            return new LootFunctionAddSocketsRandomly(conditionsIn, socketChance, maxSockets, rollCount, rollChance);
+            return new LootFunctionAddSocketsRandomly(conditionsIn, maxSockets, rollCount, rollChance);
         }
     }
 }
