@@ -5,8 +5,10 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Config;
+import socketed.Socketed;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class IsSocketableConfig {
 	@Config.Comment("There are some predefined item types shown in default config. Pattern for any additional types: Name to use;Regex to exactly match item ids.")
@@ -29,7 +31,7 @@ public class IsSocketableConfig {
 			//"SW_CROSSBOW;spartan(defiled|fire|weaponry)\\:crossbow.*"
 	};
 
-	private final HashMap<String, SocketableType> enabledItemTypes = new HashMap<>();
+	private final Map<String, SocketableType> enabledItemTypes = new HashMap<>();
 	//This is for other mods adding additional item types
 	public void addEnabledItemType(String name, Predicate<ItemStack> canSocket){
 		enabledItemTypes.put(name, new SocketableType(canSocket));

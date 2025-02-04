@@ -70,12 +70,12 @@ public class AddSocketsHelper {
     private static int getRandomTierForSocket() {
         //Weighted roll
         int totalWeights = 0;
-        for(int weight : ForgeConfig.COMMON.socketTierWeights)
+        for(int weight : ForgeConfig.ADD_SOCKETS.socketTierWeights)
             totalWeights += weight;
 
         int randWeight = RAND.nextInt(totalWeights);
-        for(int i = 0; i < ForgeConfig.COMMON.socketTierWeights.length; i++){
-            randWeight -= ForgeConfig.COMMON.socketTierWeights[i];
+        for(int i = 0; i < ForgeConfig.ADD_SOCKETS.socketTierWeights.length; i++){
+            randWeight -= ForgeConfig.ADD_SOCKETS.socketTierWeights[i];
             if(randWeight < 0)
                 return i;
         }
@@ -85,26 +85,26 @@ public class AddSocketsHelper {
     public enum EnumItemCreationContext implements IAddSocketsCreationContext {
         MERCHANT{
             @Override public float getChance() {
-                return ForgeConfig.COMMON.chanceOnMerchant;
+                return ForgeConfig.ADD_SOCKETS.chanceOnMerchant;
             }
             @Override public int getMaxSockets() {
-                return ForgeConfig.COMMON.maxSocketsOnMerchant;
+                return ForgeConfig.ADD_SOCKETS.maxSocketsOnMerchant;
             }
         },
         LOOT {
             @Override public float getChance() {
-                return ForgeConfig.COMMON.chanceOnLootGen;
+                return ForgeConfig.ADD_SOCKETS.chanceOnLootGen;
             }
             @Override public int getMaxSockets() {
-                return ForgeConfig.COMMON.maxSocketsOnLootGen;
+                return ForgeConfig.ADD_SOCKETS.maxSocketsOnLootGen;
             }
         },
         MOB_DROP {
             @Override public float getChance() {
-                return ForgeConfig.COMMON.chanceOnMobDrop;
+                return ForgeConfig.ADD_SOCKETS.chanceOnMobDrop;
             }
             @Override public int getMaxSockets() {
-                return ForgeConfig.COMMON.maxSocketsOnMobDrop;
+                return ForgeConfig.ADD_SOCKETS.maxSocketsOnMobDrop;
             }
         }
     }
