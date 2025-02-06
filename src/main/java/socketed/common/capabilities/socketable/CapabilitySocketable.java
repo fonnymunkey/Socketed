@@ -259,6 +259,9 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 		
 		List<Integer> socketsToDisable = new ArrayList<>();
 		for(GemCombinationType gemCombination : JsonConfig.getSortedGemCombinationData()) {
+			//Don't bother continuing to check combinations if theres not enough gems left to make another combination
+			if(gemCount <= 1) break;
+			
 			int matchIndex = gemCombination.matches(currentGemTypes);
 			if(matchIndex != -1) {
 				GemCombinationInstance instanceNew = new GemCombinationInstance(gemCombination);
@@ -277,17 +280,29 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 				if(!preexisting) this.gemCombinations.add(instanceNew);
 				
 				//Remove gems that belong to a combination already and optionally disable sockets belonging to them
-				List<String> gemsInCombination = gemCombination.getGemTypes();
-				for(String gemToRemove : gemsInCombination) {
-					int socketIndex = currentGemTypes.subList(matchIndex, currentGemTypes.size()).indexOf(gemToRemove);
-					//socketIndex shouldn't ever be -1 due to previous check, but check just incase
-					if(socketIndex != -1) {
-						//Shift index to account for strict order matches
-						socketIndex += matchIndex;
+				if(gemCombination.getIsStrictOrder()) {
+					//For strict order, match index is at the start of the list, so just remove in order
+					for(int i = 0; i < gemCombination.getGemTypes().size(); i++) {
+						//Wrap index, wont ever wrap anyways if wrap isnt enabled
+						int socketIndex = (i + matchIndex) % currentGemTypes.size();
+						//Disable socket if effect matches
 						if(gemCombination.getReplacesEffects()) socketsToDisable.add(socketIndex);
-						//Gem already found, don't find it again
+						//Remove gem for following combination checks
 						//TODO: Maybe config option to allow for overlapping combinations?
 						currentGemTypes.set(socketIndex, "");
+						gemCount--;
+					}
+				}
+				else {
+					//Non strict order, just remove first instance found of each matched type
+					for(String gemToRemove : gemCombination.getGemTypes()) {
+						int socketIndex = currentGemTypes.indexOf(gemToRemove);
+						//Disable socket if effect matches
+						if(gemCombination.getReplacesEffects()) socketsToDisable.add(socketIndex);
+						//Remove gem for following combination checks
+						//TODO: Maybe config option to allow for overlapping combinations?
+						currentGemTypes.set(socketIndex, "");
+						gemCount--;
 					}
 				}
 			}

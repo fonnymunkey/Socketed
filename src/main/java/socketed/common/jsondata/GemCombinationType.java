@@ -31,6 +31,9 @@ public class GemCombinationType {
     @SerializedName("Strict Count")
     private final Boolean isStrictSocketCount;
     
+    @SerializedName("Allows Wrapping")
+    private Boolean allowsWrapping;
+    
     @SerializedName("Replaces Original Effects")
     private final Boolean replacesOriginalEffects;
     
@@ -40,11 +43,12 @@ public class GemCombinationType {
     @SerializedName("Effect Entries")
     private List<GenericGemEffect> effects;
 
-    public GemCombinationType(String displayName, TextFormatting color, Boolean isStrictOrder, Boolean isStrictSocketCount, Boolean replacesOriginalEffects, List<String> gemTypes, List<GenericGemEffect> effects) {
+    public GemCombinationType(String displayName, TextFormatting color, Boolean isStrictOrder, Boolean isStrictSocketCount, Boolean allowsWrapping, Boolean replacesOriginalEffects, List<String> gemTypes, List<GenericGemEffect> effects) {
         this.displayName = displayName;
         this.color = color;
         this.isStrictOrder = isStrictOrder;
         this.isStrictSocketCount = isStrictSocketCount;
+        this.allowsWrapping = allowsWrapping;
         this.replacesOriginalEffects = replacesOriginalEffects;
         this.gemTypes = gemTypes;
         this.effects = effects;
@@ -76,6 +80,10 @@ public class GemCombinationType {
     public boolean getIsStrictSocketCount() {
         return this.isStrictSocketCount;
     }
+    
+    public boolean getAllowsWrapping() {
+        return this.allowsWrapping;
+    }
 
     public boolean getReplacesEffects() {
         return this.replacesOriginalEffects;
@@ -98,13 +106,18 @@ public class GemCombinationType {
     public int matches(List<String> input) {
         if(input == null || input.isEmpty()) return -1;
         if(input.size() < this.gemTypes.size()) return -1;
-
         if(this.isStrictSocketCount && input.size() != this.gemTypes.size()) return -1;
+        
+        List<String> inputCopy = new ArrayList<>(input);
         if(this.isStrictOrder) {
-            return Collections.indexOfSubList(input, this.gemTypes);
+            if(this.allowsWrapping) {
+                //Re-add all but last to allow for checking wrapped ordering
+                inputCopy.addAll(input);
+                inputCopy.remove(inputCopy.size() - 1);
+            }
+            return Collections.indexOfSubList(inputCopy, this.gemTypes);
         }
         else {
-            List<String> inputCopy = new ArrayList<>(input);
             for(String gemType : this.gemTypes) {
                 if(!inputCopy.contains(gemType)) return -1;
                 //Remove found gemTypes to allow for requiring multiple of the same type
@@ -139,6 +152,9 @@ public class GemCombinationType {
                 if(JsonConfig.getGemData().containsKey(gemType)) validGemsSize++;
             }
             
+            //Default to true, optional entry
+            if(this.allowsWrapping == null) this.allowsWrapping = true;
+            
             if(totalGemsSize == 0) Socketed.LOGGER.warn("Invalid Gem Combination Type, " + this.name + ", no Gem Types provided");
             else if(validGemsSize != totalGemsSize) Socketed.LOGGER.warn("Invalid Gem Combination Type, " + this.name + ", not all Gem Types valid");
             else if(validEffectsSize == 0) Socketed.LOGGER.warn("Invalid Gem Combination Type, " + this.name + ", no valid effects");
@@ -148,6 +164,7 @@ public class GemCombinationType {
                                              ", Color: " + this.color.name() +
                                              ", Strict Order: " + this.isStrictOrder +
                                              ", Strict Socket Count: " + this.isStrictSocketCount +
+                                             ", Allows Wrapping: " + this.allowsWrapping +
                                              ", Replaces Original Effects: " + this.replacesOriginalEffects +
                                              ", Valid Gem Types: " + validGemsSize + "/" + totalGemsSize +
                                              ", Valid Effects: " + validEffectsSize + "/" + totalEffectsSize);

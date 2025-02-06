@@ -76,11 +76,11 @@ public abstract class DefaultJsonConfig {
         
         //Gem Combination Types
         registerDefaultGemCombinationType("three_diamonds", new GemCombinationType(
-                "socketed.tooltip.default.three_diamonds", TextFormatting.DARK_BLUE, false,false, true,
+                "socketed.tooltip.default.three_diamonds", TextFormatting.DARK_BLUE, false,false, true, true,
                 Arrays.asList("diamond", "diamond", "diamond"),
                 Collections.singletonList(new AttributeGemEffect(SocketedSlotTypes.HAND, SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new RandomValueRange(9, false), 0))));
         registerDefaultGemCombinationType("rgb", new GemCombinationType(
-                "socketed.tooltip.default.rgb", TextFormatting.GOLD, true,false, false,
+                "socketed.tooltip.default.rgb", TextFormatting.GOLD, true,false, true, false,
                 Arrays.asList("redstone", "lucky", "lapis"),
                 Arrays.asList(new PotionGemEffect(SocketedSlotTypes.ALL, SocketedActivationTypes.PASSIVE_SELF, 9, MobEffects.GLOWING.getRegistryName().toString(), 0, 10),
                               new PotionGemEffect(SocketedSlotTypes.ALL, SocketedActivationTypes.PASSIVE_NEARBY, 40, MobEffects.GLOWING.getRegistryName().toString(), 0, 41))));
