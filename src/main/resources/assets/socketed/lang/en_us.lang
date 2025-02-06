@@ -1,8 +1,9 @@
 item.socketed.socket_tool.tooltip=Used to add and remove socketed gems from tools and armor
 item.socketed.socket_tool.name=Socketing Tool
 
-socketed.tooltip.socket=Sockets (%d/%d): %s
+socketed.tooltip.socket=Sockets (%d/%d):
 socketed.tooltip.empty=Empty
+socketed.tooltip.holdshift=Hold <Shift> for more info
 socketed.tooltip.activationtype.passive_self=Passively: %s
 socketed.tooltip.activationtype.passive_nearby=Entities nearby:  %s
 socketed.tooltip.activationtype.passive_far=Entities in area:  %s
@@ -32,7 +33,7 @@ socketed.tooltip.default.glowstone=Radiant
 socketed.tooltip.default.three_diamonds=Could've been a diamond pick
 socketed.tooltip.default.rgb=RGB Effects
 
-socketed.tooltip.gem=In Socket: %s
+socketed.tooltip.gem=In Socket:
 
 socketed.tooltip.slottype.all=
 socketed.tooltip.slottype.none=()
