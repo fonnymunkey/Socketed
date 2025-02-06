@@ -89,17 +89,6 @@ public class JsonConfig {
         return gemCombinationDataMap;
     }
 
-    //TODO refresh command
-    public static void refreshAllData() {
-        Socketed.LOGGER.info("Clearing existing Socketed configuration data");
-        gemTypesDataMap.clear();
-        gemCombinationDataMap.clear();
-        sortedGemCombinationDataList = null;
-        Socketed.LOGGER.info("Loading new Socketed configuration data");
-        loadGemTypeData();
-        loadGemCombinationData();
-    }
-
     private static void initDefaultGemTypes() {
         Socketed.LOGGER.info("Initializing default Socketed gem type configs");
         Map<String, GemType> defaultData = DefaultJsonConfig.getDefaultGemTypes();
