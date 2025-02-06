@@ -8,7 +8,6 @@ import socketed.common.jsondata.entry.effect.GenericGemEffect;
 import socketed.common.util.SocketedUtil;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,7 +80,7 @@ public class GemCombinationInstance {
         return effectsForSlot;
     }
     
-    @Nullable
+    @Nonnull
     public GemCombinationType getGemCombinationType() {
         return this.gemCombinationType;
     }
