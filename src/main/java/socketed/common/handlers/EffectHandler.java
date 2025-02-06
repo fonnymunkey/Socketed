@@ -94,6 +94,7 @@ public class EffectHandler {
     }
 
     private static final List<IAttribute> handSkipAttributes = Arrays.asList(SharedMonsterAttributes.ATTACK_DAMAGE, SharedMonsterAttributes.ATTACK_SPEED, EntityPlayer.REACH_DISTANCE);
+    private static final List<IAttribute> bodySkipAttributes = Arrays.asList(SharedMonsterAttributes.ARMOR, SharedMonsterAttributes.ARMOR_TOUGHNESS);
 
     //This handling assumes that gems cant be added or removed while wearing the item
     //This doesn't fire when swapping from one item to another of same item type in creative mode for whatever reason
@@ -142,7 +143,12 @@ public class EffectHandler {
                     if(attrInstance == null) continue;
 
                     //Damage/Speed/Reach Attributes applied on weapons themselves are handled in ItemMixin for proper handling/compat with offhand mods like RLCombat
-                    if((slot == EntityEquipmentSlot.MAINHAND || slot == EntityEquipmentSlot.OFFHAND) && handSkipAttributes.contains(attrInstance.getAttribute())) {
+                    if(slotType.isSlotValid(SocketedSlotTypes.HAND) && handSkipAttributes.contains(attrInstance.getAttribute())) {
+                        continue;
+                    }
+                    
+                    //Armor/Armor Toughness Attributes applied on armor themselves are handled in ItemMixin for proper handling/compat with slot-specific mods like FirstAid
+                    if(slotType.isSlotValid(SocketedSlotTypes.BODY) && bodySkipAttributes.contains(attrInstance.getAttribute())) {
                         continue;
                     }
 
@@ -174,7 +180,12 @@ public class EffectHandler {
                     if(attrInstance == null) continue;
                     
                     //Damage/Speed/Reach Attributes applied on weapons themselves are handled in ItemMixin for proper handling/compat with offhand mods like RLCombat
-                    if((slot == EntityEquipmentSlot.MAINHAND || slot == EntityEquipmentSlot.OFFHAND) && handSkipAttributes.contains(attrInstance.getAttribute())) {
+                    if(slotType.isSlotValid(SocketedSlotTypes.HAND) && handSkipAttributes.contains(attrInstance.getAttribute())) {
+                        continue;
+                    }
+                    
+                    //Armor/Armor Toughness Attributes applied on armor themselves are handled in ItemMixin for proper handling/compat with slot-specific mods like FirstAid
+                    if(slotType.isSlotValid(SocketedSlotTypes.BODY) && bodySkipAttributes.contains(attrInstance.getAttribute())) {
                         continue;
                     }
 
