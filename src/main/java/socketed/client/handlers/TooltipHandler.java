@@ -64,30 +64,32 @@ public class TooltipHandler {
             int gemCount = sockets.getGemCount();
             insertTooltip(tooltips, TextFormatting.BOLD + I18n.format("socketed.tooltip.socket", gemCount, socketCount) + TextFormatting.RESET);
 
-            if(!GuiScreen.isShiftKeyDown()) {
-                insertTooltip(tooltips, TextFormatting.BOLD + "" + TextFormatting.GOLD + I18n.format("socketed.tooltip.holdshift") + TextFormatting.RESET);
-            }
-            else {
-                //Gem Combinations
-                for(GemCombinationInstance combination : sockets.getGemCombinations()) {
-                    GemCombinationType combinationType = combination.getGemCombinationType();
-                    //Display Name Tooltip
-                    insertTooltip(tooltips, " " + TextFormatting.ITALIC + combinationType.getColor() + I18n.format(combinationType.getDisplayName()) + TextFormatting.RESET);
-                    
-                    //Effect Tooltips
-                    for(GenericGemEffect effect : combination.getGemEffectsForStack(stack)) {
-                        insertTooltip(tooltips, "  " + combinationType.getColor() + effect.getTooltipString(true) + TextFormatting.RESET);
-                    }
+            if(gemCount > 0) {
+                if(!GuiScreen.isShiftKeyDown()) {
+                    insertTooltip(tooltips, TextFormatting.BOLD + "" + TextFormatting.GOLD + I18n.format("socketed.tooltip.holdshift") + TextFormatting.RESET);
                 }
-                //Gems
-                for(GemInstance gemInstance : sockets.getAllGems(false)) {
-                    gemType = gemInstance.getGemType();
-                    //Display Name Tooltip
-                    insertTooltip(tooltips, " " + gemType.getColor() + I18n.format(gemType.getDisplayName()) + TextFormatting.RESET);
-                    
-                    //Effect Tooltips
-                    for(GenericGemEffect effect : gemInstance.getGemEffectsForStack(stack)) {
-                        insertTooltip(tooltips, "  " + gemType.getColor() + effect.getTooltipString(true) + TextFormatting.RESET);
+                else {
+                    //Gem Combinations
+                    for(GemCombinationInstance combination : sockets.getGemCombinations()) {
+                        GemCombinationType combinationType = combination.getGemCombinationType();
+                        //Display Name Tooltip
+                        insertTooltip(tooltips, " " + TextFormatting.ITALIC + combinationType.getColor() + I18n.format(combinationType.getDisplayName()) + TextFormatting.RESET);
+                        
+                        //Effect Tooltips
+                        for(GenericGemEffect effect : combination.getGemEffectsForStack(stack)) {
+                            insertTooltip(tooltips, "  " + combinationType.getColor() + effect.getTooltipString(true) + TextFormatting.RESET);
+                        }
+                    }
+                    //Gems
+                    for(GemInstance gemInstance : sockets.getAllGems(false)) {
+                        gemType = gemInstance.getGemType();
+                        //Display Name Tooltip
+                        insertTooltip(tooltips, " " + gemType.getColor() + I18n.format(gemType.getDisplayName()) + TextFormatting.RESET);
+                        
+                        //Effect Tooltips
+                        for(GenericGemEffect effect : gemInstance.getGemEffectsForStack(stack)) {
+                            insertTooltip(tooltips, "  " + gemType.getColor() + effect.getTooltipString(true) + TextFormatting.RESET);
+                        }
                     }
                 }
             }
