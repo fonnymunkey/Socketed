@@ -70,7 +70,7 @@ public class SocketAddRecipe extends IForgeRegistryEntry.Impl<IRecipe> implement
             ItemStack itemStack = inv.getStackInSlot(i);
             
             if(itemStack.getItem() instanceof ItemSocketGeneric) socketSlot = i;
-            else if(itemStack.getMaxStackSize() == 1 && ForgeConfig.SOCKETABLES.canSocket(itemStack)) {
+            else if(itemStack.getMaxStackSize() == 1) {
                 ICapabilitySocketable cap = itemStack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
                 if(cap != null && cap.getSocketCount() < ForgeConfig.COMMON.maxSockets) itemSlot = i;
                 else return null;
