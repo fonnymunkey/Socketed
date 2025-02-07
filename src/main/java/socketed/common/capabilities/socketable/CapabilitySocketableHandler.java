@@ -99,9 +99,13 @@ public class CapabilitySocketableHandler {
 
     public static class Storage implements Capability.IStorage<ICapabilitySocketable> {
         
-        //TODO: Cache results of writeNBT to improve performance as it gets called excessively for stack comparisons
         @Override
         public NBTBase writeNBT(Capability<ICapabilitySocketable> capability, ICapabilitySocketable instance, EnumFacing side) {
+            //If capability hasn't changed, return the cached NBT
+            NBTTagCompound cachedNBT = instance.getCachedNBT();
+            if(cachedNBT != null)
+                return cachedNBT;
+
             NBTTagCompound nbt = new NBTTagCompound();
 
             NBTTagList socketTagList = new NBTTagList();
@@ -118,6 +122,7 @@ public class CapabilitySocketableHandler {
             //Don't store NBT to stacks that could get sockets but don't have anything yet
             if(!gemCombinationTagList.isEmpty()) nbt.setTag("GemCombinations", gemCombinationTagList);
 
+            instance.setCachedNBT(nbt); //cache new NBT
             return nbt;
         }
 
@@ -147,6 +152,8 @@ public class CapabilitySocketableHandler {
             }
             //Refresh combinations after reading to account for combination changes on update
             if(read) instance.refreshCombinations();
+
+            //After reading the cached NBT is null=invalid, will be set on next itemStack comparison
         }
     }
 }

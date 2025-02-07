@@ -25,6 +25,11 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 	 * Reference to the ItemStack these sockets belong to
 	 */
 	private final ItemStack itemStack;
+
+	/**
+	 * Cached NBT for more performance during itemstack comparisons, isDirty marks the cached NBT as invalid
+	 */
+	private NBTTagCompound cachedNBT;
 	
 	/**
 	 * Ordered list of sockets, default size of 0
@@ -236,6 +241,10 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 	
 	@Override
 	public void refreshCombinations() {
+		//mark dirty
+		this.setCachedNBT(null);
+
+		//Gather all gem types as strings
 		List<String> currentGemTypes = new ArrayList<>();
 		int gemCount = 0;
 		for(GenericSocket socket : this.sockets) {
@@ -318,5 +327,17 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 	public void resetCap() {
 		this.sockets.clear();
 		this.gemCombinations.clear();
+		this.cachedNBT = null;
+	}
+
+	@Override
+	@Nullable
+	public NBTTagCompound getCachedNBT() {
+		return cachedNBT;
+	}
+
+	@Override
+	public void setCachedNBT(@Nullable NBTTagCompound nbt) {
+		this.cachedNBT = nbt;
 	}
 }

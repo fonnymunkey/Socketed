@@ -106,6 +106,7 @@ public class AddSocketCommand extends CommandBase {
                     }
                     
                     socket.setLocked(!socket.isLocked());
+                    cap.setCachedNBT(null); //mark dirty
                     player.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, mainhand);
                     sender.sendMessage(new TextComponentString("Toggled locked at index " + index));
                     return;
@@ -127,6 +128,7 @@ public class AddSocketCommand extends CommandBase {
                     }
                     
                     socket.setDisabled(!socket.isDisabled());
+                    cap.setCachedNBT(null); //mark dirty
                     player.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, mainhand);
                     sender.sendMessage(new TextComponentString("Toggled disabled at index " + index));
                     return;

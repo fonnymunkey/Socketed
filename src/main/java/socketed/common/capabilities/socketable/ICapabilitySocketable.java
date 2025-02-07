@@ -152,4 +152,19 @@ public interface ICapabilitySocketable {
      * Resets this capability for use before reading from NBT
      */
     void resetCap();
+
+
+    // -----     NBT CACHE SECTION     -----
+    // -------------------------------------
+
+    /**
+     * gets cached NBT for this capability for faster item stack comparisons. Returns null if cache is invalid
+     */
+    @Nullable
+    NBTTagCompound getCachedNBT();
+
+    /**
+     * sets the cached NBT. Set to null to invalidate
+     */
+    void setCachedNBT(@Nullable NBTTagCompound nbt);
 }
