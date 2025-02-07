@@ -313,4 +313,10 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 			if(socket != null) socket.setOverridden(true);
 		}
 	}
+	
+	@Override
+	public void resetCap() {
+		this.sockets.clear();
+		this.gemCombinations.clear();
+	}
 }

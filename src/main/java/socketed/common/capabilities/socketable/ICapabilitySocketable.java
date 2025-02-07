@@ -147,4 +147,9 @@ public interface ICapabilitySocketable {
      * Refreshes the gem combinations when gems are added/removed
      */
     void refreshCombinations();
+    
+    /**
+     * Resets this capability for use before reading from NBT
+     */
+    void resetCap();
 }

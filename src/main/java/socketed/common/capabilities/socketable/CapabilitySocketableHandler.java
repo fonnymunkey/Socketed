@@ -46,8 +46,15 @@ public class CapabilitySocketableHandler {
             if(stack.getMaxStackSize() > 1) return;
 
             //Allowed item types that can get sockets
-            if(ForgeConfig.SOCKETABLES.canSocket(stack))
+            if(ForgeConfig.SOCKETABLES.canSocket(stack)) {
                 event.addCapability(CapabilitySocketableHandler.CAP_SOCKETABLE_KEY, new CapabilitySocketableHandler.Provider(stack));
+                
+                //This tag is only used for syncing, as share tag will not be sent to client if a stack does not have a non-capability tag
+                NBTTagCompound tag = stack.getTagCompound();
+                if(tag == null) tag = new NBTTagCompound();
+                tag.setBoolean("CanSocket", true);
+                stack.setTagCompound(tag);
+            }
         }
 
         //TODO: Mixin into LootTable::generateLootForPools instead to apply to all loot only? Allows for context checks and avoids affecting equipment
@@ -92,8 +99,7 @@ public class CapabilitySocketableHandler {
 
     public static class Storage implements Capability.IStorage<ICapabilitySocketable> {
         
-        //TODO: Why does this get called every tick for every item in player inventory?
-        //TODO: Syncing to client for servers for tooltip rendering
+        //TODO: Cache results of writeNBT to improve performance as it gets called excessively for stack comparisons
         @Override
         public NBTBase writeNBT(Capability<ICapabilitySocketable> capability, ICapabilitySocketable instance, EnumFacing side) {
             NBTTagCompound nbt = new NBTTagCompound();
@@ -118,6 +124,9 @@ public class CapabilitySocketableHandler {
         @Override
         public void readNBT(Capability<ICapabilitySocketable> capability, ICapabilitySocketable instance, EnumFacing side, NBTBase nbt) {
             NBTTagCompound tags = (NBTTagCompound)nbt;
+            
+            //Reset cap before reading incase an existing cap is being read to such as during sync
+            instance.resetCap();
             
             boolean read = false;
             if(tags.hasKey("Sockets")) {
