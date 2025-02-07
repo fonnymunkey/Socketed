@@ -1,6 +1,18 @@
 item.socketed.socket_tool.tooltip=Used to add and remove socketed gems from tools and armor
 item.socketed.socket_tool.name=Socketing Tool
 
+item.socketed.socket.socket_generic.tooltip=Used to add a new Generic socket to an item
+item.socketed.socket.socket_tier_0.tooltip=Used to add a new Common socket to an item
+item.socketed.socket.socket_tier_1.tooltip=Used to add a new Uncommon socket to an item
+item.socketed.socket.socket_tier_2.tooltip=Used to add a new Rare socket to an item
+item.socketed.socket.socket_tier_3.tooltip=Used to add a new Legendary socket to an item
+
+item.socketed.socket.socket_generic.name=Generic Socket
+item.socketed.socket.socket_tier_0.name=Common Socket
+item.socketed.socket.socket_tier_1.name=Uncommon Socket
+item.socketed.socket.socket_tier_2.name=Rare Socket
+item.socketed.socket.socket_tier_3.name=Legendary Socket
+
 socketed.tooltip.socket=Sockets (%d/%d):
 socketed.tooltip.empty=Empty
 socketed.tooltip.holdshift=Hold <Shift> for more info

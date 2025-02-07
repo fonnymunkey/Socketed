@@ -18,12 +18,9 @@ import java.util.List;
 
 public class ItemSocketTool extends Item {
 
-    private final String name;
-
     public ItemSocketTool(String name) {
         super();
-        this.name = name;
-        this.setRegistryName(name);
+        this.setRegistryName(Socketed.MODID + ":" + name);
         this.setTranslationKey(Socketed.MODID + "." + name);
         this.setCreativeTab(CreativeTabs.MISC);
         this.setMaxStackSize(1);
@@ -40,7 +37,7 @@ public class ItemSocketTool extends Item {
     }
 
     public void registerModel() {
-        Socketed.proxy.registerItemRenderer(this, 0, this.name);
+        Socketed.proxy.registerItemRenderer(this, 0);
     }
 
     @SideOnly(Side.CLIENT)

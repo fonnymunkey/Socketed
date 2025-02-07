@@ -66,6 +66,10 @@ public class AddSocketsConfig {
 	@Config.Comment("Add weights for tiers 0,1,2,3 of sockets to roll on items that can have sockets")
 	@Config.Name("Socket Tier Weights")
 	public int[] socketTierWeights = {1, 5, 2, 1};
+	
+	@Config.Comment("Registers Socket items and recipes to allow adding sockets to existing items")
+	@Config.Name("Register Socket Items")
+	public boolean registerSocketItems = true;
 
 	private final Map<String, Integer> socketRollCountByItemType = new HashMap<>();
 	private final Map<String, Float> socketRollChanceByItemId = new HashMap<>();

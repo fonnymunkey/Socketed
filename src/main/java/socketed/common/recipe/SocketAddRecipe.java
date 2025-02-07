@@ -3,135 +3,88 @@ package socketed.common.recipe;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import socketed.common.capabilities.socketable.CapabilitySocketableHandler;
-import socketed.common.instances.GemInstance;
+import socketed.common.config.ForgeConfig;
 import socketed.common.capabilities.socketable.ICapabilitySocketable;
-import socketed.common.item.ItemSocketTool;
+import socketed.common.item.ItemSocketGeneric;
+import socketed.common.socket.GenericSocket;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SocketAddRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
-
-    private int toolSlot = -1;
-    private int recipientSlot = -1;
-    private int gemSlot = -1;
-    GemInstance gem = null;
-
+    
     @Override
-    public boolean matches(@Nonnull InventoryCrafting inv, @Nonnull World worldIn) {
-        //Prevent this from running multiple times until getCraftingResult is called
-        if(toolSlot!=-1 && recipientSlot != -1 && gemSlot != -1) return true;
-
-        List<Integer> occupiedSlots = new ArrayList<>();
-
-        //Quick check if there's more than 3 items in crafting, return false if so
-        int itemCounter = 0;
-        for(int i = 0; i< inv.getSizeInventory(); i++) {
-            if(!inv.getStackInSlot(i).isEmpty()) {
-                itemCounter++;
-                occupiedSlots.add(i);
-            } if(itemCounter > 3)
-                return false;
-        }
-
-        //Iterate crafting grid, check first for tool and 3 filled slots in total
-        for(int i : occupiedSlots) {
-            if (inv.getStackInSlot(i).getItem() instanceof ItemSocketTool) {
-                if (toolSlot == -1)
-                    toolSlot = i;
-                else {
-                    //More than one socketing tool
-                    resetTempValues();
-                    return false;
-                }
-            }
-        }
-        if(toolSlot == -1){
-            resetTempValues();
-            return false;
-        }
-
-        //Iterate occupied slots, get recipient item and gem
-        for(int i : occupiedSlots) {
-            ItemStack itemStack = inv.getStackInSlot(i);
-            boolean hasSockets = itemStack.hasCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
-
-            boolean isGem = false;
-            if (gem == null){
-                gem = new GemInstance(itemStack);
-                isGem = gem.validate();
-                if(!isGem)
-                    gem = null;
-            }
-
-            if (hasSockets && !isGem)
-                recipientSlot = i;
-            if (!hasSockets && isGem)
-                gemSlot = i;
-        }
-        if(recipientSlot == -1 || gemSlot == -1){
-            resetTempValues();
-            return false;
-        }
-        return true;
+    public boolean matches(InventoryCrafting inv, World worldIn) {
+        return validInput(inv) != null;
     }
-
+    
     @Override
-    @Nonnull
     public ItemStack getCraftingResult(InventoryCrafting inv) {
-        //Output is copy of item with sockets
-        ItemStack returnStack = inv.getStackInSlot(recipientSlot).copy();
-
-        ICapabilitySocketable recipientSockets = returnStack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
-
-        //Try to add Gem to sockets, return Empty Stack (crafting not possible) if no empty sockets available
-        if(!recipientSockets.addGem(gem)) {
-            resetTempValues();
-            return ItemStack.EMPTY;
-        }
-
-        resetTempValues();
-        return returnStack;
+        Integer[] slots = validInput(inv);
+        if(slots == null) return ItemStack.EMPTY;
+        
+        ItemStack output = inv.getStackInSlot(slots[0]).copy();
+        ICapabilitySocketable cap = output.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
+        //Check not needed, but for sanity
+        if(cap == null) return ItemStack.EMPTY;
+        
+        ItemStack socketItemStack = inv.getStackInSlot(slots[1]);
+        //Check not needed, but for sanity
+        if(!(socketItemStack.getItem() instanceof ItemSocketGeneric)) return ItemStack.EMPTY;
+        GenericSocket newSocket = ((ItemSocketGeneric)socketItemStack.getItem()).getNewSocket();
+        
+        cap.addSocket(newSocket);
+        return output;
     }
-
-    @Override
-    public boolean isDynamic()
-    {
-        return true;
-    }
-
-    /**
-     * These temporary search values assume that either getCraftingResult() or getRemainingItems() will always run after matches() if recipe does match.
-     * Which should be guaranteed by isDynamic = true, but other mods might change that behavior
-     */
-    private void resetTempValues(){
-        toolSlot = -1;
-        recipientSlot = -1;
-        gemSlot = -1;
-        gem = null;
-    }
-
+    
     @Override
     public boolean canFit(int width, int height) {
-        return width * height >= 3;
+        return width * height >= 2;
     }
-
+    
     @Override
-    @Nonnull
     public ItemStack getRecipeOutput() {
         return ItemStack.EMPTY;
     }
-
+    
+    @Nullable
+    private Integer[] validInput(InventoryCrafting inv) {
+        int numStacks = 0;
+        int itemSlot = -1;
+        int socketSlot = -1;
+        List<Integer> occupiedSlots = new ArrayList<>();
+        
+        for(int i = 0; i < inv.getSizeInventory(); i++) {
+            if(!inv.getStackInSlot(i).isEmpty()) {
+                numStacks++;
+                occupiedSlots.add(i);
+            }
+        }
+        if(numStacks != 2) return null;
+        
+        for(int i : occupiedSlots) {
+            ItemStack itemStack = inv.getStackInSlot(i);
+            
+            if(itemStack.getItem() instanceof ItemSocketGeneric) socketSlot = i;
+            else if(itemStack.getMaxStackSize() == 1 && ForgeConfig.SOCKETABLES.canSocket(itemStack)) {
+                ICapabilitySocketable cap = itemStack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
+                if(cap != null && cap.getSocketCount() < ForgeConfig.COMMON.maxSockets) itemSlot = i;
+                else return null;
+            }
+            else return null;
+        }
+        Integer[] slots = new Integer[2];
+        slots[0] = itemSlot;
+        slots[1] = socketSlot;
+        return (itemSlot != -1 && socketSlot != -1) ? slots : null;
+    }
+    
     @Override
-    @Nonnull
-    public NonNullList<ItemStack> getRemainingItems(@Nonnull InventoryCrafting inv)
-    {
-        resetTempValues();
-        return net.minecraftforge.common.ForgeHooks.defaultRecipeGetRemainingItems(inv);
+    public boolean isDynamic() {
+        return true;
     }
 }
