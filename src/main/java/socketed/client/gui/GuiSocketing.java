@@ -69,17 +69,27 @@ public class GuiSocketing extends GuiContainer {
                     this.mc.getTextureManager().bindTexture(socket.getSocketTexture());
                     GuiSocketing.drawModalRectWithCustomSizedTexture(x - 7, y - 7, 0, 0, 32, 32, 32, 32);
                     
-                    if(socket.isLocked() || (!cursorStack.isEmpty() && !(gemType != null && socket.acceptsGemType(gemType, false) && gemType.hasEffectsForStack(socketable)))) {
+                    boolean disabled = socket.isDisabled();
+                    boolean locked = socket.isLocked();
+                    
+                    if(locked || (!cursorStack.isEmpty() && !(gemType != null && socket.acceptsGemType(gemType, false) && gemType.hasEffectsForStack(socketable)))) {
                         this.mc.getTextureManager().bindTexture(SLOT_INVALID_TEXTURE);
                         GuiSocketing.drawModalRectWithCustomSizedTexture(x + 1, y + 1, 0, 0, 16, 16, 16, 16);
                     }
-                    if(socket.isDisabled()) {
+                    
+                    if(disabled && locked) {
                         this.mc.getTextureManager().bindTexture(ICON_DISABLED_TEXTURE);
-                        GuiSocketing.drawModalRectWithCustomSizedTexture(x + 1, y + 17, 0, 0, 8, 8, 8, 8);
-                    }
-                    if(socket.isLocked()) {
+                        GuiSocketing.drawModalRectWithCustomSizedTexture(x - 1, y + 17 + 1, 3, 3, 10, 10, 16, 16);
                         this.mc.getTextureManager().bindTexture(ICON_LOCKED_TEXTURE);
-                        GuiSocketing.drawModalRectWithCustomSizedTexture(x + 9, y + 17, 0, 0, 8, 8, 8, 8);
+                        GuiSocketing.drawModalRectWithCustomSizedTexture(x + 9, y + 17, 3, 3, 10, 10, 16, 16);
+                    }
+                    else if(disabled) {
+                        this.mc.getTextureManager().bindTexture(ICON_DISABLED_TEXTURE);
+                        GuiSocketing.drawModalRectWithCustomSizedTexture(x + 4, y + 17 + 1, 3, 3, 10, 10, 16, 16);
+                    }
+                    else if(locked) {
+                        this.mc.getTextureManager().bindTexture(ICON_LOCKED_TEXTURE);
+                        GuiSocketing.drawModalRectWithCustomSizedTexture(x + 4, y + 17, 3, 3, 10, 10, 16, 16);
                     }
                 }
             }
