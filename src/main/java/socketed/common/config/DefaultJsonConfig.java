@@ -68,7 +68,7 @@ public abstract class DefaultJsonConfig {
                                         Collections.singletonList(new OreEntry("dustRedstone"))));
         //TODO: Add enchanting attribute/add attribute to SME
         registerDefaultGemType("lapis", new GemType("socketed.tooltip.default.lapis", 2, TextFormatting.BLUE,
-                                     Collections.singletonList(new AttributeGemEffect(SocketedSlotTypes.ALL, "socketed.attributes.enchantingpower", new RandomValueRange(2, false), 0)),
+                                     Collections.singletonList(new AttributeGemEffect(SocketedSlotTypes.ALL, "somanyenchantments.enchantfocus", new RandomValueRange(2, false), 0)),
                                      Collections.singletonList(new OreEntry("gemLapis", true))));
         registerDefaultGemType("glowstone", new GemType("socketed.tooltip.default.glowstone", 1, TextFormatting.YELLOW,
                                          Collections.singletonList(new PotionGemEffect(SocketedSlotTypes.HEAD, SocketedActivationTypes.PASSIVE_FAR, 40, MobEffects.GLOWING.getRegistryName().toString(), 0, 41)),
