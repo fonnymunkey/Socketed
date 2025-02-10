@@ -36,7 +36,7 @@ public class CapabilitySocketableHandler {
     }
     
     @Mod.EventBusSubscriber
-    public static class AttachCapabilityHandler {
+    public static class EventHandler {
         
         @SubscribeEvent
         public static void attachCapabilitiesEventItemStack(AttachCapabilitiesEvent<ItemStack> event) {

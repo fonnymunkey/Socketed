@@ -2,7 +2,13 @@ package socketed.common.jsondata.entry.effect.activatable.activator.passive;
 
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import socketed.Socketed;
+import socketed.common.capabilities.effectscache.CapabilityEffectsCacheHandler;
+import socketed.common.capabilities.effectscache.ICapabilityEffectsCache;
+import socketed.common.jsondata.entry.effect.GenericGemEffect;
 import socketed.common.jsondata.entry.effect.activatable.ActivatableGemEffect;
 import socketed.common.jsondata.entry.effect.activatable.activator.GenericActivator;
 
@@ -36,5 +42,34 @@ public abstract class PassiveActivator extends GenericActivator {
 		if(this.activationRate < 1) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Activator, activation rate must be greater than 0");
 		else return true;
 		return false;
+	}
+	
+	@Mod.EventBusSubscriber
+	public static class EventHandler {
+		
+		/**
+		 * Event handling for PassiveActivators
+		 */
+		@SubscribeEvent
+		public static void onPlayerUpdate(LivingEvent.LivingUpdateEvent event) {
+			if(!(event.getEntityLiving() instanceof EntityPlayer)) return;
+			if(event.getEntityLiving().world.isRemote) return;
+			EntityPlayer player = (EntityPlayer)event.getEntityLiving();
+			
+			ICapabilityEffectsCache cachedEffects = player.getCapability(CapabilityEffectsCacheHandler.CAP_EFFECTS_CACHE, null);
+			if(cachedEffects == null) return;
+			
+			for(GenericGemEffect effect : cachedEffects.getActiveEffects()) {
+				if(effect instanceof ActivatableGemEffect) {
+					ActivatableGemEffect activatableGemEffect = (ActivatableGemEffect)effect;
+					if(activatableGemEffect.getActivatorType() instanceof PassiveActivator) {
+						PassiveActivator passiveActivator = (PassiveActivator)activatableGemEffect.getActivatorType();
+						if(player.ticksExisted%passiveActivator.getActivationRate() == 0) {
+							passiveActivator.attemptPassiveActivation(activatableGemEffect, player);
+						}
+					}
+				}
+			}
+		}
 	}
 }
