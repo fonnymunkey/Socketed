@@ -4,7 +4,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.text.TextFormatting;
-import socketed.common.attributes.Attributes;
+import socketed.common.attributes.SocketedAttributes;
 import socketed.common.jsondata.GemCombinationType;
 import socketed.common.jsondata.GemType;
 import socketed.common.jsondata.entry.RandomValueRange;
@@ -42,7 +42,7 @@ public abstract class DefaultJsonConfig {
         //Gem Types
         registerDefaultGemType("obsidian_damage", new GemType("socketed.tooltip.default.obsidian_damage", 3, TextFormatting.DARK_PURPLE,
                                                Arrays.asList(new AttributeGemEffect(SocketedSlotTypes.HAND, SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new RandomValueRange(3, false), 0),
-                                                             new AttributeGemEffect(SocketedSlotTypes.BODY, Attributes.DURABILITY.getName(), new RandomValueRange(0.02F, false), 1)),
+                                                             new AttributeGemEffect(SocketedSlotTypes.BODY, SocketedAttributes.DURABILITY.getName(), new RandomValueRange(0.02F, false), 1)),
                                                Collections.singletonList(new OreFilter("obsidian"))));
         registerDefaultGemType("stone_damage", new GemType("socketed.tooltip.default.stone_damage", 1, TextFormatting.GRAY,
                                             Collections.singletonList(new AttributeGemEffect(SocketedSlotTypes.HAND, SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new RandomValueRange(1, false), 0)),
