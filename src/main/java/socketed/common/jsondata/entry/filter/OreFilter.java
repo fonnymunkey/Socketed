@@ -8,7 +8,7 @@ import socketed.Socketed;
 
 import javax.annotation.Nonnull;
 
-public class OreEntry extends FilterEntry {
+public class OreFilter extends GenericFilter {
 
     public static final String TYPE_NAME = "Ore Dictionary";
 
@@ -18,11 +18,11 @@ public class OreEntry extends FilterEntry {
     @SerializedName("Strict Metadata")
     private final boolean strict;
 
-    public OreEntry(String name) {
+    public OreFilter(String name) {
         this(name, false);
     }
 
-    public OreEntry(String name, boolean strict) {
+    public OreFilter(String name, boolean strict) {
         super();
         this.name = name;
         this.strict = strict;
@@ -52,9 +52,9 @@ public class OreEntry extends FilterEntry {
     
     @Override
     public boolean validate() {
-        if(this.name == null || this.name.isEmpty()) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Filter entry, name null or empty");
-        else if(!OreDictionary.doesOreNameExist(this.name)) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Filter entry, " + this.name + ", dictionary does not exist");
-        else if(OreDictionary.getOres(this.name, false).isEmpty()) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Filter entry, " + this.name.trim() + ", dictionary exists but is empty");
+        if(this.name == null || this.name.isEmpty()) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Filter, name null or empty");
+        else if(!OreDictionary.doesOreNameExist(this.name)) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Filter, " + this.name + ", dictionary does not exist");
+        else if(OreDictionary.getOres(this.name, false).isEmpty()) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Filter, " + this.name.trim() + ", dictionary exists but is empty");
         else return true;
         return false;
     }

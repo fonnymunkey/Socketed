@@ -3,14 +3,14 @@ package socketed.common.jsondata.entry.filter;
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.item.ItemStack;
 
-public abstract class FilterEntry {
+public abstract class GenericFilter {
 
     public static final String TYPE_FIELD = "Filter Type";
 
     @SerializedName(TYPE_FIELD)
     protected final String type = this.getTypeName();
     
-    protected FilterEntry() {
+    protected GenericFilter() {
     
     }
     

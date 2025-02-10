@@ -53,7 +53,7 @@ public class PassiveAOEActivator extends PassiveActivator {
 	@Override
 	public boolean validate() {
 		if(super.validate()) {
-			if(this.blockRange < 1) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Activator entry, block range must be greater than 0");
+			if(this.blockRange < 1) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Activator, block range must be greater than 0");
 			else return true;
 		}
 		return false;

@@ -46,7 +46,7 @@ public abstract class GenericGemEffect {
      * @return false if any required value is invalid, which should result in discarding this effect
      */
     public boolean validate() {
-        if(this.slotType == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect entry, invalid slot type");
+        if(this.slotType == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, invalid slot type");
         else return true;
         return false;
     }

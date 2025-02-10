@@ -62,7 +62,7 @@ public abstract class AttackActivator extends GenericActivator {
 	
 	@Override
 	public boolean validate() {
-		if(!this.allowsMelee && !this.allowsRanged) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Activator entry, must allow at least either melee or ranged");
+		if(!this.allowsMelee && !this.allowsRanged) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Activator, must allow at least either melee or ranged");
 		else return true;
 		return false;
 	}

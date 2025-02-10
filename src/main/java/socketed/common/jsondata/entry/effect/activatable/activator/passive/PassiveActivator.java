@@ -33,7 +33,7 @@ public abstract class PassiveActivator extends GenericActivator {
 	
 	@Override
 	public boolean validate() {
-		if(this.activationRate < 1) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Activator entry, activation rate must be greater than 0");
+		if(this.activationRate < 1) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Activator, activation rate must be greater than 0");
 		else return true;
 		return false;
 	}

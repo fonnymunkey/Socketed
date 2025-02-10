@@ -6,7 +6,7 @@ import net.minecraft.util.text.TextFormatting;
 import socketed.Socketed;
 import socketed.common.config.JsonConfig;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
-import socketed.common.jsondata.entry.filter.FilterEntry;
+import socketed.common.jsondata.entry.filter.GenericFilter;
 import socketed.common.util.SocketedUtil;
 
 import javax.annotation.Nonnull;
@@ -30,18 +30,18 @@ public class GemType {
     @SerializedName("Text Color")
     private final TextFormatting color;
     
-    @SerializedName("Effect Entries")
+    @SerializedName("Effects")
     private List<GenericGemEffect> effects;
     
-    @SerializedName("Filter Entries")
-    private List<FilterEntry> filterEntries;
+    @SerializedName("Filters")
+    private List<GenericFilter> filters;
 
-    public GemType(String displayName, Integer tier, TextFormatting color, List<GenericGemEffect> effects, List<FilterEntry> filterEntries) {
+    public GemType(String displayName, Integer tier, TextFormatting color, List<GenericGemEffect> effects, List<GenericFilter> filters) {
         this.displayName = displayName;
         this.tier = tier;
         this.color = color;
         this.effects = effects;
-        this.filterEntries = filterEntries;
+        this.filters = filters;
     }
 
     public void setName(String name) {
@@ -73,8 +73,8 @@ public class GemType {
     }
     
     @Nonnull
-    public List<FilterEntry> getFilterEntries() {
-        return this.filterEntries;
+    public List<GenericFilter> getFilters() {
+        return this.filters;
     }
     
     //Instantiation shouldn't affect validity
@@ -90,8 +90,8 @@ public class GemType {
     
     public boolean matches(ItemStack input) {
         if(input == null || input.isEmpty()) return false;
-        for(FilterEntry entry : this.getFilterEntries()) {
-            if(entry.matches(input)) return true;
+        for(GenericFilter filter : this.getFilters()) {
+            if(filter.matches(input)) return true;
         }
         return false;
     }
@@ -101,8 +101,8 @@ public class GemType {
         else if(this.displayName == null || this.displayName.isEmpty()) Socketed.LOGGER.warn("Invalid Gem Type, " + this.name + ", display name null or empty");
         else if(this.tier == null) Socketed.LOGGER.warn("Invalid Gem Type, " + this.name + ", invalid tier");
         else if(this.color == null) Socketed.LOGGER.warn("Invalid Gem Type, " + this.name + ", invalid color");
-        else if(this.effects == null) Socketed.LOGGER.warn("Invalid Gem Type, " + this.name + ", invalid effect entry list");
-        else if(this.filterEntries == null) Socketed.LOGGER.warn("Invalid Gem Type, " + this.name + ", invalid filter entry list");
+        else if(this.effects == null) Socketed.LOGGER.warn("Invalid Gem Type, " + this.name + ", invalid effect list");
+        else if(this.filters == null) Socketed.LOGGER.warn("Invalid Gem Type, " + this.name + ", invalid filter list");
         else {
             List<GenericGemEffect> validEffects = new ArrayList<>();
             for(GenericGemEffect effect : this.effects) {
@@ -112,13 +112,13 @@ public class GemType {
             this.effects = validEffects;
             int validEffectsSize = this.effects.size();
             
-            List<FilterEntry> validFilters = new ArrayList<>();
-            for(FilterEntry filter : this.filterEntries) {
+            List<GenericFilter> validFilters = new ArrayList<>();
+            for(GenericFilter filter : this.filters) {
                 if(filter.validate()) validFilters.add(filter);
             }
-            int totalFiltersSize = this.filterEntries.size();
-            this.filterEntries = validFilters;
-            int validFiltersSize = this.filterEntries.size();
+            int totalFiltersSize = this.filters.size();
+            this.filters = validFilters;
+            int validFiltersSize = this.filters.size();
             
             if(validEffectsSize == 0) Socketed.LOGGER.warn("Invalid Gem Type, " + this.name + ", no valid effects");
             else if(validFiltersSize == 0) Socketed.LOGGER.warn("Invalid Gem Type, " + this.name + ", no valid filters");

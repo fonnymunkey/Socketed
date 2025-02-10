@@ -10,7 +10,7 @@ import socketed.Socketed;
 
 import javax.annotation.Nonnull;
 
-public class ItemEntry extends FilterEntry {
+public class ItemFilter extends GenericFilter {
 
     public static final String TYPE_NAME = "Item";
 
@@ -25,11 +25,11 @@ public class ItemEntry extends FilterEntry {
 
     private transient ItemStack stack;
 
-    public ItemEntry(String name) {
+    public ItemFilter(String name) {
         this(name, OreDictionary.WILDCARD_VALUE, false);
     }
 
-    public ItemEntry(String name, int meta, boolean strict) {
+    public ItemFilter(String name, int meta, boolean strict) {
         super();
         this.name = name;
         this.metadata = meta;
@@ -54,10 +54,10 @@ public class ItemEntry extends FilterEntry {
     
     @Override
     public boolean validate() {
-        if(this.name == null || this.name.isEmpty()) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Filter entry, name null or empty");
+        if(this.name == null || this.name.isEmpty()) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Filter, name null or empty");
         else {
             Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(this.name));
-            if(item == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Filter entry, " + this.name + ", item does not exist");
+            if(item == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Filter, " + this.name + ", item does not exist");
             else {
                 this.stack = new ItemStack(item, 1, this.strict ? this.metadata : OreDictionary.WILDCARD_VALUE);
                 return true;

@@ -10,7 +10,7 @@ import socketed.common.config.JsonConfig;
 import socketed.common.jsondata.GemType;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
 import socketed.common.jsondata.entry.effect.activatable.activator.GenericActivator;
-import socketed.common.jsondata.entry.filter.FilterEntry;
+import socketed.common.jsondata.entry.filter.GenericFilter;
 import socketed.common.jsondata.entry.effect.slot.ISlotType;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public abstract class SocketedUtil {
 
     public static final List<ISlotType> registeredSlots = new ArrayList<>();
     
-    public static void registerFilterType(String typeName, Class<? extends FilterEntry> typeClass) {
+    public static void registerFilterType(String typeName, Class<? extends GenericFilter> typeClass) {
         Socketed.LOGGER.log(Level.INFO, "Registering Filter Type " + typeName + " from " + typeClass.getSimpleName());
         JsonConfig.filterDeserializerMap.put(typeName, typeClass);
     }

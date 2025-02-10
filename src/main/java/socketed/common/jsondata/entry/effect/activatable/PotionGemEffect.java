@@ -73,12 +73,12 @@ public class PotionGemEffect extends ActivatableGemEffect {
     @Override
     public boolean validate() {
         if(super.validate()) {
-            if(this.potionName == null || this.potionName.isEmpty()) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect entry, potion name null or empty");
+            if(this.potionName == null || this.potionName.isEmpty()) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, potion name null or empty");
             else {
                 this.potion = Potion.getPotionFromResourceLocation(this.potionName);
-                if(this.potion == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect entry, " + this.potionName + ", potion does not exist");
-                else if(this.amplifier < 0) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect entry, " + this.potionName + ", amplifier can not be less than 0");
-                else if(this.duration < 0) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect entry, " + this.potionName + ", duration can not be less than 0");
+                if(this.potion == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, " + this.potionName + ", potion does not exist");
+                else if(this.amplifier < 0) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, " + this.potionName + ", amplifier can not be less than 0");
+                else if(this.duration < 0) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, " + this.potionName + ", duration can not be less than 0");
                 else return true;
             }
         }

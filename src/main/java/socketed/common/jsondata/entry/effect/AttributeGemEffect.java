@@ -108,9 +108,9 @@ public class AttributeGemEffect extends GenericGemEffect {
     @Override
     public boolean validate() {
         if(super.validate()) {
-            if(this.attributeName == null || this.attributeName.isEmpty()) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect entry, attribute name null or empty");
-            else if(this.amountRange == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect entry, " + this.attributeName + ", amount range invalid");
-            else if(this.operation < 0 || this.operation > 2) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect entry, " + this.attributeName + ", operation must be 0, 1, or 2");
+            if(this.attributeName == null || this.attributeName.isEmpty()) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, attribute name null or empty");
+            else if(this.amountRange == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, " + this.attributeName + ", amount range invalid");
+            else if(this.operation < 0 || this.operation > 2) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, " + this.attributeName + ", operation must be 0, 1, or 2");
             else return true;
         }
         return false;

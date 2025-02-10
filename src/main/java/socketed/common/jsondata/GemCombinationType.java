@@ -40,7 +40,7 @@ public class GemCombinationType {
     @SerializedName("Gem Types")
     private final List<String> gemTypes;
     
-    @SerializedName("Effect Entries")
+    @SerializedName("Effects")
     private List<GenericGemEffect> effects;
 
     public GemCombinationType(String displayName, TextFormatting color, Boolean isStrictOrder, Boolean isStrictSocketCount, Boolean allowsWrapping, Boolean replacesOriginalEffects, List<String> gemTypes, List<GenericGemEffect> effects) {
@@ -135,7 +135,7 @@ public class GemCombinationType {
         else if(this.isStrictSocketCount == null) Socketed.LOGGER.warn("Invalid Gem Combination Type, " + this.name + ", invalid strict count setting");
         else if(this.replacesOriginalEffects == null) Socketed.LOGGER.warn("Invalid Gem Combination Type, " + this.name + ", invalid replaces original effects setting");
         else if(this.gemTypes == null) Socketed.LOGGER.warn("Invalid Gem Combination Type, " + this.name + ", invalid gem types list");
-        else if(this.effects == null) Socketed.LOGGER.warn("Invalid Gem Combination Type, " + this.name + ", invalid effect entry list");
+        else if(this.effects == null) Socketed.LOGGER.warn("Invalid Gem Combination Type, " + this.name + ", invalid effect list");
         else {
             List<GenericGemEffect> validEffects = new ArrayList<>();
             for(GenericGemEffect effect : this.effects) {

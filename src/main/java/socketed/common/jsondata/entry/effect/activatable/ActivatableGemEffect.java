@@ -29,8 +29,8 @@ public abstract class ActivatableGemEffect extends GenericGemEffect {
     @Override
     public boolean validate() {
         if(super.validate()) {
-            if(this.activatorType == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect entry, invalid activator");
-            else if(!this.activatorType.validate()) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect entry, invalid activator");
+            if(this.activatorType == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, invalid activator");
+            else if(!this.activatorType.validate()) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, invalid activator");
             else return true;
         }
         return false;

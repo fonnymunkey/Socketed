@@ -76,7 +76,7 @@ public class AttackingActivator extends AttackActivator {
 	@Override
 	public boolean validate() {
 		if(super.validate()) {
-			if(!this.affectsSelf && !this.affectsTarget) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Activator entry, must affect at least either self or target");
+			if(!this.affectsSelf && !this.affectsTarget) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Activator, must affect at least either self or target");
 			else return true;
 		}
 		return false;

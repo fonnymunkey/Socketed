@@ -38,7 +38,7 @@ public class JsonConfig {
     private static final Map<String, GemCombinationType> gemCombinationDataMap = new HashMap<>();
     private static List<GemCombinationType> sortedGemCombinationDataList = null;
 
-    public static final Map<String, Class<? extends FilterEntry>> filterDeserializerMap = new HashMap<>();
+    public static final Map<String, Class<? extends GenericFilter>> filterDeserializerMap = new HashMap<>();
     public static final Map<String, Class<? extends GenericGemEffect>> gemEffectDeserializerMap = new HashMap<>();
     public static final Map<String, Class<? extends GenericActivator>> activatorDeserializerMap = new HashMap<>();
     public static final Map<String, Class<? extends ISlotType>> slotTypeDeserializerMap = new HashMap<>();
@@ -68,9 +68,8 @@ public class JsonConfig {
     }
     
     public static void init() {
-        SocketedUtil.registerFilterType(RejectAllEntry.TYPE_NAME, RejectAllEntry.class);
-        SocketedUtil.registerFilterType(ItemEntry.TYPE_NAME, ItemEntry.class);
-        SocketedUtil.registerFilterType(OreEntry.TYPE_NAME, OreEntry.class);
+        SocketedUtil.registerFilterType(ItemFilter.TYPE_NAME, ItemFilter.class);
+        SocketedUtil.registerFilterType(OreFilter.TYPE_NAME, OreFilter.class);
         SocketedUtil.registerEffectType(AttributeGemEffect.TYPE_NAME, AttributeGemEffect.class);
         SocketedUtil.registerEffectType(PotionGemEffect.TYPE_NAME, PotionGemEffect.class);
         SocketedUtil.registerActivator(PassiveSelfActivator.TYPE_NAME, PassiveSelfActivator.class);
@@ -154,7 +153,7 @@ public class JsonConfig {
 
         try {
             FilterDeserializer filterDeserializer = new FilterDeserializer();
-            for(Map.Entry<String, Class<? extends FilterEntry>> entry : filterDeserializerMap.entrySet()) {
+            for(Map.Entry<String, Class<? extends GenericFilter>> entry : filterDeserializerMap.entrySet()) {
                 filterDeserializer.registerType(entry.getKey(), entry.getValue());
             }
             EffectDeserializer effectDeserializer = new EffectDeserializer();
@@ -162,7 +161,7 @@ public class JsonConfig {
                 effectDeserializer.registerType(entry.getKey(), entry.getValue());
             }
             Gson gson = new GsonBuilder()
-                    .registerTypeAdapter(FilterEntry.class, filterDeserializer)
+                    .registerTypeAdapter(GenericFilter.class, filterDeserializer)
                     .registerTypeAdapter(GenericGemEffect.class, effectDeserializer)
                     .create();
 
@@ -220,7 +219,7 @@ public class JsonConfig {
 
         try {
             FilterDeserializer filterDeserializer = new FilterDeserializer();
-            for(Map.Entry<String, Class<? extends FilterEntry>> entry : filterDeserializerMap.entrySet()) {
+            for(Map.Entry<String, Class<? extends GenericFilter>> entry : filterDeserializerMap.entrySet()) {
                 filterDeserializer.registerType(entry.getKey(), entry.getValue());
             }
             EffectDeserializer effectDeserializer = new EffectDeserializer();
@@ -228,7 +227,7 @@ public class JsonConfig {
                 effectDeserializer.registerType(entry.getKey(), entry.getValue());
             }
             Gson gson = new GsonBuilder()
-                    .registerTypeAdapter(FilterEntry.class, filterDeserializer)
+                    .registerTypeAdapter(GenericFilter.class, filterDeserializer)
                     .registerTypeAdapter(GenericGemEffect.class, effectDeserializer)
                     .create();
             

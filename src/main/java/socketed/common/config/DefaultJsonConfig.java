@@ -12,7 +12,7 @@ import socketed.common.jsondata.entry.effect.AttributeGemEffect;
 import socketed.common.jsondata.entry.effect.activatable.PotionGemEffect;
 import socketed.common.jsondata.entry.effect.activatable.activator.passive.PassiveAOEActivator;
 import socketed.common.jsondata.entry.effect.activatable.activator.passive.PassiveSelfActivator;
-import socketed.common.jsondata.entry.filter.OreEntry;
+import socketed.common.jsondata.entry.filter.OreFilter;
 import socketed.common.jsondata.entry.effect.slot.SocketedSlotTypes;
 
 import java.util.*;
@@ -43,33 +43,33 @@ public abstract class DefaultJsonConfig {
         registerDefaultGemType("obsidian_damage", new GemType("socketed.tooltip.default.obsidian_damage", 3, TextFormatting.DARK_PURPLE,
                                                Arrays.asList(new AttributeGemEffect(SocketedSlotTypes.HAND, SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new RandomValueRange(3, false), 0),
                                                              new AttributeGemEffect(SocketedSlotTypes.BODY, Attributes.DURABILITY.getName(), new RandomValueRange(0.02F, false), 1)),
-                                               Collections.singletonList(new OreEntry("obsidian"))));
+                                               Collections.singletonList(new OreFilter("obsidian"))));
         registerDefaultGemType("stone_damage", new GemType("socketed.tooltip.default.stone_damage", 1, TextFormatting.GRAY,
                                             Collections.singletonList(new AttributeGemEffect(SocketedSlotTypes.HAND, SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new RandomValueRange(1, false), 0)),
-                                            Arrays.asList(new OreEntry("stone"),
-                                                          new OreEntry("cobblestone"))));
+                                            Arrays.asList(new OreFilter("stone"),
+                                                          new OreFilter("cobblestone"))));
         registerDefaultGemType("sticky", new GemType("socketed.tooltip.default.sticky", 0, TextFormatting.DARK_GREEN,
                                       Collections.singletonList(new PotionGemEffect(SocketedSlotTypes.BODY, new PassiveSelfActivator(9), MobEffects.SLOWNESS.getRegistryName().toString(), 0, 10)),
-                                      Collections.singletonList(new OreEntry("slimeball"))));
+                                      Collections.singletonList(new OreFilter("slimeball"))));
         registerDefaultGemType("lucky", new GemType("socketed.tooltip.default.lucky", 2, TextFormatting.GREEN,
                                      Collections.singletonList(new AttributeGemEffect(SocketedSlotTypes.ALL, SharedMonsterAttributes.LUCK.getName(), new RandomValueRange(2, false), 0)),
-                                     Collections.singletonList(new OreEntry("gemEmerald"))));
+                                     Collections.singletonList(new OreFilter("gemEmerald"))));
         registerDefaultGemType("streamlined", new GemType("socketed.tooltip.default.streamlined", 1, TextFormatting.AQUA,
                                            Collections.singletonList(new AttributeGemEffect(SocketedSlotTypes.BODY, EntityLivingBase.SWIM_SPEED.getName(), new RandomValueRange(0.1F, false), 1)),
-                                           Collections.singletonList(new OreEntry("gemPrismarine"))));
+                                           Collections.singletonList(new OreFilter("gemPrismarine"))));
         registerDefaultGemType("diamond", new GemType("socketed.tooltip.default.diamond", 2, TextFormatting.AQUA,
                                        Arrays.asList(
                                                new AttributeGemEffect(SocketedSlotTypes.HAND, SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new RandomValueRange(2, 3, true), 0),
                                                new AttributeGemEffect(SocketedSlotTypes.BODY, SharedMonsterAttributes.ARMOR.getName(), new RandomValueRange(2, false), 0)),
-                                       Collections.singletonList(new OreEntry("gemDiamond"))));
+                                       Collections.singletonList(new OreFilter("gemDiamond"))));
         registerDefaultGemType("redstone", new GemType("socketed.tooltip.default.redstone", 2, TextFormatting.RED,
                                         Arrays.asList(
                                                 new AttributeGemEffect(SocketedSlotTypes.HAND, SharedMonsterAttributes.ATTACK_SPEED.getName(), new RandomValueRange(0.05F, false), 1),
                                                 new AttributeGemEffect(SocketedSlotTypes.BODY, SharedMonsterAttributes.MOVEMENT_SPEED.getName(), new RandomValueRange(0.05F, false), 1)),
-                                        Collections.singletonList(new OreEntry("dustRedstone"))));
+                                        Collections.singletonList(new OreFilter("dustRedstone"))));
         registerDefaultGemType("glowstone", new GemType("socketed.tooltip.default.glowstone", 1, TextFormatting.YELLOW,
                                          Collections.singletonList(new PotionGemEffect(SocketedSlotTypes.HEAD, new PassiveAOEActivator(40, 16), MobEffects.GLOWING.getRegistryName().toString(), 0, 41)),
-                                         Collections.singletonList(new OreEntry("dustGlowstone"))));
+                                         Collections.singletonList(new OreFilter("dustGlowstone"))));
         
         //Gem Combination Types
         registerDefaultGemCombinationType("three_diamonds", new GemCombinationType(
