@@ -138,8 +138,7 @@ public class GemType {
     @Nullable
     public static GemType getGemTypeFromItemStack(ItemStack itemStack) {
         if(itemStack.isEmpty()) return null;
-        for(GemType gemType : JsonConfig.getGemData().values()) {
-            //TODO: Issues with one item being valid for multiple gem types?
+        for(GemType gemType : JsonConfig.getSortedGemDataList()) {
             if(gemType.matches(itemStack)) return gemType;
         }
         return null;

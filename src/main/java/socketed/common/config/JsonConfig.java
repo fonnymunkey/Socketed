@@ -41,6 +41,7 @@ public class JsonConfig {
     private static final Map<String, GemType> gemTypesDataMap = new HashMap<>();
     private static final Map<String, GemCombinationType> gemCombinationDataMap = new HashMap<>();
     private static List<GemCombinationType> sortedGemCombinationDataList = null;
+    private static List<GemType> sortedGemDataList = null;
 
     public static final Map<String, Class<? extends GenericFilter>> filterDeserializerMap = new HashMap<>();
     public static final Map<String, Class<? extends GenericGemEffect>> gemEffectDeserializerMap = new HashMap<>();
@@ -302,7 +303,7 @@ public class JsonConfig {
         }
         return null;
     }
-
+    
     //Order matters bc a list of gems might fit multiple gem combinations. more strict combinations will be found first and higher gem count combinations too
     public static List<GemCombinationType> getSortedGemCombinationData() {
         if(sortedGemCombinationDataList == null) {
@@ -312,5 +313,14 @@ public class JsonConfig {
             sortedGemCombinationDataList.sort((v1,v2) -> Boolean.compare(!v1.getIsStrictSocketCount(),!v2.getIsStrictSocketCount()));
         }
         return sortedGemCombinationDataList;
+    }
+    
+    //One itemstack may be valid for multiple filters, so sort by tier to prefer higher tier gemtypes first
+    public static List<GemType> getSortedGemDataList() {
+        if(sortedGemDataList == null) {
+            sortedGemDataList = new ArrayList<>(gemTypesDataMap.values());
+            sortedGemDataList.sort(Comparator.comparingInt(v -> - v.getTier()));
+        }
+        return sortedGemDataList;
     }
 }
