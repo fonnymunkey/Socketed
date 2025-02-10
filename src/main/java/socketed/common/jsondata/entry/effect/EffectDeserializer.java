@@ -3,8 +3,8 @@ package socketed.common.jsondata.entry.effect;
 import com.google.gson.*;
 import socketed.common.config.JsonConfig;
 import socketed.common.jsondata.entry.RandomValueRange;
-import socketed.common.jsondata.entry.effect.activatable.ActivationTypeDeserializer;
-import socketed.common.jsondata.entry.effect.activatable.IActivationType;
+import socketed.common.jsondata.entry.effect.activatable.activator.ActivatorDeserializer;
+import socketed.common.jsondata.entry.effect.activatable.activator.GenericActivator;
 import socketed.common.jsondata.entry.effect.slot.ISlotType;
 import socketed.common.jsondata.entry.effect.slot.SlotTypeDeserializer;
 
@@ -18,16 +18,16 @@ public class EffectDeserializer implements JsonDeserializer<GenericGemEffect> {
     private final Map<String, Class<? extends GenericGemEffect>> typeReg;
 
     public EffectDeserializer() {
-        ActivationTypeDeserializer activationTypeDeserializer = new ActivationTypeDeserializer();
-        for(Map.Entry<String, Class<? extends IActivationType>> entry : JsonConfig.activationTypeDeserializerMap.entrySet()) {
-            activationTypeDeserializer.registerType(entry.getKey(), entry.getValue());
+        ActivatorDeserializer activatorDeserializer = new ActivatorDeserializer();
+        for(Map.Entry<String, Class<? extends GenericActivator>> entry : JsonConfig.activatorDeserializerMap.entrySet()) {
+            activatorDeserializer.registerType(entry.getKey(), entry.getValue());
         }
         SlotTypeDeserializer slotTypeDeserializer = new SlotTypeDeserializer();
         for(Map.Entry<String, Class<? extends ISlotType>> entry : JsonConfig.slotTypeDeserializerMap.entrySet()) {
             slotTypeDeserializer.registerType(entry.getKey(), entry.getValue());
         }
         this.gson = new GsonBuilder()
-                .registerTypeAdapter(IActivationType.class, activationTypeDeserializer)
+                .registerTypeAdapter(GenericActivator.class, activatorDeserializer)
                 .registerTypeAdapter(ISlotType.class, slotTypeDeserializer)
                 .registerTypeAdapter(RandomValueRange.class, new RandomValueRange.Serializer())
                 .create();

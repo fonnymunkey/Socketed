@@ -8,6 +8,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.Socketed;
+import socketed.common.jsondata.entry.effect.activatable.activator.GenericActivator;
 import socketed.common.jsondata.entry.effect.slot.ISlotType;
 
 import javax.annotation.Nonnull;
@@ -27,16 +28,8 @@ public class PotionGemEffect extends ActivatableGemEffect {
 
     private transient Potion potion;
     
-    public PotionGemEffect(ISlotType slotType, IActivationType activationType, boolean requiresDirectActivation, String potionName, int amplifier, int duration) {
-        this(slotType, activationType, 0, requiresDirectActivation, potionName, amplifier, duration);
-    }
-    
-    public PotionGemEffect(ISlotType slotType, IActivationType activationType, int activationFrequency, String potionName, int amplifier, int duration) {
-        this(slotType, activationType, activationFrequency, false, potionName, amplifier, duration);
-    }
-    
-    public PotionGemEffect(ISlotType slotType, IActivationType activationType, int activationFrequency, boolean requiresDirectActivation, String potionName, int amplifier, int duration) {
-        super(slotType, activationType, activationFrequency, requiresDirectActivation);
+    public PotionGemEffect(ISlotType slotType, GenericActivator activator, String potionName, int amplifier, int duration) {
+        super(slotType, activator);
         this.potionName = potionName;
         this.amplifier = amplifier;
         this.duration = duration;
@@ -65,7 +58,7 @@ public class PotionGemEffect extends ActivatableGemEffect {
     @SideOnly(Side.CLIENT)
     @Override
     public String getTooltipString(boolean onItem) {
-        String tooltip = I18n.format("socketed.tooltip.activationtype." + this.getActivationType().getTooltipKey(), I18n.format(this.getPotion().getName()));
+        String tooltip = this.getActivatorType().getTooltipString() + " " + I18n.format(this.getPotion().getName());
         int potionLvl = this.getAmplifier() + 1;
         if(potionLvl == 1) return tooltip;
         else if(potionLvl > 1 && potionLvl <= 10) return tooltip + " " + I18n.format("enchantment.level." + potionLvl);

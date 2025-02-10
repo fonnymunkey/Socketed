@@ -22,6 +22,8 @@ import socketed.common.capabilities.socketable.ICapabilitySocketable;
 import socketed.common.jsondata.entry.effect.AttributeGemEffect;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
 import socketed.common.jsondata.entry.effect.activatable.ActivatableGemEffect;
+import socketed.common.jsondata.entry.effect.activatable.activator.attack.AttackActivator;
+import socketed.common.jsondata.entry.effect.activatable.activator.passive.PassiveActivator;
 import socketed.common.jsondata.entry.effect.slot.ISlotType;
 import socketed.common.jsondata.entry.effect.slot.SocketedSlotTypes;
 
@@ -37,43 +39,94 @@ public class EffectHandler {
         if(event.getEntityLiving() == null) return;
         if(event.getEntityLiving().world.isRemote) return;
         if(event.getSource() == null) return;
+        DamageSource source = event.getSource();
         
-        if(event.getEntityLiving() instanceof EntityPlayer) {
-            handleHitEffects((EntityPlayer)event.getEntityLiving(), event.getEntityLiving(), event.getSource(), true);
+        //Prioritize checking the direct attacker, prevent ranged pet attacks from triggering attacker effects such as lycanites
+        boolean isMelee = isDamageSourceMelee(source);
+        boolean isRanged = !isMelee && isDamageSourceRanged(source);
+        
+        EntityLivingBase target = event.getEntityLiving();
+        EntityLivingBase attacker;
+        if(isMelee) attacker = (EntityLivingBase)source.getImmediateSource();
+        else if(isRanged) attacker = (EntityLivingBase)source.getTrueSource();
+        else return;
+        
+        //Dont trigger on self damage if that manages to happen
+        if(target == attacker) return;
+        
+        //AttackedActivator handling
+        if(target instanceof EntityPlayer) {
+            handleAttacked((EntityPlayer)target, attacker, isMelee, isRanged, source);
         }
-        if(event.getSource().getTrueSource() instanceof EntityPlayer) {
-            handleHitEffects((EntityPlayer)event.getSource().getTrueSource(), event.getEntityLiving(), event.getSource(), false);
+        //AttackingActivator handling
+        if(attacker instanceof EntityPlayer) {
+            handleAttacking((EntityPlayer)attacker, target, isMelee, isRanged, source);
         }
     }
-
-    private static void handleHitEffects(EntityPlayer player, EntityLivingBase victim, DamageSource source, boolean received) {
+    
+    private static void handleAttacked(EntityPlayer player, EntityLivingBase attacker, boolean isMelee, boolean isRanged, DamageSource source) {
         ICapabilityEffectsCache cachedEffects = player.getCapability(CapabilityEffectsCacheHandler.CAP_EFFECTS_CACHE, null);
         if(cachedEffects == null) return;
         
-        //Handle cached effects for activations that don't require direct activation
+        //Handle cached effects
         for(GenericGemEffect effect : cachedEffects.getActiveEffects()) {
             if(effect instanceof ActivatableGemEffect) {
-                ActivatableGemEffect activatableEffect = (ActivatableGemEffect)effect;
-                activatableEffect.getActivationType().triggerOnAttackEffect(activatableEffect, victim, source, received);
+                ActivatableGemEffect activatableGemEffect = (ActivatableGemEffect)effect;
+                if(activatableGemEffect.getActivatorType() instanceof AttackActivator) {
+                    AttackActivator attackActivator = ((AttackActivator)activatableGemEffect.getActivatorType());
+                    if((attackActivator.getAllowsMelee() && isMelee) || (attackActivator.getAllowsRanged() && isRanged)) {
+                        attackActivator.attemptAttackActivation(activatableGemEffect, player, player, attacker, false, source);
+                    }
+                }
+            }
+        }
+    }
+    
+    private static void handleAttacking(EntityPlayer player, EntityLivingBase target, boolean isMelee, boolean isRanged, DamageSource source) {
+        ICapabilityEffectsCache cachedEffects = player.getCapability(CapabilityEffectsCacheHandler.CAP_EFFECTS_CACHE, null);
+        if(cachedEffects == null) return;
+        
+        //Handle cached effects
+        for(GenericGemEffect effect : cachedEffects.getActiveEffects()) {
+            if(effect instanceof ActivatableGemEffect) {
+                ActivatableGemEffect activatableGemEffect = (ActivatableGemEffect)effect;
+                if(activatableGemEffect.getActivatorType() instanceof AttackActivator) {
+                    AttackActivator attackActivator = ((AttackActivator)activatableGemEffect.getActivatorType());
+                    if((attackActivator.getAllowsMelee() && isMelee) || (attackActivator.getAllowsRanged() && isRanged)) {
+                        attackActivator.attemptAttackActivation(activatableGemEffect, player, target, player, false, source);
+                    }
+                }
             }
         }
         
-        //Handle effects from the weapon being attacked with (direct activation)
+        //Handle direct activation effects
+        //RLCombat swaps offhand into mainhand before posting LivingAttack for offhand attacks
         ItemStack weaponStack = player.getHeldItemMainhand();
         if(weaponStack.isEmpty()) return;
         
         ICapabilitySocketable sockets = weaponStack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
         if(sockets == null) return;
         
-        //TODO: RLCombat compat to get whether the attack is being posted from mainhand or offhand
+        //TODO: RLCombat compat to get whether the attack is being posted from mainhand or offhand for more accurate slot type check
         for(GenericGemEffect effect : sockets.getAllActiveEffects(SocketedSlotTypes.HAND)) {
             if(effect instanceof ActivatableGemEffect) {
-                ActivatableGemEffect activatableEffect = (ActivatableGemEffect)effect;
-                if(activatableEffect.getRequiresDirectActivation()) {
-                    activatableEffect.getActivationType().triggerOnAttackEffect(activatableEffect, victim, source, received);
+                ActivatableGemEffect activatableGemEffect = (ActivatableGemEffect)effect;
+                if(activatableGemEffect.getActivatorType() instanceof AttackActivator) {
+                    AttackActivator attackActivator = ((AttackActivator)activatableGemEffect.getActivatorType());
+                    if((attackActivator.getAllowsMelee() && isMelee) || (attackActivator.getAllowsRanged() && isRanged)) {
+                        attackActivator.attemptAttackActivation(activatableGemEffect, player, target, player, true, source);
+                    }
                 }
             }
         }
+    }
+    
+    private static boolean isDamageSourceMelee(DamageSource source) {
+        return source.getImmediateSource() instanceof EntityLivingBase;
+    }
+    
+    private static boolean isDamageSourceRanged(DamageSource source) {
+        return !(source.getImmediateSource() instanceof EntityLivingBase) && source.getTrueSource() instanceof EntityLivingBase;
     }
 
     @SubscribeEvent
@@ -87,8 +140,13 @@ public class EffectHandler {
         
         for(GenericGemEffect effect : cachedEffects.getActiveEffects()) {
             if(effect instanceof ActivatableGemEffect) {
-                ActivatableGemEffect activatableEffect = (ActivatableGemEffect)effect;
-                activatableEffect.getActivationType().triggerPerTickEffect(activatableEffect, player);
+                ActivatableGemEffect activatableGemEffect = (ActivatableGemEffect)effect;
+                if(activatableGemEffect.getActivatorType() instanceof PassiveActivator) {
+                    PassiveActivator passiveActivator = (PassiveActivator)activatableGemEffect.getActivatorType();
+                    if(player.ticksExisted%passiveActivator.getActivationRate() == 0) {
+                        passiveActivator.attemptPassiveActivation(activatableGemEffect, player);
+                    }
+                }
             }
         }
     }
@@ -157,7 +215,7 @@ public class EffectHandler {
                     }
                 }
                 else {
-                    //Attribute effects are cached by default, so only non-attribute effects are cached in the player capability
+                    //Attribute effects are handled above, so only non-attribute effects are cached in the player capability
                     effectsToUncache.add(effect);
                 }
             }
@@ -194,9 +252,7 @@ public class EffectHandler {
                     }
                 }
                 else {
-                    //Do not cache activatable effects marked as direct activation, handlers will need to check for those effects themselves for special handling
-                    if(effect instanceof ActivatableGemEffect && ((ActivatableGemEffect)effect).getRequiresDirectActivation()) continue;
-                    //Attribute effects are cached by default, so only non-attribute effects are cached in the player capability
+                    //Attribute effects are handled above, so only non-attribute effects are cached in the player capability
                     effectsToCache.add(effect);
                 }
             }

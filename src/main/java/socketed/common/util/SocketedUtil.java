@@ -9,7 +9,7 @@ import socketed.Socketed;
 import socketed.common.config.JsonConfig;
 import socketed.common.jsondata.GemType;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
-import socketed.common.jsondata.entry.effect.activatable.IActivationType;
+import socketed.common.jsondata.entry.effect.activatable.activator.GenericActivator;
 import socketed.common.jsondata.entry.filter.FilterEntry;
 import socketed.common.jsondata.entry.effect.slot.ISlotType;
 
@@ -29,14 +29,12 @@ public abstract class SocketedUtil {
         Socketed.LOGGER.log(Level.INFO, "Registering Effect Type " + typeName + " from " + typeClass.getSimpleName());
         JsonConfig.gemEffectDeserializerMap.put(typeName, typeClass);
     }
-
-    public static <T extends Enum<T> & IActivationType> void registerActivationTypes(Class<T> typeClass) {
-        for(T type : typeClass.getEnumConstants()) {
-            Socketed.LOGGER.log(Level.INFO, "Registering Activation Type " + type.name() + " from " + typeClass.getSimpleName());
-            JsonConfig.activationTypeDeserializerMap.put(type.name(), typeClass);
-        }
-    }
     
+    public static void registerActivator(String typeName, Class<? extends GenericActivator> typeClass) {
+        Socketed.LOGGER.log(Level.INFO, "Registering Activator " + typeName + " from " + typeClass.getSimpleName());
+        JsonConfig.activatorDeserializerMap.put(typeName, typeClass);
+    }
+
     public static <T extends Enum<T> & ISlotType> void registerSlotTypes(Class<T> typeClass) {
         for(T type : typeClass.getEnumConstants()) {
             Socketed.LOGGER.log(Level.INFO, "Registering Slot Type " + type.name() + " from " + typeClass.getSimpleName());

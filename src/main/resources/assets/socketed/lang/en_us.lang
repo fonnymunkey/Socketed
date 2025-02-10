@@ -16,21 +16,21 @@ item.socketed.socket.socket_tier_3.name=Legendary Socket
 socketed.tooltip.socket=Sockets (%d/%d):
 socketed.tooltip.empty=Empty
 socketed.tooltip.holdshift=Hold <Shift> for more info
-socketed.tooltip.activationtype.passive_self=Passively: %s
-socketed.tooltip.activationtype.passive_nearby=Entities nearby:  %s
-socketed.tooltip.activationtype.passive_far=Entities in area:  %s
-socketed.tooltip.activationtype.on_attacked_self=When Attacked: %s
-socketed.tooltip.activationtype.on_attacked_self_melee=When Attacked (Melee): %s
-socketed.tooltip.activationtype.on_attacked_self_ranged=When Attacked (Ranged): %s
-socketed.tooltip.activationtype.on_attacked_attacker=Attacker Receives: %s
-socketed.tooltip.activationtype.on_attacked_attacker_melee=Attacker Receives (Melee): %s
-socketed.tooltip.activationtype.on_attacked_attacker_ranged=Attacker Receives (Ranged): %s
-socketed.tooltip.activationtype.on_attacking_self=When Attacking: %s
-socketed.tooltip.activationtype.on_attacking_self_melee=When Attacking (Melee): %s
-socketed.tooltip.activationtype.on_attacking_self_ranged=When Attacking (Ranged): %s
-socketed.tooltip.activationtype.on_attacking_target=Target Receives: %s
-socketed.tooltip.activationtype.on_attacking_target_melee=Target Receives (Melee): %s
-socketed.tooltip.activationtype.on_attacking_target_ranged=Target Receives (Ranged): %s
+
+socketed.tooltip.activator.passive_self=Passively:
+socketed.tooltip.activator.passive_aoe=Within %d Blocks:
+socketed.tooltip.activator.attacking_indirect=Attacking%1$s%2$s:
+socketed.tooltip.activator.attacking_direct=Used In Attack%1$s%2$s:
+socketed.tooltip.activator.attacked=Attacked%1$s%2$s:
+
+socketed.tooltip.attack.melee= (Melee)
+socketed.tooltip.attack.ranged= (Ranged)
+socketed.tooltip.attack.melee_ranged=
+socketed.tooltip.attack.self= (Self)
+socketed.tooltip.attack.target= (Target)
+socketed.tooltip.attack.attacker= (Attacker)
+socketed.tooltip.attack.self_target= (Self/Target)
+socketed.tooltip.attack.self_attacker= (Self/Attacker)
 
 socketed.tooltip.default.obsidian_damage=Obsidian Tipped
 socketed.tooltip.default.stone_damage=Whet Stone

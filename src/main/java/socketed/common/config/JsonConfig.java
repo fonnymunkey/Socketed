@@ -12,9 +12,12 @@ import socketed.common.jsondata.entry.RandomValueRange;
 import socketed.common.jsondata.entry.effect.AttributeGemEffect;
 import socketed.common.jsondata.entry.effect.EffectDeserializer;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
-import socketed.common.jsondata.entry.effect.activatable.SocketedActivationTypes;
-import socketed.common.jsondata.entry.effect.activatable.IActivationType;
 import socketed.common.jsondata.entry.effect.activatable.PotionGemEffect;
+import socketed.common.jsondata.entry.effect.activatable.activator.GenericActivator;
+import socketed.common.jsondata.entry.effect.activatable.activator.attack.AttackedActivator;
+import socketed.common.jsondata.entry.effect.activatable.activator.attack.AttackingActivator;
+import socketed.common.jsondata.entry.effect.activatable.activator.passive.PassiveAOEActivator;
+import socketed.common.jsondata.entry.effect.activatable.activator.passive.PassiveSelfActivator;
 import socketed.common.jsondata.entry.filter.*;
 import socketed.common.jsondata.entry.effect.slot.SocketedSlotTypes;
 import socketed.common.jsondata.entry.effect.slot.ISlotType;
@@ -37,7 +40,7 @@ public class JsonConfig {
 
     public static final Map<String, Class<? extends FilterEntry>> filterDeserializerMap = new HashMap<>();
     public static final Map<String, Class<? extends GenericGemEffect>> gemEffectDeserializerMap = new HashMap<>();
-    public static final Map<String, Class<? extends IActivationType>> activationTypeDeserializerMap = new HashMap<>();
+    public static final Map<String, Class<? extends GenericActivator>> activatorDeserializerMap = new HashMap<>();
     public static final Map<String, Class<? extends ISlotType>> slotTypeDeserializerMap = new HashMap<>();
 
     public static void preInit(File file) {
@@ -70,7 +73,10 @@ public class JsonConfig {
         SocketedUtil.registerFilterType(OreEntry.TYPE_NAME, OreEntry.class);
         SocketedUtil.registerEffectType(AttributeGemEffect.TYPE_NAME, AttributeGemEffect.class);
         SocketedUtil.registerEffectType(PotionGemEffect.TYPE_NAME, PotionGemEffect.class);
-        SocketedUtil.registerActivationTypes(SocketedActivationTypes.class);
+        SocketedUtil.registerActivator(PassiveSelfActivator.TYPE_NAME, PassiveSelfActivator.class);
+        SocketedUtil.registerActivator(PassiveAOEActivator.TYPE_NAME, PassiveAOEActivator.class);
+        SocketedUtil.registerActivator(AttackingActivator.TYPE_NAME, AttackingActivator.class);
+        SocketedUtil.registerActivator(AttackedActivator.TYPE_NAME, AttackedActivator.class);
         SocketedUtil.registerSlotTypes(SocketedSlotTypes.class);
         
         DefaultJsonConfig.initializeBuiltinEntries();

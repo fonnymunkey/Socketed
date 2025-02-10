@@ -9,8 +9,9 @@ import socketed.common.jsondata.GemCombinationType;
 import socketed.common.jsondata.GemType;
 import socketed.common.jsondata.entry.RandomValueRange;
 import socketed.common.jsondata.entry.effect.AttributeGemEffect;
-import socketed.common.jsondata.entry.effect.activatable.SocketedActivationTypes;
 import socketed.common.jsondata.entry.effect.activatable.PotionGemEffect;
+import socketed.common.jsondata.entry.effect.activatable.activator.passive.PassiveAOEActivator;
+import socketed.common.jsondata.entry.effect.activatable.activator.passive.PassiveSelfActivator;
 import socketed.common.jsondata.entry.filter.OreEntry;
 import socketed.common.jsondata.entry.effect.slot.SocketedSlotTypes;
 
@@ -48,7 +49,7 @@ public abstract class DefaultJsonConfig {
                                             Arrays.asList(new OreEntry("stone"),
                                                           new OreEntry("cobblestone"))));
         registerDefaultGemType("sticky", new GemType("socketed.tooltip.default.sticky", 0, TextFormatting.DARK_GREEN,
-                                      Collections.singletonList(new PotionGemEffect(SocketedSlotTypes.BODY, SocketedActivationTypes.PASSIVE_SELF, 9, MobEffects.SLOWNESS.getRegistryName().toString(), 0, 10)),
+                                      Collections.singletonList(new PotionGemEffect(SocketedSlotTypes.BODY, new PassiveSelfActivator(9), MobEffects.SLOWNESS.getRegistryName().toString(), 0, 10)),
                                       Collections.singletonList(new OreEntry("slimeball"))));
         registerDefaultGemType("lucky", new GemType("socketed.tooltip.default.lucky", 2, TextFormatting.GREEN,
                                      Collections.singletonList(new AttributeGemEffect(SocketedSlotTypes.ALL, SharedMonsterAttributes.LUCK.getName(), new RandomValueRange(2, false), 0)),
@@ -67,7 +68,7 @@ public abstract class DefaultJsonConfig {
                                                 new AttributeGemEffect(SocketedSlotTypes.BODY, SharedMonsterAttributes.MOVEMENT_SPEED.getName(), new RandomValueRange(0.05F, false), 1)),
                                         Collections.singletonList(new OreEntry("dustRedstone"))));
         registerDefaultGemType("glowstone", new GemType("socketed.tooltip.default.glowstone", 1, TextFormatting.YELLOW,
-                                         Collections.singletonList(new PotionGemEffect(SocketedSlotTypes.HEAD, SocketedActivationTypes.PASSIVE_FAR, 40, MobEffects.GLOWING.getRegistryName().toString(), 0, 41)),
+                                         Collections.singletonList(new PotionGemEffect(SocketedSlotTypes.HEAD, new PassiveAOEActivator(40, 16), MobEffects.GLOWING.getRegistryName().toString(), 0, 41)),
                                          Collections.singletonList(new OreEntry("dustGlowstone"))));
         
         //Gem Combination Types
@@ -77,8 +78,8 @@ public abstract class DefaultJsonConfig {
                 Collections.singletonList(new AttributeGemEffect(SocketedSlotTypes.HAND, SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new RandomValueRange(9, false), 0))));
         registerDefaultGemCombinationType("rgb", new GemCombinationType(
                 "socketed.tooltip.default.rgb", TextFormatting.GOLD, true,false, true, false,
-                Arrays.asList("redstone", "lucky", "lapis"),
-                Arrays.asList(new PotionGemEffect(SocketedSlotTypes.ALL, SocketedActivationTypes.PASSIVE_SELF, 9, MobEffects.GLOWING.getRegistryName().toString(), 0, 10),
-                              new PotionGemEffect(SocketedSlotTypes.ALL, SocketedActivationTypes.PASSIVE_NEARBY, 40, MobEffects.GLOWING.getRegistryName().toString(), 0, 41))));
+                Arrays.asList("redstone", "lucky", "diamond"),
+                Arrays.asList(new PotionGemEffect(SocketedSlotTypes.ALL, new PassiveSelfActivator(9), MobEffects.GLOWING.getRegistryName().toString(), 0, 10),
+                              new PotionGemEffect(SocketedSlotTypes.ALL, new PassiveAOEActivator(40, 8), MobEffects.GLOWING.getRegistryName().toString(), 0, 41))));
     }
 }
