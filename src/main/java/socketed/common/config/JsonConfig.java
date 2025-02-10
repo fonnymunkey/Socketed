@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import net.minecraft.nbt.NBTTagCompound;
 import socketed.Socketed;
 import socketed.common.jsondata.GemCombinationType;
 import socketed.common.jsondata.GemType;
@@ -21,6 +22,8 @@ import socketed.common.jsondata.entry.effect.activatable.activator.passive.Passi
 import socketed.common.jsondata.entry.filter.*;
 import socketed.common.jsondata.entry.effect.slot.SocketedSlotTypes;
 import socketed.common.jsondata.entry.effect.slot.ISlotType;
+import socketed.common.socket.GenericSocket;
+import socketed.common.socket.TieredSocket;
 import socketed.common.util.SocketedUtil;
 
 import javax.annotation.Nullable;
@@ -28,6 +31,7 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.util.*;
+import java.util.function.Function;
 
 public class JsonConfig {
     
@@ -42,6 +46,7 @@ public class JsonConfig {
     public static final Map<String, Class<? extends GenericGemEffect>> gemEffectDeserializerMap = new HashMap<>();
     public static final Map<String, Class<? extends GenericActivator>> activatorDeserializerMap = new HashMap<>();
     public static final Map<String, Class<? extends ISlotType>> slotTypeDeserializerMap = new HashMap<>();
+    public static final Map<String, Function<NBTTagCompound, ? extends GenericSocket>> socketNBTDeserializerMap = new HashMap<>();
 
     public static void preInit(File file) {
         File modFolder = new File(file, Socketed.MODID);
@@ -68,15 +73,17 @@ public class JsonConfig {
     }
     
     public static void init() {
-        SocketedUtil.registerFilterType(ItemFilter.TYPE_NAME, ItemFilter.class);
-        SocketedUtil.registerFilterType(OreFilter.TYPE_NAME, OreFilter.class);
-        SocketedUtil.registerEffectType(AttributeGemEffect.TYPE_NAME, AttributeGemEffect.class);
-        SocketedUtil.registerEffectType(PotionGemEffect.TYPE_NAME, PotionGemEffect.class);
-        SocketedUtil.registerActivator(PassiveSelfActivator.TYPE_NAME, PassiveSelfActivator.class);
-        SocketedUtil.registerActivator(PassiveAOEActivator.TYPE_NAME, PassiveAOEActivator.class);
-        SocketedUtil.registerActivator(AttackingActivator.TYPE_NAME, AttackingActivator.class);
-        SocketedUtil.registerActivator(AttackedActivator.TYPE_NAME, AttackedActivator.class);
-        SocketedUtil.registerSlotTypes(SocketedSlotTypes.class);
+        SocketedUtil.registerFilterType(ItemFilter.TYPE_NAME, ItemFilter.class, Socketed.MODID);
+        SocketedUtil.registerFilterType(OreFilter.TYPE_NAME, OreFilter.class, Socketed.MODID);
+        SocketedUtil.registerEffectType(AttributeGemEffect.TYPE_NAME, AttributeGemEffect.class, Socketed.MODID);
+        SocketedUtil.registerEffectType(PotionGemEffect.TYPE_NAME, PotionGemEffect.class, Socketed.MODID);
+        SocketedUtil.registerActivator(PassiveSelfActivator.TYPE_NAME, PassiveSelfActivator.class, Socketed.MODID);
+        SocketedUtil.registerActivator(PassiveAOEActivator.TYPE_NAME, PassiveAOEActivator.class, Socketed.MODID);
+        SocketedUtil.registerActivator(AttackingActivator.TYPE_NAME, AttackingActivator.class, Socketed.MODID);
+        SocketedUtil.registerActivator(AttackedActivator.TYPE_NAME, AttackedActivator.class, Socketed.MODID);
+        SocketedUtil.registerSlotTypes(SocketedSlotTypes.class, Socketed.MODID);
+        SocketedUtil.registerSocket(GenericSocket.TYPE_NAME, GenericSocket::new, Socketed.MODID);
+        SocketedUtil.registerSocket(TieredSocket.TYPE_NAME, TieredSocket::new, Socketed.MODID);
         
         DefaultJsonConfig.initializeBuiltinEntries();
     }

@@ -2,6 +2,7 @@ package socketed.common.util;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Level;
@@ -12,35 +13,42 @@ import socketed.common.jsondata.entry.effect.GenericGemEffect;
 import socketed.common.jsondata.entry.effect.activatable.activator.GenericActivator;
 import socketed.common.jsondata.entry.filter.GenericFilter;
 import socketed.common.jsondata.entry.effect.slot.ISlotType;
+import socketed.common.socket.GenericSocket;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 public abstract class SocketedUtil {
 
     public static final List<ISlotType> registeredSlots = new ArrayList<>();
     
-    public static void registerFilterType(String typeName, Class<? extends GenericFilter> typeClass) {
-        Socketed.LOGGER.log(Level.INFO, "Registering Filter Type " + typeName + " from " + typeClass.getSimpleName());
+    public static void registerFilterType(String typeName, Class<? extends GenericFilter> typeClass, String modid) {
+        Socketed.LOGGER.log(Level.INFO, "Registering Filter " + typeName + " from " + modid);
         JsonConfig.filterDeserializerMap.put(typeName, typeClass);
     }
 
-    public static void registerEffectType(String typeName, Class<? extends GenericGemEffect> typeClass) {
-        Socketed.LOGGER.log(Level.INFO, "Registering Effect Type " + typeName + " from " + typeClass.getSimpleName());
+    public static void registerEffectType(String typeName, Class<? extends GenericGemEffect> typeClass, String modid) {
+        Socketed.LOGGER.log(Level.INFO, "Registering Effect " + typeName + " from " + modid);
         JsonConfig.gemEffectDeserializerMap.put(typeName, typeClass);
     }
     
-    public static void registerActivator(String typeName, Class<? extends GenericActivator> typeClass) {
-        Socketed.LOGGER.log(Level.INFO, "Registering Activator " + typeName + " from " + typeClass.getSimpleName());
+    public static void registerActivator(String typeName, Class<? extends GenericActivator> typeClass, String modid) {
+        Socketed.LOGGER.log(Level.INFO, "Registering Activator " + typeName + " from " + modid);
         JsonConfig.activatorDeserializerMap.put(typeName, typeClass);
     }
 
-    public static <T extends Enum<T> & ISlotType> void registerSlotTypes(Class<T> typeClass) {
+    public static <T extends Enum<T> & ISlotType> void registerSlotTypes(Class<T> typeClass, String modid) {
         for(T type : typeClass.getEnumConstants()) {
-            Socketed.LOGGER.log(Level.INFO, "Registering Slot Type " + type.name() + " from " + typeClass.getSimpleName());
+            Socketed.LOGGER.log(Level.INFO, "Registering Slot Type " + type.name() + " from " + modid);
             registeredSlots.add(type);
             JsonConfig.slotTypeDeserializerMap.put(type.name(), typeClass);
         }
+    }
+    
+    public static void registerSocket(String typeName, Function<NBTTagCompound, ? extends GenericSocket> fromNBTFunction, String modid) {
+        Socketed.LOGGER.log(Level.INFO, "Registering Socket " + typeName + " from " + modid);
+        JsonConfig.socketNBTDeserializerMap.put(typeName, fromNBTFunction);
     }
     
     /**

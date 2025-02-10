@@ -10,13 +10,13 @@ import socketed.common.jsondata.GemCombinationType;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
 import socketed.common.jsondata.entry.effect.slot.ISlotType;
 import socketed.common.socket.GenericSocket;
-import socketed.common.socket.TieredSocket;
 import socketed.common.util.SocketedUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class CapabilitySocketable implements ICapabilitySocketable {
@@ -88,13 +88,13 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 	public void addSocketFromNBT(String socketType, NBTTagCompound tags) {
 		if(socketType == null || socketType.isEmpty() || tags == null) return;
 		
-		//TODO: Allow for registering and deserializing custom socket types
-		if(socketType.equals(GenericSocket.TYPE_NAME)) {
-			this.addSocketNoRefresh(new GenericSocket(tags));
-		}
-		else if(socketType.equals(TieredSocket.TYPE_NAME)) {
-			this.addSocketNoRefresh(new TieredSocket(tags));
-		}
+		Function<NBTTagCompound, ? extends GenericSocket> fromNBTFunction = JsonConfig.socketNBTDeserializerMap.get(socketType);
+		//If an addon that added a socket was removed, remove the socket
+		if(fromNBTFunction == null) return;
+		GenericSocket socket = fromNBTFunction.apply(tags);
+		//Shouldn't ever be null, but sanity check
+		if(socket == null) return;
+		this.addSocketNoRefresh(socket);
 		//Don't fresh combinations here to avoid overwriting cached values before they are fully retrieved
 	}
 	
