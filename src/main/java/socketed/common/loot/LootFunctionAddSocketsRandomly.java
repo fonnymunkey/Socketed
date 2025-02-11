@@ -32,6 +32,7 @@ public class LootFunctionAddSocketsRandomly extends LootFunction {
     @Override
     @Nonnull
     public ItemStack apply(@Nonnull ItemStack stack, @Nonnull Random rand, @Nonnull LootContext context) {
+        if(stack.isEmpty() || stack.getMaxStackSize() > 1) return stack;
         ICapabilitySocketable cap = stack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
         if(cap != null) {
             SocketedUtil.addSocketsToStackRandomly(stack, maxSockets, rollCount, rollChance);

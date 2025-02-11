@@ -28,9 +28,10 @@ public class LootFunctionSetSockets extends LootFunction {
     @Override
     @Nonnull
     public ItemStack apply(@Nonnull ItemStack stack, @Nonnull Random rand, @Nonnull LootContext context) {
+        if(stack.isEmpty() || stack.getMaxStackSize() > 1) return stack;
         ICapabilitySocketable cap = stack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
-        if (cap != null) {
-            for (int tier : socketTiers) {
+        if(cap != null) {
+            for(int tier : socketTiers) {
                 cap.addSocket(new TieredSocket(tier));
             }
         }
