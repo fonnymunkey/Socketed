@@ -16,7 +16,7 @@ public class ForgeConfig {
     public static Client CLIENT = new Client();
 
     @Config.Name("Socketable Items")
-    public static IsSocketableConfig SOCKETABLES = new IsSocketableConfig();
+    public static SocketableConfig SOCKETABLES = new SocketableConfig();
 
     @Config.Name("Default Socket Acquisition")
     public static AddSocketsConfig ADD_SOCKETS = new AddSocketsConfig();
@@ -47,6 +47,7 @@ public class ForgeConfig {
         public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
             if(event.getModID().equals(socketed.Socketed.MODID)) {
                 ConfigManager.sync(socketed.Socketed.MODID, Config.Type.INSTANCE);
+                ForgeConfig.SOCKETABLES.reset();
             }
         }
     }
