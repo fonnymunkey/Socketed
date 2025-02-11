@@ -5,8 +5,9 @@ import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import socketed.Socketed;
 
-@Config(modid = socketed.Socketed.MODID, name = socketed.Socketed.MODNAME, category = "")
+@Config(modid = Socketed.MODID, name = Socketed.MODNAME, category = "")
 public class ForgeConfig {
 
     @Config.Name("Common")
@@ -22,22 +23,25 @@ public class ForgeConfig {
     public static AddSocketsConfig ADD_SOCKETS = new AddSocketsConfig();
 
     public static class Common {
-        @Config.Comment("Maximum amount of sockets any item can have")
+        @Config.Comment(
+                "Maximum amount of sockets any item can have" + "\n" +
+                "Warning: Lowering this value can cause already existing items to lose excess sockets")
         @Config.Name("Max Sockets")
         @Config.RangeInt(min = 1, max = 8)
+        @Config.RequiresMcRestart
         public int maxSockets = 8;
 
-        @Config.Comment("Set to false to disable removing gems from sockets")
-        @Config.Name("Gems are removable")
+        @Config.Comment("If set to false, gems can only be placed into sockets, not removed")
+        @Config.Name("Removable Gems")
         public boolean gemsAreRemovable = true;
 
-        @Config.Comment("Set to true to destroy gems when removing them from sockets")
-        @Config.Name("Destroy gems on removal")
+        @Config.Comment("If Removable Gems is enabled, destroys the gem on removal instead of returning it to the player")
+        @Config.Name("Destructive Gem Removal")
         public boolean destroyGemsOnRemoval = false;
     }
 
     public static class Client {
-
+        //Unused currently
     }
 
     @Mod.EventBusSubscriber(modid = socketed.Socketed.MODID)
