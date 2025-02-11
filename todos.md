@@ -1,6 +1,5 @@
 ## Todos + Ideas
 - GUI socket tier draw
-- gem tooltip tier draw
 - collect identical effects on tooltip?
 - additional effect types: 
   - +x lvl to specific enchant
@@ -16,7 +15,6 @@
 - should gems be instantiated on socketing or earlier? 
   - or maybe a possibility for rare gems to roll directly with stats?
   - like there should be an api to create gems dynamically from attached nbt instead of statically via json
-- get sockets on craft, mob drop, loot gen, villager trades with separate chances + socket amount ranges
 
 ### For addon mod (RLSocketed or whatever)
 - Baubles compat?

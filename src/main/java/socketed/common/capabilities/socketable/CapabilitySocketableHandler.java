@@ -14,6 +14,7 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import socketed.Socketed;
+import socketed.common.config.JsonConfig;
 import socketed.common.socket.gem.GemCombinationInstance;
 import socketed.common.config.ForgeConfig;
 import socketed.common.socket.GenericSocket;
@@ -39,8 +40,9 @@ public class CapabilitySocketableHandler {
         public static void attachCapabilitiesEventItemStack(AttachCapabilitiesEvent<ItemStack> event) {
             ItemStack stack = event.getObject();
             if(stack.isEmpty()) return;
-            if(stack.hasCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null)) return;
             if(stack.getMaxStackSize() > 1) return;
+            if(!JsonConfig.hasCompletedLoading()) return;
+            if(stack.hasCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null)) return;
 
             //Allowed item types that can get sockets
             if(ForgeConfig.SOCKETABLES.canSocket(stack)) {

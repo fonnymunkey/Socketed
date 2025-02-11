@@ -47,6 +47,11 @@ socketed.tooltip.default.rgb=RGB Effects
 
 socketed.tooltip.gem=In Socket:
 
+socketed.tooltip.tier_0=(Common)
+socketed.tooltip.tier_1=(Uncommon)
+socketed.tooltip.tier_2=(Rare)
+socketed.tooltip.tier_3=(Legendary)
+
 socketed.tooltip.slottype.all=
 socketed.tooltip.slottype.none=()
 socketed.tooltip.slottype.body=(On Body)

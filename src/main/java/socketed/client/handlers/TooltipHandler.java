@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.common.capabilities.socketable.CapabilitySocketableHandler;
+import socketed.common.config.JsonConfig;
 import socketed.common.socket.gem.GemCombinationInstance;
 import socketed.common.socket.gem.GemInstance;
 import socketed.common.capabilities.socketable.ICapabilitySocketable;
@@ -33,6 +34,8 @@ public class TooltipHandler {
     public static void onItemTooltipEvent(ItemTooltipEvent event) {
         ItemStack stack = event.getItemStack();
         if(stack.isEmpty()) return;
+        
+        if(!JsonConfig.hasCompletedLoading()) return;
         
         ICapabilitySocketable sockets = stack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
         GemType gemType = null;
@@ -99,7 +102,7 @@ public class TooltipHandler {
             //In socket Tooltip
             insertTooltip(tooltips, TextFormatting.BOLD + I18n.format("socketed.tooltip.gem") + TextFormatting.RESET);
             //Display Name Tooltip
-            insertTooltip(tooltips, " " + gemType.getColor() + I18n.format(gemType.getDisplayName()) + TextFormatting.RESET);
+            insertTooltip(tooltips, " " + gemType.getColor() + I18n.format(gemType.getDisplayName()) + " " + I18n.format("socketed.tooltip.tier_" + gemType.getTier()) + TextFormatting.RESET);
             
             if(!GuiScreen.isShiftKeyDown()) {
                 insertTooltip(tooltips, TextFormatting.BOLD + "" + TextFormatting.GOLD + I18n.format("socketed.tooltip.holdshift") + TextFormatting.RESET);
