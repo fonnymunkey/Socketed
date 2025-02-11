@@ -11,7 +11,7 @@ public class SocketedPlugin implements IFMLLoadingPlugin {
 
     public SocketedPlugin() {
         MixinBootstrap.init();
-        FermiumRegistryAPI.enqueueMixin(false, "mixins.socketed.json");
+        FermiumRegistryAPI.enqueueMixin(false, "mixins.socketed.vanilla.json");
     }
 
     @Override

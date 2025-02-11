@@ -3,9 +3,9 @@ package socketed.common.socket;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import socketed.Socketed;
-import socketed.common.instances.GemInstance;
-import socketed.common.jsondata.GemType;
-import socketed.common.jsondata.entry.effect.GenericGemEffect;
+import socketed.common.socket.gem.GemInstance;
+import socketed.common.socket.gem.effect.GenericGemEffect;
+import socketed.common.socket.gem.GemType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

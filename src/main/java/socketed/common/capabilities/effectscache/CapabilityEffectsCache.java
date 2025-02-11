@@ -1,6 +1,6 @@
 package socketed.common.capabilities.effectscache;
 
-import socketed.common.jsondata.entry.effect.GenericGemEffect;
+import socketed.common.socket.gem.effect.GenericGemEffect;
 
 import java.util.ArrayList;
 import java.util.List;

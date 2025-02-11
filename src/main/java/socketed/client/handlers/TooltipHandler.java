@@ -13,12 +13,12 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.common.capabilities.socketable.CapabilitySocketableHandler;
-import socketed.common.instances.GemCombinationInstance;
-import socketed.common.instances.GemInstance;
+import socketed.common.socket.gem.GemCombinationInstance;
+import socketed.common.socket.gem.GemInstance;
 import socketed.common.capabilities.socketable.ICapabilitySocketable;
-import socketed.common.jsondata.GemCombinationType;
-import socketed.common.jsondata.GemType;
-import socketed.common.jsondata.entry.effect.GenericGemEffect;
+import socketed.common.socket.gem.GemCombinationType;
+import socketed.common.socket.gem.GemType;
+import socketed.common.socket.gem.effect.GenericGemEffect;
 import socketed.common.util.SocketedUtil;
 
 import java.util.List;

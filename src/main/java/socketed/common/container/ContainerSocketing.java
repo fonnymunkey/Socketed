@@ -7,7 +7,7 @@ import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import socketed.common.capabilities.socketable.CapabilitySocketableHandler;
-import socketed.common.instances.GemInstance;
+import socketed.common.socket.gem.GemInstance;
 import socketed.common.capabilities.socketable.ICapabilitySocketable;
 import socketed.common.config.ForgeConfig;
 import socketed.common.socket.GenericSocket;

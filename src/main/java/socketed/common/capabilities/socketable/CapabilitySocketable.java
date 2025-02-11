@@ -2,13 +2,13 @@ package socketed.common.capabilities.socketable;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import socketed.common.instances.GemCombinationInstance;
-import socketed.common.instances.GemInstance;
+import socketed.common.socket.gem.GemCombinationInstance;
+import socketed.common.socket.gem.GemInstance;
 import socketed.common.config.ForgeConfig;
 import socketed.common.config.JsonConfig;
-import socketed.common.jsondata.GemCombinationType;
-import socketed.common.jsondata.entry.effect.GenericGemEffect;
-import socketed.common.jsondata.entry.effect.slot.ISlotType;
+import socketed.common.socket.gem.GemCombinationType;
+import socketed.common.socket.gem.effect.GenericGemEffect;
+import socketed.common.socket.gem.effect.slot.ISlotType;
 import socketed.common.socket.GenericSocket;
 import socketed.common.util.SocketedUtil;
 

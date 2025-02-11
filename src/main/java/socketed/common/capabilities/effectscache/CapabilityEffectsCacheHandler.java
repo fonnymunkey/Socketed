@@ -21,10 +21,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import socketed.Socketed;
 import socketed.common.capabilities.socketable.CapabilitySocketableHandler;
 import socketed.common.capabilities.socketable.ICapabilitySocketable;
-import socketed.common.jsondata.entry.effect.AttributeGemEffect;
-import socketed.common.jsondata.entry.effect.GenericGemEffect;
-import socketed.common.jsondata.entry.effect.slot.ISlotType;
-import socketed.common.jsondata.entry.effect.slot.SocketedSlotTypes;
+import socketed.common.socket.gem.effect.AttributeGemEffect;
+import socketed.common.socket.gem.effect.GenericGemEffect;
+import socketed.common.socket.gem.effect.slot.ISlotType;
+import socketed.common.socket.gem.effect.slot.SocketedSlotTypes;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

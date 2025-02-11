@@ -5,15 +5,15 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.text.TextFormatting;
 import socketed.common.attributes.SocketedAttributes;
-import socketed.common.jsondata.GemCombinationType;
-import socketed.common.jsondata.GemType;
-import socketed.common.jsondata.entry.RandomValueRange;
-import socketed.common.jsondata.entry.effect.AttributeGemEffect;
-import socketed.common.jsondata.entry.effect.activatable.PotionGemEffect;
-import socketed.common.jsondata.entry.effect.activatable.activator.passive.PassiveAOEActivator;
-import socketed.common.jsondata.entry.effect.activatable.activator.passive.PassiveSelfActivator;
-import socketed.common.jsondata.entry.filter.OreFilter;
-import socketed.common.jsondata.entry.effect.slot.SocketedSlotTypes;
+import socketed.common.socket.gem.GemCombinationType;
+import socketed.common.socket.gem.GemType;
+import socketed.common.socket.gem.util.RandomValueRange;
+import socketed.common.socket.gem.effect.AttributeGemEffect;
+import socketed.common.socket.gem.effect.activatable.PotionGemEffect;
+import socketed.common.socket.gem.effect.activatable.activator.passive.PassiveAOEActivator;
+import socketed.common.socket.gem.effect.activatable.activator.passive.PassiveSelfActivator;
+import socketed.common.socket.gem.filter.OreFilter;
+import socketed.common.socket.gem.effect.slot.SocketedSlotTypes;
 
 import java.util.*;
 

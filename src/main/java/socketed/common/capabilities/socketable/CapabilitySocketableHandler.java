@@ -14,7 +14,7 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import socketed.Socketed;
-import socketed.common.instances.GemCombinationInstance;
+import socketed.common.socket.gem.GemCombinationInstance;
 import socketed.common.config.ForgeConfig;
 import socketed.common.socket.GenericSocket;
 

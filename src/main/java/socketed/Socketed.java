@@ -22,9 +22,9 @@ import socketed.common.container.GuiHandlerSocketing;
 import socketed.common.init.ModItems;
 import socketed.common.init.ModRecipes;
 import socketed.common.proxy.IProxy;
-import socketed.common.socket.AddSocketCommand;
-import socketed.common.socket.LootFunctionAddSocketsRandomly;
-import socketed.common.socket.LootFunctionSetSockets;
+import socketed.common.command.AddSocketCommand;
+import socketed.common.loot.LootFunctionAddSocketsRandomly;
+import socketed.common.loot.LootFunctionSetSockets;
 
 @Mod(modid = Socketed.MODID, name = Socketed.MODNAME, version = Socketed.VERSION)
 public class Socketed {

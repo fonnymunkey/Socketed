@@ -12,11 +12,11 @@ import socketed.common.config.AddSocketsConfig;
 import socketed.common.config.ForgeConfig;
 import socketed.common.config.JsonConfig;
 import socketed.common.config.SocketableConfig;
-import socketed.common.jsondata.GemType;
-import socketed.common.jsondata.entry.effect.GenericGemEffect;
-import socketed.common.jsondata.entry.effect.activatable.activator.GenericActivator;
-import socketed.common.jsondata.entry.filter.GenericFilter;
-import socketed.common.jsondata.entry.effect.slot.ISlotType;
+import socketed.common.socket.gem.GemType;
+import socketed.common.socket.gem.effect.GenericGemEffect;
+import socketed.common.socket.gem.effect.activatable.activator.GenericActivator;
+import socketed.common.socket.gem.filter.GenericFilter;
+import socketed.common.socket.gem.effect.slot.ISlotType;
 import socketed.common.socket.GenericSocket;
 
 import java.util.ArrayList;

@@ -1,10 +1,10 @@
 package socketed.common.capabilities.socketable;
 
 import net.minecraft.nbt.NBTTagCompound;
-import socketed.common.instances.GemCombinationInstance;
-import socketed.common.instances.GemInstance;
-import socketed.common.jsondata.entry.effect.GenericGemEffect;
-import socketed.common.jsondata.entry.effect.slot.ISlotType;
+import socketed.common.socket.gem.GemCombinationInstance;
+import socketed.common.socket.gem.GemInstance;
+import socketed.common.socket.gem.effect.GenericGemEffect;
+import socketed.common.socket.gem.effect.slot.ISlotType;
 import socketed.common.socket.GenericSocket;
 
 import javax.annotation.Nonnull;
