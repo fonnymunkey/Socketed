@@ -23,6 +23,7 @@ public class ForgeConfig {
     public static AddSocketsConfig ADD_SOCKETS = new AddSocketsConfig();
 
     public static class Common {
+        
         @Config.Comment(
                 "Maximum amount of sockets any item can have" + "\n" +
                 "Warning: Lowering this value can cause already existing items to lose excess sockets")
@@ -30,6 +31,14 @@ public class ForgeConfig {
         @Config.RangeInt(min = 1, max = 8)
         @Config.RequiresMcRestart
         public int maxSockets = 8;
+        
+        @Config.Comment(
+                "Maximum tier possible for tiered sockets" + "\n" +
+                "Warning: If you change this value from default you will want to supply your own textures and language files")
+        @Config.Name("Max Socket Tier")
+        @Config.RangeInt(min = 0, max = 5)
+        @Config.RequiresMcRestart
+        public int maxSocketTier = 3;
 
         @Config.Comment("If set to false, gems can only be placed into sockets, not removed")
         @Config.Name("Removable Gems")

@@ -1,12 +1,13 @@
 package socketed.common.socket;
 
 import net.minecraft.client.resources.I18n;
-import net.minecraft.item.EnumRarity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.Socketed;
+import socketed.common.config.ForgeConfig;
 import socketed.common.socket.gem.GemInstance;
 import socketed.common.socket.gem.GemType;
 
@@ -22,7 +23,7 @@ public class TieredSocket extends GenericSocket {
      * Constructs an empty socket with the provided tier
      */
     public TieredSocket(int tier) {
-        this.tier = Math.max(0, Math.min(3, tier));
+        this.tier = Math.max(0, Math.min(ForgeConfig.COMMON.maxSocketTier, tier));
     }
 
     /**
@@ -30,7 +31,7 @@ public class TieredSocket extends GenericSocket {
      */
     public TieredSocket(GemInstance gem, int tier) {
         super(gem);
-        this.tier = Math.max(0, Math.min(3, tier));
+        this.tier = Math.max(0, Math.min(ForgeConfig.COMMON.maxSocketTier, tier));
     }
     
     /**
@@ -38,7 +39,7 @@ public class TieredSocket extends GenericSocket {
      */
     public TieredSocket(NBTTagCompound nbt) {
         super(nbt);
-        this.tier = Math.max(0, Math.min(3, nbt.getInteger("Tier")));
+        this.tier = Math.max(0, Math.min(ForgeConfig.COMMON.maxSocketTier, nbt.getInteger("Tier")));
     }
     
     /**
@@ -86,6 +87,10 @@ public class TieredSocket extends GenericSocket {
     protected static final ResourceLocation TIER_2_FILLED_TEXTURE = new ResourceLocation(Socketed.MODID, "textures/gui/container/socket_tier_2_filled.png");
     protected static final ResourceLocation TIER_3_EMPTY_TEXTURE = new ResourceLocation(Socketed.MODID, "textures/gui/container/socket_tier_3_empty.png");
     protected static final ResourceLocation TIER_3_FILLED_TEXTURE = new ResourceLocation(Socketed.MODID, "textures/gui/container/socket_tier_3_filled.png");
+    protected static final ResourceLocation TIER_4_EMPTY_TEXTURE = new ResourceLocation(Socketed.MODID, "textures/gui/container/socket_tier_4_empty.png");
+    protected static final ResourceLocation TIER_4_FILLED_TEXTURE = new ResourceLocation(Socketed.MODID, "textures/gui/container/socket_tier_4_filled.png");
+    protected static final ResourceLocation TIER_5_EMPTY_TEXTURE = new ResourceLocation(Socketed.MODID, "textures/gui/container/socket_tier_5_empty.png");
+    protected static final ResourceLocation TIER_5_FILLED_TEXTURE = new ResourceLocation(Socketed.MODID, "textures/gui/container/socket_tier_5_filled.png");
     
     /**
      * @return The resourcelocation of the texture to render in the socketing gui
@@ -98,6 +103,8 @@ public class TieredSocket extends GenericSocket {
             case 1: return this.isEmpty() ? TIER_1_EMPTY_TEXTURE : TIER_1_FILLED_TEXTURE;
             case 2: return this.isEmpty() ? TIER_2_EMPTY_TEXTURE : TIER_2_FILLED_TEXTURE;
             case 3: return this.isEmpty() ? TIER_3_EMPTY_TEXTURE : TIER_3_FILLED_TEXTURE;
+            case 4: return this.isEmpty() ? TIER_4_EMPTY_TEXTURE : TIER_4_FILLED_TEXTURE;
+            case 5: return this.isEmpty() ? TIER_5_EMPTY_TEXTURE : TIER_5_FILLED_TEXTURE;
         }
         return super.getSocketTexture();
     }
@@ -109,10 +116,12 @@ public class TieredSocket extends GenericSocket {
     @Nonnull
     public String getSocketTooltip() {
         switch(this.getTier()) {
-            case 0: return EnumRarity.COMMON.getColor() + I18n.format("socketed.tooltip.tier_0");
-            case 1: return EnumRarity.UNCOMMON.getColor() + I18n.format("socketed.tooltip.tier_1");
-            case 2: return EnumRarity.RARE.getColor() + I18n.format("socketed.tooltip.tier_2");
-            case 3: return EnumRarity.EPIC.getColor() + I18n.format("socketed.tooltip.tier_3");
+            case 0: return I18n.format("socketed.tooltip.tier_0");
+            case 1: return I18n.format("socketed.tooltip.tier_1");
+            case 2: return I18n.format("socketed.tooltip.tier_2");
+            case 3: return I18n.format("socketed.tooltip.tier_3");
+            case 4: return I18n.format("socketed.tooltip.tier_4");
+            case 5: return I18n.format("socketed.tooltip.tier_5");
         }
         return super.getSocketTooltip();
     }

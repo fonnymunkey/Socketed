@@ -36,6 +36,8 @@ public class ItemSocketTier extends ItemSocketGeneric {
 			case 1: tooltip.add(I18n.format("item.socketed.socket.socket_tier_1.tooltip")); break;
 			case 2: tooltip.add(I18n.format("item.socketed.socket.socket_tier_2.tooltip")); break;
 			case 3: tooltip.add(I18n.format("item.socketed.socket.socket_tier_3.tooltip")); break;
+			case 4: tooltip.add(I18n.format("item.socketed.socket.socket_tier_4.tooltip")); break;
+			case 5: tooltip.add(I18n.format("item.socketed.socket.socket_tier_5.tooltip")); break;
 		}
 	}
 }

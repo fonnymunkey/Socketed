@@ -18,10 +18,9 @@ public class ModItems {
     static {
         if(ForgeConfig.ADD_SOCKETS.registerSocketItems) {
             socketItems.add(new ItemSocketGeneric("socket_generic"));
-            socketItems.add(new ItemSocketTier("socket_tier_0", 0));
-            socketItems.add(new ItemSocketTier("socket_tier_1", 1));
-            socketItems.add(new ItemSocketTier("socket_tier_2", 2));
-            socketItems.add(new ItemSocketTier("socket_tier_3", 3));
+            for(int i = 0; i <= ForgeConfig.COMMON.maxSocketTier; i++) {
+                socketItems.add(new ItemSocketTier("socket_tier_" + i, i));
+            }
         }
     }
     
