@@ -5,13 +5,13 @@ item.socketed.socket.socket_generic.tooltip=Used to add a new Generic socket to 
 item.socketed.socket.socket_tier_0.tooltip=Used to add a new Common socket to an item
 item.socketed.socket.socket_tier_1.tooltip=Used to add a new Uncommon socket to an item
 item.socketed.socket.socket_tier_2.tooltip=Used to add a new Rare socket to an item
-item.socketed.socket.socket_tier_3.tooltip=Used to add a new Legendary socket to an item
+item.socketed.socket.socket_tier_3.tooltip=Used to add a new Epic socket to an item
 
 item.socketed.socket.socket_generic.name=Generic Socket
 item.socketed.socket.socket_tier_0.name=Common Socket
 item.socketed.socket.socket_tier_1.name=Uncommon Socket
 item.socketed.socket.socket_tier_2.name=Rare Socket
-item.socketed.socket.socket_tier_3.name=Legendary Socket
+item.socketed.socket.socket_tier_3.name=Epic Socket
 
 socketed.tooltip.socket=Sockets (%d/%d):
 socketed.tooltip.empty=Empty
@@ -47,10 +47,11 @@ socketed.tooltip.default.rgb=RGB Effects
 
 socketed.tooltip.gem=In Socket:
 
+socketed.tooltip.generic=(Generic)
 socketed.tooltip.tier_0=(Common)
 socketed.tooltip.tier_1=(Uncommon)
 socketed.tooltip.tier_2=(Rare)
-socketed.tooltip.tier_3=(Legendary)
+socketed.tooltip.tier_3=(Epic)
 
 socketed.tooltip.slottype.all=
 socketed.tooltip.slottype.none=()

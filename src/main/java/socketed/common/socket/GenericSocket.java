@@ -1,7 +1,11 @@
 package socketed.common.socket;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.Socketed;
 import socketed.common.socket.gem.GemInstance;
 import socketed.common.socket.gem.effect.GenericGemEffect;
@@ -170,9 +174,19 @@ public class GenericSocket {
     /**
      * @return The resourcelocation of the texture to render in the socketing gui
      */
+    @SideOnly(Side.CLIENT)
     @Nonnull
     public ResourceLocation getSocketTexture() {
         if(this.isEmpty()) return GENERIC_EMPTY_TEXTURE;
         return GENERIC_FILLED_TEXTURE;
+    }
+    
+    /**
+     * @return the tooltip to be displayed when hovering over this socket in gui while empty
+     */
+    @SideOnly(Side.CLIENT)
+    @Nonnull
+    public String getSocketTooltip() {
+        return TextFormatting.GOLD + I18n.format("socketed.tooltip.generic");
     }
 }

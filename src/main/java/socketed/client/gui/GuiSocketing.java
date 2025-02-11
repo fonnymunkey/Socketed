@@ -4,8 +4,11 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.client.config.GuiUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.Socketed;
@@ -14,6 +17,9 @@ import socketed.common.capabilities.socketable.ICapabilitySocketable;
 import socketed.common.container.ContainerSocketing;
 import socketed.common.socket.gem.GemType;
 import socketed.common.socket.GenericSocket;
+import socketed.mixin.vanilla.IGuiContainerMixin;
+
+import java.util.Collections;
 
 @SideOnly(Side.CLIENT)
 public class GuiSocketing extends GuiContainer {
@@ -37,7 +43,29 @@ public class GuiSocketing extends GuiContainer {
     public void initGui() {
         super.initGui();
     }
-
+    
+    @Override
+    protected void renderHoveredToolTip(int mouseX, int mouseY) {
+        if(this.mc.player.inventory.getItemStack().isEmpty() && ((IGuiContainerMixin)this).getHoveredSlot() != null) {
+            Slot slot = ((IGuiContainerMixin)this).getHoveredSlot();
+            if(slot.getHasStack()) {
+                this.renderToolTip(slot.getStack(), mouseX, mouseY);
+            }
+            else if(slot instanceof ContainerSocketing.SlotGem) {
+                ItemStack socketable = this.inventorySlots.getSlot(0).getStack();
+                if(!socketable.isEmpty()) {
+                    ICapabilitySocketable itemSockets = socketable.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
+                    if(itemSockets != null && itemSockets.getSocketCount() > 0) {
+                        GenericSocket socket = itemSockets.getSocketAt(slot.getSlotIndex() - 1);
+                        if(socket != null) {
+                            GuiUtils.drawHoveringText(Collections.singletonList("  " + TextFormatting.BOLD + socket.getSocketTooltip() + TextFormatting.RESET), mouseX, mouseY, width, height, 300, fontRenderer);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         String s = I18n.format("socketed.socketinggui.displayname");
         this.fontRenderer.drawString(s, 8, 6, 4210752);

@@ -1,7 +1,11 @@
 package socketed.common.socket;
 
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.Socketed;
 import socketed.common.socket.gem.GemInstance;
 import socketed.common.socket.gem.GemType;
@@ -86,6 +90,7 @@ public class TieredSocket extends GenericSocket {
     /**
      * @return The resourcelocation of the texture to render in the socketing gui
      */
+    @SideOnly(Side.CLIENT)
     @Nonnull
     public ResourceLocation getSocketTexture() {
         switch(this.getTier()) {
@@ -95,5 +100,20 @@ public class TieredSocket extends GenericSocket {
             case 3: return this.isEmpty() ? TIER_3_EMPTY_TEXTURE : TIER_3_FILLED_TEXTURE;
         }
         return super.getSocketTexture();
+    }
+    
+    /**
+     * @return the tooltip to be displayed when hovering over this socket in gui while empty
+     */
+    @SideOnly(Side.CLIENT)
+    @Nonnull
+    public String getSocketTooltip() {
+        switch(this.getTier()) {
+            case 0: return EnumRarity.COMMON.getColor() + I18n.format("socketed.tooltip.tier_0");
+            case 1: return EnumRarity.UNCOMMON.getColor() + I18n.format("socketed.tooltip.tier_1");
+            case 2: return EnumRarity.RARE.getColor() + I18n.format("socketed.tooltip.tier_2");
+            case 3: return EnumRarity.EPIC.getColor() + I18n.format("socketed.tooltip.tier_3");
+        }
+        return super.getSocketTooltip();
     }
 }

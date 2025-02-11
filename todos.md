@@ -1,5 +1,4 @@
 ## Todos + Ideas
-- GUI socket tier draw
 - additional effect types: 
   - +x lvl to specific enchant
   - whatever = slowness passive_nearby
