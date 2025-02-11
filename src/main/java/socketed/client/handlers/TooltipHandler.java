@@ -22,7 +22,10 @@ import socketed.common.socket.gem.GemType;
 import socketed.common.socket.gem.effect.GenericGemEffect;
 import socketed.common.util.SocketedUtil;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber
@@ -84,14 +87,29 @@ public class TooltipHandler {
                         }
                     }
                     //Gems
-                    for(GemInstance gemInstance : sockets.getAllGems(false)) {
-                        gemType = gemInstance.getGemType();
-                        //Display Name Tooltip
-                        insertTooltip(tooltips, " " + gemType.getColor() + I18n.format(gemType.getDisplayName()) + TextFormatting.RESET);
-                        
-                        //Effect Tooltips
-                        for(GenericGemEffect effect : gemInstance.getGemEffectsForStack(stack)) {
-                            insertTooltip(tooltips, "  " + gemType.getColor() + effect.getTooltipString(true) + TextFormatting.RESET);
+                    List<GemInstance> gemInstances = sockets.getAllGems(false);
+                    if(!gemInstances.isEmpty()) {
+                        Map<GemType,List<String>> mappedTips = new LinkedHashMap<>();
+                        for(GemInstance gemInstance : gemInstances) {
+                            gemType = gemInstance.getGemType();
+                            List<String> tipsForType = mappedTips.get(gemType);
+                            //Display Name Tooltip
+                            if(tipsForType == null) {
+                                tipsForType = new ArrayList<>();
+                                tipsForType.add(" " + gemType.getColor() + I18n.format(gemType.getDisplayName()) + TextFormatting.RESET);
+                            }
+                            //Effect Tooltips
+                            for(GenericGemEffect effect : gemInstance.getGemEffectsForStack(stack)) {
+                                tipsForType.add("  " + gemType.getColor() + effect.getTooltipString(true) + TextFormatting.RESET);
+                            }
+                            mappedTips.put(gemType, tipsForType);
+                        }
+                        //Reiterate tips to collect alike effects to reduce bloat
+                        //TODO: more efficient way of doing this?
+                        for(List<String> tipsForType : mappedTips.values()) {
+                            for(String tip : tipsForType) {
+                                insertTooltip(tooltips, tip);
+                            }
                         }
                     }
                 }

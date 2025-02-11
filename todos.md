@@ -1,6 +1,5 @@
 ## Todos + Ideas
 - GUI socket tier draw
-- collect identical effects on tooltip?
 - additional effect types: 
   - +x lvl to specific enchant
   - whatever = slowness passive_nearby
