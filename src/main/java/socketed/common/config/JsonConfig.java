@@ -10,6 +10,7 @@ import socketed.Socketed;
 import socketed.common.socket.gem.GemCombinationType;
 import socketed.common.socket.gem.GemType;
 import socketed.common.socket.gem.effect.activatable.IgniteGemEffect;
+import socketed.common.socket.gem.effect.activatable.KnockbackGemEffect;
 import socketed.common.socket.gem.util.RandomValueRange;
 import socketed.common.socket.gem.effect.*;
 import socketed.common.socket.gem.effect.activatable.PotionGemEffect;
@@ -80,6 +81,7 @@ public class JsonConfig {
         SocketedUtil.registerEffectType(AttributeGemEffect.TYPE_NAME, AttributeGemEffect.class, Socketed.MODID);
         SocketedUtil.registerEffectType(PotionGemEffect.TYPE_NAME, PotionGemEffect.class, Socketed.MODID);
         SocketedUtil.registerEffectType(IgniteGemEffect.TYPE_NAME, IgniteGemEffect.class, Socketed.MODID);
+        SocketedUtil.registerEffectType(KnockbackGemEffect.TYPE_NAME, KnockbackGemEffect.class, Socketed.MODID);
         SocketedUtil.registerActivator(PassiveSelfActivator.TYPE_NAME, PassiveSelfActivator.class, Socketed.MODID);
         SocketedUtil.registerActivator(PassiveAOEActivator.TYPE_NAME, PassiveAOEActivator.class, Socketed.MODID);
         SocketedUtil.registerActivator(AttackingActivator.TYPE_NAME, AttackingActivator.class, Socketed.MODID);

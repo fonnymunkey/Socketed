@@ -45,6 +45,8 @@ socketed.tooltip.default.diamond=Diamond Imbued
 socketed.tooltip.default.redstone=Energized
 socketed.tooltip.default.lapis=Enchanting Attuned
 socketed.tooltip.default.glowstone=Radiant
+socketed.tooltip.default.piston=Piston Actuated
+socketed.tooltip.default.sticky_piston=Grabber
 
 socketed.tooltip.default.three_diamonds=Could've been a diamond pick
 socketed.tooltip.default.rgb=RGB Effects
@@ -85,3 +87,5 @@ socketed.modifier.take.take.2=-%s%% to -%s%% %s
 attribute.name.socketed.durability=Durability
 
 socketed.tooltip.effect.ignite=Ignites for %ds
+socketed.tooltip.effect.knockback=Knocks Back
+socketed.tooltip.effect.knockback_inverted=Pulls

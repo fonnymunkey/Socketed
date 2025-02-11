@@ -7,6 +7,9 @@ import net.minecraft.util.text.TextFormatting;
 import socketed.common.attributes.SocketedAttributes;
 import socketed.common.socket.gem.GemCombinationType;
 import socketed.common.socket.gem.GemType;
+import socketed.common.socket.gem.effect.activatable.KnockbackGemEffect;
+import socketed.common.socket.gem.effect.activatable.activator.attack.AttackingActivator;
+import socketed.common.socket.gem.filter.ItemFilter;
 import socketed.common.socket.gem.util.RandomValueRange;
 import socketed.common.socket.gem.effect.AttributeGemEffect;
 import socketed.common.socket.gem.effect.activatable.PotionGemEffect;
@@ -70,6 +73,12 @@ public abstract class DefaultJsonConfig {
         registerDefaultGemType("glowstone", new GemType("socketed.tooltip.default.glowstone", 1, TextFormatting.YELLOW,
                                          Collections.singletonList(new PotionGemEffect(SocketedSlotTypes.HEAD, new PassiveAOEActivator(40, 16), MobEffects.GLOWING.getRegistryName().toString(), 0, 41)),
                                          Collections.singletonList(new OreFilter("dustGlowstone"))));
+        registerDefaultGemType("piston", new GemType("socketed.tooltip.default.piston", 1, TextFormatting.AQUA,
+                                                        Collections.singletonList(new KnockbackGemEffect(SocketedSlotTypes.HAND, new AttackingActivator(false, true, true, false, true), 2.0F, false)),
+                                                        Collections.singletonList(new ItemFilter("minecraft:piston", 0, false))));
+        registerDefaultGemType("sticky_piston", new GemType("socketed.tooltip.default.sticky_piston", 1, TextFormatting.GREEN,
+                                                     Collections.singletonList(new KnockbackGemEffect(SocketedSlotTypes.HAND, new AttackingActivator(false, true, true, false, true), 2.0F, true)),
+                                                     Collections.singletonList(new ItemFilter("minecraft:sticky_piston", 0, false))));
         
         //Gem Combination Types
         registerDefaultGemCombinationType("three_diamonds", new GemCombinationType(
