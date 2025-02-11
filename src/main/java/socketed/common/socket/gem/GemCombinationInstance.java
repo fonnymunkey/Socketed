@@ -3,7 +3,6 @@ package socketed.common.socket.gem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import socketed.common.socket.gem.GemCombinationType;
 import socketed.common.socket.gem.effect.GenericGemEffect;
 import socketed.common.util.SocketedUtil;
 
@@ -34,7 +33,7 @@ public class GemCombinationInstance {
      * Instantiate a new instance from NBT
      */
     public GemCombinationInstance(NBTTagCompound nbt) {
-        this.gemCombinationType = GemCombinationType.getGemCombinationTypeFromName(nbt.getString("GemCombinationType"));
+        this.gemCombinationType = SocketedUtil.getGemCombinationTypeFromName(nbt.getString("GemCombinationType"));
         if(this.gemCombinationType != null) {
             NBTTagList effectsNBT = nbt.getTagList("Effects",10);
             //As effects are stored ordered, only read the effects if the stored NBT size is as expected

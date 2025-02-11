@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import socketed.common.loot.DefaultSocketsGenerator;
+import socketed.common.util.SocketedUtil;
 
 import java.util.Collection;
 import java.util.Random;
@@ -25,9 +26,9 @@ public abstract class LootEntryItemMixin {
         //Attempt to add sockets to loot by default without specifying loot functions
         if(context.getLootedEntity() != null && context.getLootedEntity() instanceof EntityLivingBase) {
             //Mob specific loot generation
-            DefaultSocketsGenerator.addSockets(stack, DefaultSocketsGenerator.SocketedItemCreationContext.MOB_DROP);
+            SocketedUtil.addSocketsToStack(stack, DefaultSocketsGenerator.SocketedItemCreationContext.MOB_DROP);
         }
         //General loot generation such as chests
-        else DefaultSocketsGenerator.addSockets(stack, DefaultSocketsGenerator.SocketedItemCreationContext.LOOT);
+        else SocketedUtil.addSocketsToStack(stack, DefaultSocketsGenerator.SocketedItemCreationContext.LOOT);
     }
 }

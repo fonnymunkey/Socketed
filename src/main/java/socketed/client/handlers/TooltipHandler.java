@@ -13,7 +13,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.common.capabilities.socketable.CapabilitySocketableHandler;
-import socketed.common.config.JsonConfig;
 import socketed.common.socket.gem.GemCombinationInstance;
 import socketed.common.socket.gem.GemInstance;
 import socketed.common.capabilities.socketable.ICapabilitySocketable;
@@ -38,11 +37,11 @@ public class TooltipHandler {
         ItemStack stack = event.getItemStack();
         if(stack.isEmpty()) return;
         
-        if(!JsonConfig.hasCompletedLoading()) return;
+        if(!SocketedUtil.hasCompletedLoading()) return;
         
         ICapabilitySocketable sockets = stack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
         GemType gemType = null;
-        if(sockets == null) gemType = GemType.getGemTypeFromItemStack(stack);
+        if(sockets == null) gemType = SocketedUtil.getGemTypeFromItemStack(stack);
         if(sockets == null && gemType == null) return;
 
         List<String> tooltips = event.getToolTip();

@@ -7,7 +7,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.OreDictionary;
-import socketed.common.socket.gem.GemType;
 import socketed.common.socket.gem.effect.GenericGemEffect;
 import socketed.common.util.SocketedUtil;
 
@@ -34,7 +33,7 @@ public class GemInstance {
     public GemInstance(ItemStack stack) {
         this.itemId = stack.getItem().getRegistryName().toString();
         this.metadata = stack.getMetadata();
-        this.gemType = GemType.getGemTypeFromItemStack(stack);
+        this.gemType = SocketedUtil.getGemTypeFromItemStack(stack);
         if(this.gemType != null) {
             for(GenericGemEffect effect : this.gemType.getEffects()) {
                 this.effects.add(effect.instantiate());
@@ -48,7 +47,7 @@ public class GemInstance {
     public GemInstance(NBTTagCompound nbt) {
         this.itemId = nbt.getString("ItemId");
         this.metadata = nbt.getInteger("Metadata");
-        this.gemType = GemType.getGemTypeFromName(nbt.getString("GemType"));
+        this.gemType = SocketedUtil.getGemTypeFromName(nbt.getString("GemType"));
         if(this.gemType != null) {
             NBTTagList effectsNBT = nbt.getTagList("Effects", 10);
             //As effects are stored ordered, only read the effects if the stored NBT size is as expected

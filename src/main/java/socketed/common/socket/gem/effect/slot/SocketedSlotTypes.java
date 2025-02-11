@@ -29,7 +29,7 @@ public enum SocketedSlotTypes implements ISlotType {
 		@Override
 		public Set<ItemStack> getEquippedStacks(EntityPlayer player) {
 			HashSet<ItemStack> set = new HashSet<>();
-			for(ISlotType type : SocketedUtil.registeredSlots) {
+			for(ISlotType type : SocketedUtil.getAllSlotTypes()) {
 				if(this != type) set.addAll(type.getEquippedStacks(player));
 			}
 			return set;

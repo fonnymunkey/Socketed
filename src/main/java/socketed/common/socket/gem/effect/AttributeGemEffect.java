@@ -26,7 +26,7 @@ public class AttributeGemEffect extends GenericGemEffect {
     private final RandomValueRange amountRange;
 
     @SerializedName("Modifier Operation")
-    private final int operation;
+    private final Integer operation;
     
     private transient AttributeModifier modifier = null;
 
@@ -105,11 +105,17 @@ public class AttributeGemEffect extends GenericGemEffect {
         return new AttributeGemEffect(this);
     }
     
+    /**
+     * AttributeName: Required
+     * AmountRage: Required
+     * Operation: Required
+     */
     @Override
     public boolean validate() {
         if(super.validate()) {
             if(this.attributeName == null || this.attributeName.isEmpty()) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, attribute name null or empty");
             else if(this.amountRange == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, " + this.attributeName + ", amount range invalid");
+            else if(this.operation == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, " + this.attributeName + ", operation must be defined");
             else if(this.operation < 0 || this.operation > 2) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, " + this.attributeName + ", operation must be 0, 1, or 2");
             else return true;
         }

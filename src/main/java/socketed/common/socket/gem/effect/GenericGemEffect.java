@@ -44,6 +44,8 @@ public abstract class GenericGemEffect {
     /**
      * Attempts to validate this effect and setup caches from parsed values, such as Potion references
      * @return false if any required value is invalid, which should result in discarding this effect
+     *
+     * SlotType: Required
      */
     public boolean validate() {
         if(this.slotType == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, invalid slot type");

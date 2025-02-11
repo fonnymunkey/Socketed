@@ -13,10 +13,10 @@ public class OreFilter extends GenericFilter {
     public static final String TYPE_NAME = "Ore Dictionary";
 
     @SerializedName("Ore Dictionary Name")
-    private final String name;
+    private final String dictName;
 
     @SerializedName("Strict Metadata")
-    private final boolean strict;
+    private Boolean strict;
 
     public OreFilter(String name) {
         this(name, false);
@@ -24,19 +24,19 @@ public class OreFilter extends GenericFilter {
 
     public OreFilter(String name, boolean strict) {
         super();
-        this.name = name;
+        this.dictName = name;
         this.strict = strict;
     }
     
     @Nonnull
     public String getName() {
-        return this.name;
+        return this.dictName;
     }
 
     @Override
     public boolean matches(ItemStack input) {
         if(input == null || input.isEmpty()) return false;
-        NonNullList<ItemStack> list = OreDictionary.getOres(this.name, false);
+        NonNullList<ItemStack> list = OreDictionary.getOres(this.dictName, false);
         for(ItemStack stack : list) {
             if(stack.getItem().equals(input.getItem()) && (!this.strict || stack.getMetadata() == input.getMetadata())) {
                 return true;
@@ -50,12 +50,22 @@ public class OreFilter extends GenericFilter {
         return TYPE_NAME;
     }
     
+    /**
+     * DictName: Required
+     * Strict: Optional, default true
+     */
     @Override
     public boolean validate() {
-        if(this.name == null || this.name.isEmpty()) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Filter, name null or empty");
-        else if(!OreDictionary.doesOreNameExist(this.name)) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Filter, " + this.name + ", dictionary does not exist");
-        else if(OreDictionary.getOres(this.name, false).isEmpty()) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Filter, " + this.name.trim() + ", dictionary exists but is empty");
-        else return true;
+        if(this.strict == null) this.strict = true;
+        
+        if(this.dictName == null || this.dictName.isEmpty()) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Filter, dictionary name null or empty");
+        else {
+            //Warn but don't invalidate, in case ore dictionaries get added after loading
+            if(!OreDictionary.doesOreNameExist(this.dictName)) Socketed.LOGGER.warn(this.getTypeName() + " Filter " + this.dictName + " may be invalid, dictionary does not exist");
+            else if(OreDictionary.getOres(this.dictName, false).isEmpty()) Socketed.LOGGER.warn(this.getTypeName() + " Filter " + this.dictName + " may be invalid, dictionary exists but is empty");
+            
+            return true;
+        }
         return false;
     }
 }

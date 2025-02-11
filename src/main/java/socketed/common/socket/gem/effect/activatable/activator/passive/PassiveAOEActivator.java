@@ -17,7 +17,7 @@ public class PassiveAOEActivator extends PassiveActivator {
 	public static final String TYPE_NAME = "Passive AOE";
 	
 	@SerializedName("Block Range")
-	protected final int blockRange;
+	protected final Integer blockRange;
 	
 	public PassiveAOEActivator(int activationRate, int blockRange) {
 		super(activationRate);
@@ -50,10 +50,14 @@ public class PassiveAOEActivator extends PassiveActivator {
 		return TYPE_NAME;
 	}
 	
+	/**
+	 * BlockRange: Required
+	 */
 	@Override
 	public boolean validate() {
 		if(super.validate()) {
-			if(this.blockRange < 1) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Activator, block range must be greater than 0");
+			if(this.blockRange == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Activator, block range must be defined");
+			else if(this.blockRange < 1) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Activator, block range must be greater than 0");
 			else return true;
 		}
 		return false;

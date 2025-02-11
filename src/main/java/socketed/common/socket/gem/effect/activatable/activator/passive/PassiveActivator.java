@@ -15,7 +15,7 @@ import socketed.common.socket.gem.effect.activatable.activator.GenericActivator;
 public abstract class PassiveActivator extends GenericActivator {
 	
 	@SerializedName("Activation Rate")
-	protected final int activationRate;
+	protected final Integer activationRate;
 	
 	public PassiveActivator(int activationRate) {
 		super();
@@ -37,9 +37,13 @@ public abstract class PassiveActivator extends GenericActivator {
 	 */
 	public abstract void attemptPassiveActivation(ActivatableGemEffect effect, EntityPlayer player);
 	
+	/**
+	 * ActivationRate: Required
+	 */
 	@Override
 	public boolean validate() {
-		if(this.activationRate < 1) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Activator, activation rate must be greater than 0");
+		if(this.activationRate == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Activator, activation rate must be defined");
+		else if(this.activationRate < 1) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Activator, activation rate must be greater than 0");
 		else return true;
 		return false;
 	}

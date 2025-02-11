@@ -22,13 +22,13 @@ import socketed.common.socket.gem.effect.slot.SocketedSlotTypes;
 public abstract class AttackActivator extends GenericActivator {
 	
 	@SerializedName("Affects Self")
-	protected final boolean affectsSelf;
+	protected final Boolean affectsSelf;
 	
 	@SerializedName("Allows Melee")
-	protected final boolean allowsMelee;
+	protected Boolean allowsMelee;
 	
 	@SerializedName("Allows Ranged")
-	protected final boolean allowsRanged;
+	protected Boolean allowsRanged;
 	
 	public AttackActivator(boolean affectsSelf, boolean allowsMelee, boolean allowsRanged) {
 		super();
@@ -71,9 +71,18 @@ public abstract class AttackActivator extends GenericActivator {
 	 */
 	public abstract void attemptAttackActivation(ActivatableGemEffect effect, EntityPlayer player, EntityLivingBase target, EntityLivingBase attacker, boolean directlyActivated, DamageSource source);
 	
+	/**
+	 * AffectsSelf: Required
+	 * AllowsMelee: Optional, default true
+	 * AllowsRanged: Optional, default false
+	 */
 	@Override
 	public boolean validate() {
-		if(!this.allowsMelee && !this.allowsRanged) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Activator, must allow at least either melee or ranged");
+		if(this.allowsMelee == null) this.allowsMelee = true;
+		if(this.allowsRanged == null) this.allowsRanged = false;
+		
+		if(this.affectsSelf == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Activator, must define if it affects self");
+		else if(!this.allowsMelee && !this.allowsRanged) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Activator, must allow at least either melee or ranged");
 		else return true;
 		return false;
 	}

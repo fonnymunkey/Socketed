@@ -7,7 +7,6 @@ import socketed.common.config.JsonConfig;
 import socketed.common.socket.gem.effect.GenericGemEffect;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -23,19 +22,19 @@ public class GemCombinationType {
     private final String displayName;
     
     @SerializedName("Text Color")
-    private final TextFormatting color;
+    private TextFormatting color;
     
     @SerializedName("Strict Order")
-    private final Boolean isStrictOrder;
+    private Boolean isStrictOrder;
     
     @SerializedName("Strict Count")
-    private final Boolean isStrictSocketCount;
+    private Boolean isStrictSocketCount;
     
     @SerializedName("Allows Wrapping")
     private Boolean allowsWrapping;
     
     @SerializedName("Replaces Original Effects")
-    private final Boolean replacesOriginalEffects;
+    private Boolean replacesOriginalEffects;
     
     @SerializedName("Gem Types")
     private final List<String> gemTypes;
@@ -126,14 +125,26 @@ public class GemCombinationType {
             return 0;
         }
     }
-
+    
+    /**
+     * DisplayName: Required
+     * TextColor: Optional, default gray
+     * StrictOrder: Optional, default false
+     * StrictCount: Optional, default false
+     * AllowsWrapping: Optional, default true
+     * ReplacesOriginalEffects: Optional, default true
+     * GemTypes: Required
+     * Effects: Required
+     */
     public boolean validate() {
+        if(this.color == null) this.color = TextFormatting.GRAY;
+        if(this.isStrictOrder == null) this.isStrictOrder = false;
+        if(this.isStrictSocketCount == null) this.isStrictSocketCount = false;
+        if(this.allowsWrapping == null) this.allowsWrapping = true;
+        if(this.replacesOriginalEffects == null) this.replacesOriginalEffects = true;
+        
         if(this.name == null || this.name.isEmpty()) Socketed.LOGGER.warn("Invalid Gem Combination Type, name null or empty");
         else if(this.displayName == null || this.displayName.isEmpty()) Socketed.LOGGER.warn("Invalid Gem Combination Type, " + this.name + ", display name null or empty");
-        else if(this.color == null) Socketed.LOGGER.warn("Invalid Gem Combination Type, " + this.name + ", invalid color");
-        else if(this.isStrictOrder == null) Socketed.LOGGER.warn("Invalid Gem Combination Type, " + this.name + ", invalid strict order setting");
-        else if(this.isStrictSocketCount == null) Socketed.LOGGER.warn("Invalid Gem Combination Type, " + this.name + ", invalid strict count setting");
-        else if(this.replacesOriginalEffects == null) Socketed.LOGGER.warn("Invalid Gem Combination Type, " + this.name + ", invalid replaces original effects setting");
         else if(this.gemTypes == null) Socketed.LOGGER.warn("Invalid Gem Combination Type, " + this.name + ", invalid gem types list");
         else if(this.effects == null) Socketed.LOGGER.warn("Invalid Gem Combination Type, " + this.name + ", invalid effect list");
         else {
@@ -152,9 +163,6 @@ public class GemCombinationType {
                 if(JsonConfig.getGemData().containsKey(gemType)) validGemsSize++;
             }
             
-            //Default to true, optional entry
-            if(this.allowsWrapping == null) this.allowsWrapping = true;
-            
             if(totalGemsSize == 0) Socketed.LOGGER.warn("Invalid Gem Combination Type, " + this.name + ", no Gem Types provided");
             else if(validGemsSize != totalGemsSize) Socketed.LOGGER.warn("Invalid Gem Combination Type, " + this.name + ", not all Gem Types valid");
             else if(validEffectsSize == 0) Socketed.LOGGER.warn("Invalid Gem Combination Type, " + this.name + ", no valid effects");
@@ -168,15 +176,11 @@ public class GemCombinationType {
                                              ", Replaces Original Effects: " + this.replacesOriginalEffects +
                                              ", Valid Gem Types: " + validGemsSize + "/" + totalGemsSize +
                                              ", Valid Effects: " + validEffectsSize + "/" + totalEffectsSize);
+                //Warn but don't invalidate
+                if(validEffectsSize != totalEffectsSize) Socketed.LOGGER.warn("Possible invalid Gem Combination Type, " + this.name + ", not all effects valid");
                 return true;
             }
         }
         return false;
-    }
-    
-    @Nullable
-    public static GemCombinationType getGemCombinationTypeFromName(String gemCombinationTypeName) {
-        if(gemCombinationTypeName == null || gemCombinationTypeName.isEmpty()) return null;
-        return JsonConfig.getGemCombinationData().get(gemCombinationTypeName);
     }
 }

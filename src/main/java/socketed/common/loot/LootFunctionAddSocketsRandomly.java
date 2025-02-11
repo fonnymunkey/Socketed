@@ -11,6 +11,7 @@ import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import socketed.common.capabilities.socketable.CapabilitySocketableHandler;
 import socketed.common.capabilities.socketable.ICapabilitySocketable;
+import socketed.common.util.SocketedUtil;
 
 import javax.annotation.Nonnull;
 import java.util.Random;
@@ -32,8 +33,9 @@ public class LootFunctionAddSocketsRandomly extends LootFunction {
     @Nonnull
     public ItemStack apply(@Nonnull ItemStack stack, @Nonnull Random rand, @Nonnull LootContext context) {
         ICapabilitySocketable cap = stack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
-        if(cap != null)
-            DefaultSocketsGenerator.addSocketsRandomly(stack, maxSockets, rollCount, rollChance);
+        if(cap != null) {
+            SocketedUtil.addSocketsToStackRandomly(stack, maxSockets, rollCount, rollChance);
+        }
         return stack;
     }
 

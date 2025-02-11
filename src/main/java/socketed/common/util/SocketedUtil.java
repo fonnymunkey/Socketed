@@ -8,10 +8,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Level;
 import socketed.Socketed;
-import socketed.common.config.AddSocketsConfig;
-import socketed.common.config.ForgeConfig;
-import socketed.common.config.JsonConfig;
-import socketed.common.config.SocketableConfig;
+import socketed.common.config.*;
+import socketed.common.loot.DefaultSocketsGenerator;
+import socketed.common.loot.IItemCreationContext;
+import socketed.common.socket.gem.GemCombinationType;
 import socketed.common.socket.gem.GemType;
 import socketed.common.socket.gem.effect.GenericGemEffect;
 import socketed.common.socket.gem.effect.activatable.activator.GenericActivator;
@@ -19,14 +19,19 @@ import socketed.common.socket.gem.filter.GenericFilter;
 import socketed.common.socket.gem.effect.slot.ISlotType;
 import socketed.common.socket.GenericSocket;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 public abstract class SocketedUtil {
-
-    public static final List<ISlotType> registeredSlots = new ArrayList<>();
+    
+    private static final List<ISlotType> registeredSlots = new ArrayList<>();
+    
+    //
+    // Registrations
+    //
     
     public static void registerFilterType(String typeName, Class<? extends GenericFilter> typeClass, String modid) {
         Socketed.LOGGER.log(Level.INFO, "Registering Filter " + typeName + " from " + modid);
@@ -59,7 +64,7 @@ public abstract class SocketedUtil {
     /**
      * Used to allow addons to define their own item type definitions and rolls for socketing and loot
      */
-    public static void addForcedItemType(String name, Predicate<Item> canSocket, int rolls) {
+    public static void registerForcedItemType(String name, Predicate<Item> canSocket, int rolls) {
         Socketed.LOGGER.log(Level.INFO, "Registering Forced Socketable Item Type: " + name);
         SocketableConfig.forcedItemTypes.put(name, new SocketableConfig.SocketableType(canSocket));
         AddSocketsConfig.forcedItemTypeRolls.put(name, rolls);
@@ -69,19 +74,56 @@ public abstract class SocketedUtil {
     /**
      * Used to allow addons to define their own item type definitions and rolls for socketing and loot
      */
-    public static void addForcedItemType(String name, String regex, int rolls) {
+    public static void registerForcedItemType(String name, String regex, int rolls) {
         Socketed.LOGGER.log(Level.INFO, "Registering Forced Socketable Item Type: " + name);
         SocketableConfig.forcedItemTypes.put(name, new SocketableConfig.SocketableType(regex));
         AddSocketsConfig.forcedItemTypeRolls.put(name, rolls);
         ForgeConfig.reset();
     }
     
+    public static void registerDefaultGemType(String name, GemType gemType) {
+        DefaultJsonConfig.registerDefaultGemType(name, gemType);
+    }
+    
+    public static void registerDefaultGemCombinationType(String name, GemCombinationType gemCombinationType) {
+        DefaultJsonConfig.registerDefaultGemCombinationType(name, gemCombinationType);
+    }
+    
+    //
+    // Utility
+    //
+    
     /**
      * @return if the given ItemStack would be a valid gem
      */
     public static boolean stackIsGem(ItemStack stack) {
         if(stack.isEmpty()) return false;
-        return GemType.getGemTypeFromItemStack(stack) != null;
+        if(!SocketedUtil.hasCompletedLoading()) return false;
+        return SocketedUtil.getGemTypeFromItemStack(stack) != null;
+    }
+    
+    @Nullable
+    public static GemType getGemTypeFromItemStack(ItemStack itemStack) {
+        if(itemStack.isEmpty()) return null;
+        if(!SocketedUtil.hasCompletedLoading()) return null;
+        for(GemType gemType : JsonConfig.getSortedGemDataList()) {
+            if(gemType.matches(itemStack)) return gemType;
+        }
+        return null;
+    }
+    
+    @Nullable
+    public static GemType getGemTypeFromName(String gemTypeName) {
+        if(gemTypeName == null || gemTypeName.isEmpty()) return null;
+        if(!SocketedUtil.hasCompletedLoading()) return null;
+        return JsonConfig.getGemData().get(gemTypeName);
+    }
+    
+    @Nullable
+    public static GemCombinationType getGemCombinationTypeFromName(String gemCombinationTypeName) {
+        if(gemCombinationTypeName == null || gemCombinationTypeName.isEmpty()) return null;
+        if(!SocketedUtil.hasCompletedLoading()) return null;
+        return JsonConfig.getGemCombinationData().get(gemCombinationTypeName);
     }
     
     /**
@@ -92,6 +134,10 @@ public abstract class SocketedUtil {
     public static boolean isStackValidForSlot(ItemStack stack, ISlotType slotType) {
         if(stack.isEmpty()) return false;
         return slotType.isStackValid(stack);
+    }
+    
+    public static List<ISlotType> getAllSlotTypes() {
+        return registeredSlots;
     }
     
     /**
@@ -107,5 +153,30 @@ public abstract class SocketedUtil {
     @SideOnly(Side.CLIENT)
     public static String getSlotTooltip(ISlotType slotType) {
         return I18n.format("socketed.tooltip.slottype." + slotType.getTooltipKey());
+    }
+    
+    public static void addSocketsToStack(ItemStack stack, IItemCreationContext context) {
+        if(SocketedUtil.hasCompletedLoading()) {
+            DefaultSocketsGenerator.addSockets(stack, context);
+        }
+    }
+    
+    public static void addSocketsToStackRandomly(ItemStack stack, int maxSockets, int rollAmount, float rollChance) {
+        if(SocketedUtil.hasCompletedLoading()) {
+            DefaultSocketsGenerator.addSocketsRandomly(stack, maxSockets, rollAmount, rollChance);
+        }
+    }
+    
+    public static boolean canStackHaveSockets(ItemStack stack) {
+        if(SocketedUtil.hasCompletedLoading()) {
+            return ForgeConfig.SOCKETABLES.canSocket(stack);
+        }
+        return false;
+    }
+    
+    //Some ItemStacks/tooltips are created during loading causing data to be read before loading is finished
+    //These ItemStacks would not involve sockets anyways so ignore them if accessed during loading
+    public static boolean hasCompletedLoading() {
+        return JsonConfig.completedLoading;
     }
 }

@@ -12,7 +12,7 @@ public class DefaultSocketsGenerator {
     
     private static final Random RAND = new Random();
 
-    public static void addSockets(ItemStack stack, SocketedItemCreationContext context) {
+    public static void addSockets(ItemStack stack, IItemCreationContext context) {
         if(stack == null || stack.isEmpty() || stack.getMaxStackSize() > 1) return;
         ICapabilitySocketable itemSockets = stack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
         if(itemSockets == null) return;

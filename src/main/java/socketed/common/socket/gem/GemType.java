@@ -4,13 +4,11 @@ import com.google.gson.annotations.SerializedName;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import socketed.Socketed;
-import socketed.common.config.JsonConfig;
 import socketed.common.socket.gem.effect.GenericGemEffect;
 import socketed.common.socket.gem.filter.GenericFilter;
 import socketed.common.util.SocketedUtil;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,10 +23,10 @@ public class GemType {
     private final String displayName;
     
     @SerializedName("Gem Tier")
-    private final Integer tier;
+    private Integer tier;
     
     @SerializedName("Text Color")
-    private final TextFormatting color;
+    private TextFormatting color;
     
     @SerializedName("Effects")
     private List<GenericGemEffect> effects;
@@ -96,11 +94,20 @@ public class GemType {
         return false;
     }
     
+    /**
+     * DisplayName: Required
+     * GemTier: Optional, default 0
+     * TextColor: Optional, default gray
+     * Effects: Required
+     * Filters: Required
+     */
     public boolean validate() {
+        if(this.tier == null) this.tier = 0;
+        if(this.color == null) this.color = TextFormatting.GRAY;
+        
         if(this.name == null || this.name.isEmpty()) Socketed.LOGGER.warn("Invalid Gem Type, name null or empty");
         else if(this.displayName == null || this.displayName.isEmpty()) Socketed.LOGGER.warn("Invalid Gem Type, " + this.name + ", display name null or empty");
-        else if(this.tier == null) Socketed.LOGGER.warn("Invalid Gem Type, " + this.name + ", invalid tier");
-        else if(this.color == null) Socketed.LOGGER.warn("Invalid Gem Type, " + this.name + ", invalid color");
+        else if(this.tier < 0) Socketed.LOGGER.warn("Invalid Gem Type, " + this.name + ", tier must not be less than 0");
         else if(this.effects == null) Socketed.LOGGER.warn("Invalid Gem Type, " + this.name + ", invalid effect list");
         else if(this.filters == null) Socketed.LOGGER.warn("Invalid Gem Type, " + this.name + ", invalid filter list");
         else {
@@ -129,24 +136,12 @@ public class GemType {
                                              ", Color: " + this.color.name() +
                                              ", Valid Effects: " + validEffectsSize + "/" + totalEffectsSize +
                                              ", Valid Filters: " + validFiltersSize + "/" + totalFiltersSize);
+                //Warn but don't invalidate
+                if(validEffectsSize != totalEffectsSize) Socketed.LOGGER.warn("Possible invalid Gem Type, " + this.name + ", not all effects valid");
+                if(validFiltersSize != totalFiltersSize) Socketed.LOGGER.warn("Possible invalid Gem Type, " + this.name + ", not all filters valid");
                 return true;
             }
         }
         return false;
-    }
-
-    @Nullable
-    public static GemType getGemTypeFromItemStack(ItemStack itemStack) {
-        if(itemStack.isEmpty()) return null;
-        for(GemType gemType : JsonConfig.getSortedGemDataList()) {
-            if(gemType.matches(itemStack)) return gemType;
-        }
-        return null;
-    }
-    
-    @Nullable
-    public static GemType getGemTypeFromName(String gemTypeName) {
-        if(gemTypeName == null || gemTypeName.isEmpty()) return null;
-        return JsonConfig.getGemData().get(gemTypeName);
     }
 }

@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import socketed.common.loot.DefaultSocketsGenerator;
+import socketed.common.util.SocketedUtil;
 
 import java.util.Random;
 
@@ -22,6 +23,6 @@ public abstract class EntityVillagerListItemMixin {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/village/MerchantRecipeList;add(Ljava/lang/Object;)Z", remap = false)
     )
     private void socketed_vanillaEntityVillagerListItemForEmeralds_addMerchantRecipe(IMerchant merchant, MerchantRecipeList recipeList, Random random, CallbackInfo ci, @Local(ordinal = 1) ItemStack stack) {
-        DefaultSocketsGenerator.addSockets(stack, DefaultSocketsGenerator.SocketedItemCreationContext.MERCHANT);
+        SocketedUtil.addSocketsToStack(stack, DefaultSocketsGenerator.SocketedItemCreationContext.MERCHANT);
     }
 }

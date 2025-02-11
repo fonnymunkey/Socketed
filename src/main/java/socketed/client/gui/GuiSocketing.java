@@ -17,6 +17,7 @@ import socketed.common.capabilities.socketable.ICapabilitySocketable;
 import socketed.common.container.ContainerSocketing;
 import socketed.common.socket.gem.GemType;
 import socketed.common.socket.GenericSocket;
+import socketed.common.util.SocketedUtil;
 import socketed.mixin.vanilla.IGuiContainerMixin;
 
 import java.util.Collections;
@@ -87,7 +88,7 @@ public class GuiSocketing extends GuiContainer {
                 double angleIncr = 2.0D * Math.PI / Math.max(1, socketCount);
                 
                 ItemStack cursorStack = this.playerInventory.getItemStack();
-                GemType gemType = GemType.getGemTypeFromItemStack(cursorStack);
+                GemType gemType = SocketedUtil.getGemTypeFromItemStack(cursorStack);
                 for(int socketIndex = 0; socketIndex < socketCount; socketIndex++) {
                     GenericSocket socket = itemSockets.getSocketAt(socketIndex);
                     if(socket == null) continue;

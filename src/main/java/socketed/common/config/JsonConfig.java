@@ -47,7 +47,7 @@ public class JsonConfig {
     public static final Map<String, Class<? extends ISlotType>> slotTypeDeserializerMap = new HashMap<>();
     public static final Map<String, Function<NBTTagCompound, ? extends GenericSocket>> socketNBTDeserializerMap = new HashMap<>();
     
-    private static boolean completedLoading = false;
+    public static boolean completedLoading = false;
 
     public static void preInit(File file) {
         File modFolder = new File(file, Socketed.MODID);
@@ -93,12 +93,6 @@ public class JsonConfig {
         loadGemTypeData();
         loadGemCombinationData();
         completedLoading = true;
-    }
-    
-    //Some ItemStacks/tooltips are created during loading causing data to be read before loading is finished
-    //These ItemStacks would not involve sockets anyways so ignore them if accessed during loading
-    public static boolean hasCompletedLoading() {
-        return completedLoading;
     }
 
     public static Map<String, GemType> getGemData() {

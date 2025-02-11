@@ -21,10 +21,10 @@ public class PotionGemEffect extends ActivatableGemEffect {
     private final String potionName;
 
     @SerializedName("Amplifier")
-    private final int amplifier;
+    private final Integer amplifier;
 
     @SerializedName("Duration")
-    private final int duration;
+    private final Integer duration;
 
     private transient Potion potion;
     
@@ -70,6 +70,11 @@ public class PotionGemEffect extends ActivatableGemEffect {
         return TYPE_NAME;
     }
     
+    /**
+     * PotionName: Required
+     * Amplifier: Required
+     * Duration: Required
+     */
     @Override
     public boolean validate() {
         if(super.validate()) {
@@ -77,7 +82,9 @@ public class PotionGemEffect extends ActivatableGemEffect {
             else {
                 this.potion = Potion.getPotionFromResourceLocation(this.potionName);
                 if(this.potion == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, " + this.potionName + ", potion does not exist");
+                else if(this.amplifier == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, " + this.potionName + ", amplifier must be defined");
                 else if(this.amplifier < 0) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, " + this.potionName + ", amplifier can not be less than 0");
+                else if(this.duration == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, " + this.potionName + ", duration must be defined");
                 else if(this.duration < 0) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, " + this.potionName + ", duration can not be less than 0");
                 else return true;
             }

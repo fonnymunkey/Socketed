@@ -15,10 +15,10 @@ public class AttackingActivator extends AttackActivator {
 	public static final String TYPE_NAME = "Attacking";
 	
 	@SerializedName("Affects Target")
-	protected final boolean affectsTarget;
+	protected final Boolean affectsTarget;
 	
 	@SerializedName("Directly Activated")
-	protected final boolean directlyActivated;
+	protected Boolean directlyActivated;
 	
 	public AttackingActivator(boolean affectsSelf, boolean affectsTarget, boolean allowsMelee, boolean allowsRanged, boolean directlyActivated) {
 		super(affectsSelf, allowsMelee, allowsRanged);
@@ -73,10 +73,17 @@ public class AttackingActivator extends AttackActivator {
 		return TYPE_NAME;
 	}
 	
+	/**
+	 * AffectsTarget: Required
+	 * DirectlyActivated: Optional, default false
+	 */
 	@Override
 	public boolean validate() {
+		if(this.directlyActivated == null) this.directlyActivated = false;
+		
 		if(super.validate()) {
-			if(!this.affectsSelf && !this.affectsTarget) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Activator, must affect at least either self or target");
+			if(this.affectsTarget == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Activator, must define if it affects target");
+			else if(!this.affectsSelf && !this.affectsTarget) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Activator, must affect at least either self or target");
 			else return true;
 		}
 		return false;

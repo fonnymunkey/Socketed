@@ -14,10 +14,10 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import socketed.Socketed;
-import socketed.common.config.JsonConfig;
 import socketed.common.socket.gem.GemCombinationInstance;
 import socketed.common.config.ForgeConfig;
 import socketed.common.socket.GenericSocket;
+import socketed.common.util.SocketedUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -41,11 +41,11 @@ public class CapabilitySocketableHandler {
             ItemStack stack = event.getObject();
             if(stack.isEmpty()) return;
             if(stack.getMaxStackSize() > 1) return;
-            if(!JsonConfig.hasCompletedLoading()) return;
+            if(!SocketedUtil.hasCompletedLoading()) return;
             if(stack.hasCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null)) return;
 
             //Allowed item types that can get sockets
-            if(ForgeConfig.SOCKETABLES.canSocket(stack)) {
+            if(SocketedUtil.canStackHaveSockets(stack)) {
                 event.addCapability(CapabilitySocketableHandler.CAP_SOCKETABLE_KEY, new CapabilitySocketableHandler.Provider(stack));
                 
                 //This tag is only used for syncing, as share tag will not be sent to client if a stack does not have a non-capability tag

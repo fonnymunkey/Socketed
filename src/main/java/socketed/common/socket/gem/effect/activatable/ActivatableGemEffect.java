@@ -26,6 +26,9 @@ public abstract class ActivatableGemEffect extends GenericGemEffect {
 
     public abstract void performEffect(EntityLivingBase entity);
     
+    /**
+     * ActivatorType: Required
+     */
     @Override
     public boolean validate() {
         if(super.validate()) {
