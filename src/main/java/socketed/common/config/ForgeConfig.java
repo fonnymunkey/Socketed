@@ -43,6 +43,11 @@ public class ForgeConfig {
     public static class Client {
         //Unused currently
     }
+    
+    public static void reset() {
+        ForgeConfig.SOCKETABLES.reset();
+        ForgeConfig.ADD_SOCKETS.reset();
+    }
 
     @Mod.EventBusSubscriber(modid = socketed.Socketed.MODID)
     private static class EventHandler {
@@ -51,7 +56,7 @@ public class ForgeConfig {
         public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
             if(event.getModID().equals(socketed.Socketed.MODID)) {
                 ConfigManager.sync(socketed.Socketed.MODID, Config.Type.INSTANCE);
-                ForgeConfig.SOCKETABLES.reset();
+                ForgeConfig.reset();
             }
         }
     }

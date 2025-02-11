@@ -14,13 +14,14 @@ import socketed.common.util.AddSocketsHelper;
 import java.util.Random;
 
 @Mixin(EntityVillager.ListItemForEmeralds.class)
-public class EntityVillagerListItemMixin {
+public abstract class EntityVillagerListItemMixin {
+    
+    //TODO: Ensure results do not reroll by closing/opening GUI or reloading world
     @Inject(
             method = "addMerchantRecipe",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/village/MerchantRecipeList;add(Ljava/lang/Object;)Z"),
-            remap = false
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/village/MerchantRecipeList;add(Ljava/lang/Object;)Z", remap = false)
     )
-    private void socketed_entityVillagerListItem_addSockets(IMerchant merchant, MerchantRecipeList recipeList, Random random, CallbackInfo ci, @Local(ordinal = 1) ItemStack stack){
+    private void socketed_vanillaEntityVillagerListItemForEmeralds_addMerchantRecipe(IMerchant merchant, MerchantRecipeList recipeList, Random random, CallbackInfo ci, @Local(ordinal = 1) ItemStack stack) {
         AddSocketsHelper.addSockets(stack, AddSocketsHelper.EnumItemCreationContext.MERCHANT);
     }
 }

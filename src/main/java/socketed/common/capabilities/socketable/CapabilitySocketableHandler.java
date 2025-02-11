@@ -1,6 +1,5 @@
 package socketed.common.capabilities.socketable;
 
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,14 +11,12 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import socketed.Socketed;
 import socketed.common.instances.GemCombinationInstance;
 import socketed.common.config.ForgeConfig;
 import socketed.common.socket.GenericSocket;
-import socketed.common.util.AddSocketsHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -54,15 +51,6 @@ public class CapabilitySocketableHandler {
                 if(tag == null) tag = new NBTTagCompound();
                 tag.setBoolean("CanSocket", true);
                 stack.setTagCompound(tag);
-            }
-        }
-
-        //TODO: Mixin into LootTable::generateLootForPools instead to apply to all loot only? Allows for context checks and avoids affecting equipment
-        @SubscribeEvent
-        public static void onLivingDrops(LivingDropsEvent event) {
-            //TODO: stop socket farm where players just let mobs pick up unsocketed items until they get sockets
-            for(EntityItem itemDrop : event.getDrops()) {
-                AddSocketsHelper.addSockets(itemDrop.getItem(), AddSocketsHelper.EnumItemCreationContext.MOB_DROP);
             }
         }
     }

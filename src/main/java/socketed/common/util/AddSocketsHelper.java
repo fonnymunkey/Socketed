@@ -1,7 +1,6 @@
 package socketed.common.util;
 
 import net.minecraft.item.*;
-import net.minecraft.util.ResourceLocation;
 import socketed.common.capabilities.socketable.CapabilitySocketableHandler;
 import socketed.common.capabilities.socketable.ICapabilitySocketable;
 import socketed.common.config.ForgeConfig;
@@ -10,9 +9,11 @@ import socketed.common.socket.TieredSocket;
 import java.util.Random;
 
 public class AddSocketsHelper {
-    public static final Random RAND = new Random();
+    
+    private static final Random RAND = new Random();
 
     public static void addSockets(ItemStack stack, EnumItemCreationContext context) {
+        if(stack == null || stack.isEmpty() || stack.getMaxStackSize() > 1) return;
         ICapabilitySocketable itemSockets = stack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
         if(itemSockets == null) return;
         //Only add sockets to items that don't have sockets yet
@@ -26,64 +27,67 @@ public class AddSocketsHelper {
         // - and item material enchantability gives chance for the rolls
         // - example helmet: 3 rolls, diamond: each 50% chance
 
-        if(RAND.nextFloat() >= context.getChance()) return;
+        if(RAND.nextFloat() > context.getChance()) return;
+        
+        int rollAmount = AddSocketsHelper.getRollAmount(stack);
+        float rollChance = AddSocketsHelper.getRollChance(stack);
 
-        float rollChance = getRollChance(stack);
-        int rollAmount = getRollAmount(stack);
-
-        addSocketsRandomly(stack, context.getMaxSockets(), rollAmount, rollChance);
+        AddSocketsHelper.addSocketsRandomly(stack, context.getMaxSockets(), rollAmount, rollChance);
     }
 
-    public static void addSocketsRandomly(ItemStack socketable, int maxSockets, int rollAmount, float rollChance){
-        ICapabilitySocketable itemSockets = socketable.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
+    public static void addSocketsRandomly(ItemStack stack, int maxSockets, int rollAmount, float rollChance) {
+        if(stack == null || stack.isEmpty() || stack.getMaxStackSize() > 1) return;
+        ICapabilitySocketable itemSockets = stack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
         if(itemSockets == null) return;
+        //Only add sockets to items that don't have sockets yet
+        //Adding alreadyBeenChecked tag *shouldn't* be needed currently, at least not with the given contexts yet
+        if(itemSockets.getSocketCount() != 0) return;
 
-        for(int i = 0; i < rollAmount; i++){
+        for(int i = 0; i < rollAmount; i++) {
             if(itemSockets.getSocketCount() >= maxSockets) break;
-            if(RAND.nextFloat() < rollChance)
-                itemSockets.addSocket(new TieredSocket(getRandomTierForSocket()));
+            if(RAND.nextFloat() <= rollChance) {
+                //TODO: allow for default loot to get non-tiered sockets?
+                itemSockets.addSocket(new TieredSocket(AddSocketsHelper.getRandomTierForSocket()));
+            }
         }
     }
 
     private static int getRollAmount(ItemStack stack) {
         String socketableType = ForgeConfig.SOCKETABLES.getSocketableType(stack);
-        return ForgeConfig.ADD_SOCKETS.getSocketRollCount(socketableType);
+        return socketableType == null ? 0 : ForgeConfig.ADD_SOCKETS.getSocketRollCount(socketableType);
     }
 
     private static float getRollChance(ItemStack stack) {
         Item item = stack.getItem();
 
-        //Override by item id
-        ResourceLocation itemReg = item.getRegistryName();
-        if(itemReg != null){
-            float chance = ForgeConfig.ADD_SOCKETS.getSocketRollChance(itemReg.toString());
-            if(chance >= 0) return chance;
-        }
+        //Override by item
+        float chance = ForgeConfig.ADD_SOCKETS.getSocketRollChance(item);
+        if(chance >= 0) return chance;
 
         //Vanilla enchanting always uses enchantability divided by 4, so we do the same.
         //Items without a material will have tier 0 and use base chance only
-        int enchantabilityTier = item.getItemEnchantability(stack) / 4;
-
+        float enchantabilityTier = (float)item.getItemEnchantability(stack) / 4.0F;
         return ForgeConfig.ADD_SOCKETS.socketRollBaseChance + enchantabilityTier * ForgeConfig.ADD_SOCKETS.socketRollChancePerEnchantabilityTier;
     }
 
     private static int getRandomTierForSocket() {
         //Weighted roll
         int totalWeights = 0;
-        for(int weight : ForgeConfig.ADD_SOCKETS.socketTierWeights)
+        for(int weight : ForgeConfig.ADD_SOCKETS.socketTierWeights) {
             totalWeights += weight;
+        }
 
         int randWeight = RAND.nextInt(totalWeights);
-        for(int i = 0; i < ForgeConfig.ADD_SOCKETS.socketTierWeights.length; i++){
+        for(int i = 0; i < ForgeConfig.ADD_SOCKETS.socketTierWeights.length; i++) {
             randWeight -= ForgeConfig.ADD_SOCKETS.socketTierWeights[i];
-            if(randWeight < 0)
-                return i;
+            if(randWeight < 0) return i;
         }
         return 0;
     }
 
     public enum EnumItemCreationContext implements IAddSocketsCreationContext {
-        MERCHANT{
+        
+        MERCHANT {
             @Override public float getChance() {
                 return ForgeConfig.ADD_SOCKETS.chanceOnMerchant;
             }
@@ -91,6 +95,7 @@ public class AddSocketsHelper {
                 return ForgeConfig.ADD_SOCKETS.maxSocketsOnMerchant;
             }
         },
+        
         LOOT {
             @Override public float getChance() {
                 return ForgeConfig.ADD_SOCKETS.chanceOnLootGen;
@@ -99,6 +104,7 @@ public class AddSocketsHelper {
                 return ForgeConfig.ADD_SOCKETS.maxSocketsOnLootGen;
             }
         },
+        
         MOB_DROP {
             @Override public float getChance() {
                 return ForgeConfig.ADD_SOCKETS.chanceOnMobDrop;

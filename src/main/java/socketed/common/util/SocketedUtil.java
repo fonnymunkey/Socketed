@@ -1,13 +1,17 @@
 package socketed.common.util;
 
 import net.minecraft.client.resources.I18n;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Level;
 import socketed.Socketed;
+import socketed.common.config.AddSocketsConfig;
+import socketed.common.config.ForgeConfig;
 import socketed.common.config.JsonConfig;
+import socketed.common.config.SocketableConfig;
 import socketed.common.jsondata.GemType;
 import socketed.common.jsondata.entry.effect.GenericGemEffect;
 import socketed.common.jsondata.entry.effect.activatable.activator.GenericActivator;
@@ -18,6 +22,7 @@ import socketed.common.socket.GenericSocket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 public abstract class SocketedUtil {
 
@@ -49,6 +54,26 @@ public abstract class SocketedUtil {
     public static void registerSocket(String typeName, Function<NBTTagCompound, ? extends GenericSocket> fromNBTFunction, String modid) {
         Socketed.LOGGER.log(Level.INFO, "Registering Socket " + typeName + " from " + modid);
         JsonConfig.socketNBTDeserializerMap.put(typeName, fromNBTFunction);
+    }
+    
+    /**
+     * Used to allow addons to define their own item type definitions and rolls for socketing and loot
+     */
+    public static void addForcedItemType(String name, Predicate<Item> canSocket, int rolls) {
+        Socketed.LOGGER.log(Level.INFO, "Registering Forced Socketable Item Type: " + name);
+        SocketableConfig.forcedItemTypes.put(name, new SocketableConfig.SocketableType(canSocket));
+        AddSocketsConfig.forcedItemTypeRolls.put(name, rolls);
+        ForgeConfig.reset();
+    }
+    
+    /**
+     * Used to allow addons to define their own item type definitions and rolls for socketing and loot
+     */
+    public static void addForcedItemType(String name, String regex, int rolls) {
+        Socketed.LOGGER.log(Level.INFO, "Registering Forced Socketable Item Type: " + name);
+        SocketableConfig.forcedItemTypes.put(name, new SocketableConfig.SocketableType(regex));
+        AddSocketsConfig.forcedItemTypeRolls.put(name, rolls);
+        ForgeConfig.reset();
     }
     
     /**

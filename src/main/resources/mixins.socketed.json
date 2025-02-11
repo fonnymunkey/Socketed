@@ -6,6 +6,7 @@
   "target": "@env(DEFAULT)",
   "minVersion": "0.8",
   "mixins": [
+    "EntityLivingMixin",
     "EntityVillagerListEnchantedItemMixin",
     "EntityVillagerListItemMixin",
     "ItemMixin",

@@ -15,7 +15,7 @@ import java.util.function.Predicate;
 public class SocketableConfig {
 	
 	private static final Map<String, SocketableType> defaultItemTypes = new HashMap<>();
-	private static final Map<String, SocketableType> forcedItemTypes = new HashMap<>();
+	public static final Map<String, SocketableType> forcedItemTypes = new HashMap<>();
 	
 	static {
 		SocketableConfig.defaultItemTypes.put("HELMET", new SocketableType(v -> v instanceof ItemArmor && ((ItemArmor)v).getEquipmentSlot().equals(EntityEquipmentSlot.HEAD)));
@@ -30,24 +30,6 @@ public class SocketableConfig {
 		SocketableConfig.defaultItemTypes.put("HOE", new SocketableType(v -> v instanceof ItemHoe));
 		SocketableConfig.defaultItemTypes.put("SHOVEL", new SocketableType(v -> v instanceof ItemSpade));
 		SocketableConfig.defaultItemTypes.put("SHIELD", new SocketableType(v -> v instanceof ItemShield));
-	}
-	
-	/**
-	 * Used to allow addons to define their own item type definitions
-	 */
-	public static void addForcedItemType(String name, Predicate<Item> canSocket) {
-		Socketed.LOGGER.log(Level.INFO, "Registering Forced Socketable Item Type: " + name);
-		SocketableConfig.forcedItemTypes.put(name, new SocketableType(canSocket));
-		ForgeConfig.SOCKETABLES.reset();
-	}
-	
-	/**
-	 * Used to allow addons to define their own item type definitions
-	 */
-	public static void addForcedItemType(String name, String regex) {
-		Socketed.LOGGER.log(Level.INFO, "Registering Forced Socketable Item Type: " + name);
-		SocketableConfig.forcedItemTypes.put(name, new SocketableType(regex));
-		ForgeConfig.SOCKETABLES.reset();
 	}
 	
 	@Config.Comment(
@@ -129,7 +111,7 @@ public class SocketableConfig {
 	}
 
 	//TODO: Changed from ItemStack to Item to allow for caching easier, theoretically ItemStack data shouldn't make a difference from an Item for socketable, change in future if really required
-	private static class SocketableType {
+	public static class SocketableType {
 		private final Predicate<Item> canSocket;
 
 		public SocketableType(Predicate<Item> canSocket) {
