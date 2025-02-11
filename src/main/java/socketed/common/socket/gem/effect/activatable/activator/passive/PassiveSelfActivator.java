@@ -16,7 +16,7 @@ public class PassiveSelfActivator extends PassiveActivator {
 	
 	@Override
 	public void attemptPassiveActivation(ActivatableGemEffect effect, EntityPlayer player) {
-		effect.performEffect(player);
+		effect.performEffect(player, player);
 	}
 	
 	@SideOnly(Side.CLIENT)

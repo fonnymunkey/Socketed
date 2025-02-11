@@ -3,6 +3,7 @@ package socketed.common.socket.gem.effect.activatable;
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.fml.relauncher.Side;
@@ -49,7 +50,7 @@ public class PotionGemEffect extends ActivatableGemEffect {
     }
 
     @Override
-    public void performEffect(EntityLivingBase entity) {
+    public void performEffect(EntityPlayer player, EntityLivingBase entity) {
         if(entity != null && !entity.world.isRemote) {
             entity.addPotionEffect(new PotionEffect(this.getPotion(), this.getDuration(), this.getAmplifier()));
         }

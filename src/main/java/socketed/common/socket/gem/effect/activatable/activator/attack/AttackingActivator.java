@@ -46,8 +46,8 @@ public class AttackingActivator extends AttackActivator {
 		if(directlyActivated != this.getDirectlyActivated()) return;
 		//Player is the attacker
 		if(player == attacker) {
-			if(this.getAffectsSelf()) effect.performEffect(attacker);
-			if(this.getAffectsTarget()) effect.performEffect(target);
+			if(this.getAffectsSelf()) effect.performEffect(player, attacker);
+			if(this.getAffectsTarget()) effect.performEffect(player, target);
 		}
 	}
 	

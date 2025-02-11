@@ -35,7 +35,7 @@ public class PassiveAOEActivator extends PassiveActivator {
 	public void attemptPassiveActivation(ActivatableGemEffect effect, EntityPlayer player) {
 		List<EntityLivingBase> entitiesNearby = player.world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(player.getPosition()).grow(this.getBlockRange()));
 		for(EntityLivingBase entity : entitiesNearby) {
-			if(entity != player) effect.performEffect(entity);
+			if(entity != player) effect.performEffect(player, entity);
 		}
 	}
 	

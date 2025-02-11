@@ -2,12 +2,14 @@ package socketed.common.socket.gem.effect.activatable;
 
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import socketed.Socketed;
 import socketed.common.socket.gem.effect.GenericGemEffect;
 import socketed.common.socket.gem.effect.activatable.activator.GenericActivator;
 import socketed.common.socket.gem.effect.slot.ISlotType;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public abstract class ActivatableGemEffect extends GenericGemEffect {
 
@@ -23,8 +25,12 @@ public abstract class ActivatableGemEffect extends GenericGemEffect {
     public GenericActivator getActivatorType() {
         return this.activatorType;
     }
-
-    public abstract void performEffect(EntityLivingBase entity);
+    
+    /**
+     * @param player the player that is the source of the activation
+     * @param entity the entity that the effect should be performed on, may be the same as the player
+     */
+    public abstract void performEffect(EntityPlayer player, EntityLivingBase entity);
     
     /**
      * ActivatorType: Required
