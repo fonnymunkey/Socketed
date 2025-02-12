@@ -47,6 +47,10 @@ public class ForgeConfig {
         @Config.Comment("If Removable Gems is enabled, destroys the gem on removal instead of returning it to the player")
         @Config.Name("Destructive Gem Removal")
         public boolean destroyGemsOnRemoval = false;
+        
+        @Config.Comment("If enabled, Socketed will attempt to prevent items with sockets from being enchanted, and enchanted items from getting sockets")
+        @Config.Name("Enchantment Lock")
+        public boolean enchantmentLock = false;
     }
 
     public static class Client {

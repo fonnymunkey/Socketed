@@ -73,6 +73,7 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 	@Override
 	public void addSocket(GenericSocket socket) {
 		if(socket != null && this.sockets.size() < ForgeConfig.COMMON.maxSockets) {
+			if(ForgeConfig.COMMON.enchantmentLock && this.itemStack.isItemEnchanted()) return;
 			this.sockets.add(socket);
 			this.refreshCombinations();
 		}
@@ -87,6 +88,7 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 	@Override
 	public void addSocketFromNBT(String socketType, NBTTagCompound tags) {
 		if(socketType == null || socketType.isEmpty() || tags == null) return;
+		if(ForgeConfig.COMMON.enchantmentLock && this.itemStack.isItemEnchanted()) return;
 		
 		Function<NBTTagCompound, ? extends GenericSocket> fromNBTFunction = JsonConfig.socketNBTDeserializerMap.get(socketType);
 		//If an addon that added a socket was removed, remove the socket

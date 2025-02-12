@@ -7,8 +7,13 @@ import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import socketed.common.attributes.SocketedAttributes;
+import socketed.common.capabilities.socketable.CapabilitySocketableHandler;
+import socketed.common.capabilities.socketable.ICapabilitySocketable;
+import socketed.common.config.ForgeConfig;
 
 import java.util.Random;
 
@@ -23,7 +28,7 @@ public abstract class ItemStackMixin {
             at = @At(value = "HEAD"),
             argsOnly = true
     )
-    private int socketed_itemStack_changeDurabilityDamage(int amount, @Local(argsOnly = true) Random rand, @Local(argsOnly = true) EntityPlayerMP player) {
+    private int socketed_vanillaItemStack_attemptDamageItem(int amount, @Local(argsOnly = true) Random rand, @Local(argsOnly = true) EntityPlayerMP player) {
         if(player == null) return amount;
         if(!this.isItemStackDamageable()) return amount;
         
@@ -47,5 +52,21 @@ public abstract class ItemStackMixin {
         }
         //Note: different to unbreaking we don't differentiate between armor and tools/weapons
         return Math.max(0, actualNewAmount);
+    }
+    
+    @Inject(
+            method = "isItemEnchantable",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private void socketed_vanillaItemStack_isItemEnchantable(CallbackInfoReturnable<Boolean> cir) {
+        if(ForgeConfig.COMMON.enchantmentLock) {
+            if(((ItemStack)(Object)this).getMaxStackSize() == 1) {
+                ICapabilitySocketable cap = ((ItemStack)(Object)this).getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
+                if(cap != null && cap.getSocketCount() > 0) {
+                    cir.setReturnValue(false);
+                }
+            }
+        }
     }
 }
