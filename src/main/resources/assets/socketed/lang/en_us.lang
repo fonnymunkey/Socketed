@@ -21,20 +21,19 @@ socketed.tooltip.socket=Sockets (%d/%d):
 socketed.tooltip.empty=Empty
 socketed.tooltip.holdshift=Hold <Shift> for more info
 
-socketed.tooltip.activator.passive_self=Passively:
-socketed.tooltip.activator.passive_aoe=Within %d Blocks:
-socketed.tooltip.activator.attacking_indirect=Attacking%1$s%2$s:
-socketed.tooltip.activator.attacking_direct=Used In Attack%1$s%2$s:
-socketed.tooltip.activator.attacked=Attacked%1$s%2$s:
+socketed.tooltip.activator.passive_self=Passive:
+socketed.tooltip.activator.passive_self_aoe=Passive AOE (%db):
+socketed.tooltip.activator.attacking=Attacking (%s):
+socketed.tooltip.activator.attacking_aoe=Attacking AOE (%s/%db):
+socketed.tooltip.activator.attacked=Attacked (%s):
+socketed.tooltip.activator.attacked_aoe=Attacked AOE (%s/%db):
 
-socketed.tooltip.attack.melee= (Melee)
-socketed.tooltip.attack.ranged= (Ranged)
-socketed.tooltip.attack.melee_ranged=
-socketed.tooltip.attack.self= (Self)
-socketed.tooltip.attack.target= (Target)
-socketed.tooltip.attack.attacker= (Attacker)
-socketed.tooltip.attack.self_target= (Self/Target)
-socketed.tooltip.attack.self_attacker= (Self/Attacker)
+socketed.tooltip.attack.melee=Melee
+socketed.tooltip.attack.ranged=Ranged
+socketed.tooltip.attack.self=Self
+socketed.tooltip.attack.target=Target
+socketed.tooltip.attack.attacker=Attacker
+socketed.tooltip.attack.both=Both
 
 socketed.tooltip.default.obsidian_damage=Obsidian Tipped
 socketed.tooltip.default.stone_damage=Whet Stone

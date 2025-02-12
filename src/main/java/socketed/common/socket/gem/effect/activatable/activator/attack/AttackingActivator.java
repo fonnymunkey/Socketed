@@ -45,17 +45,17 @@ public class AttackingActivator extends AttackActivator {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public String getTooltipString() {
-		return I18n.format(this.getDirectlyActivated() ? "socketed.tooltip.activator.attacking_direct" : "socketed.tooltip.activator.attacking_indirect",
+		return I18n.format("socketed.tooltip.activator.attacking",
 						   (this.getAllowsMelee() ?
-						   this.getAllowsRanged() ?
-						   I18n.format("socketed.tooltip.attack.melee_ranged") :
-						   I18n.format("socketed.tooltip.attack.melee") :
-						   I18n.format("socketed.tooltip.attack.ranged")),
-						   (this.getAffectsSelf() ?
-						   this.getAffectsOther() ?
-						   I18n.format("socketed.tooltip.attack.self_target") :
-						   I18n.format("socketed.tooltip.attack.self") :
-						   I18n.format("socketed.tooltip.attack.target"))
+							this.getAllowsRanged() ?
+							"" :
+							I18n.format("socketed.tooltip.attack.melee") + "/" :
+							I18n.format("socketed.tooltip.attack.ranged") + "/") +
+							(this.getAffectsSelf() ?
+							 this.getAffectsOther() ?
+							 I18n.format("socketed.tooltip.attack.both") :
+							 I18n.format("socketed.tooltip.attack.self") :
+							 I18n.format("socketed.tooltip.attack.target"))
 						  );
 	}
 	

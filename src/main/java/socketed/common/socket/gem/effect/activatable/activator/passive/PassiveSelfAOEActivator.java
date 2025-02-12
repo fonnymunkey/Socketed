@@ -32,7 +32,7 @@ public class PassiveSelfAOEActivator extends PassiveAOEActivator {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public String getTooltipString() {
-		return I18n.format("socketed.tooltip.activator.passive_aoe", this.getBlockRange());
+		return I18n.format("socketed.tooltip.activator.passive_self_aoe", this.getBlockRange());
 	}
 	
 	@Override

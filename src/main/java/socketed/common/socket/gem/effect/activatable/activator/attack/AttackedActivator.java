@@ -36,12 +36,12 @@ public class AttackedActivator extends AttackActivator {
 		return I18n.format("socketed.tooltip.activator.attacked",
 						   (this.getAllowsMelee() ?
 							this.getAllowsRanged() ?
-							I18n.format("socketed.tooltip.attack.melee_ranged") :
-							I18n.format("socketed.tooltip.attack.melee") :
-							I18n.format("socketed.tooltip.attack.ranged")),
-						   (this.getAffectsSelf() ?
+							"" :
+							I18n.format("socketed.tooltip.attack.melee") + "/" :
+							I18n.format("socketed.tooltip.attack.ranged") + "/") +
+							(this.getAffectsSelf() ?
 							this.getAffectsOther() ?
-							I18n.format("socketed.tooltip.attack.self_attacker") :
+							I18n.format("socketed.tooltip.attack.both") :
 							I18n.format("socketed.tooltip.attack.self") :
 							I18n.format("socketed.tooltip.attack.attacker"))
 						  );

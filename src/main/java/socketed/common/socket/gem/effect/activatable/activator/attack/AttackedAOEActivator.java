@@ -45,21 +45,21 @@ public class AttackedAOEActivator extends AttackAOEActivator {
 		}
 	}
 	
-	//TODO
 	@SideOnly(Side.CLIENT)
 	@Override
 	public String getTooltipString() {
-		return I18n.format("socketed.tooltip.activator.attacked",
+		return I18n.format("socketed.tooltip.activator.attacked_aoe",
 						   (this.getAllowsMelee() ?
 							this.getAllowsRanged() ?
-							I18n.format("socketed.tooltip.attack.melee_ranged") :
-							I18n.format("socketed.tooltip.attack.melee") :
-							I18n.format("socketed.tooltip.attack.ranged")),
-						   (this.getAffectsSelf() ?
-							this.getAffectsOther() ?
-							I18n.format("socketed.tooltip.attack.self_attacker") :
-							I18n.format("socketed.tooltip.attack.self") :
-							I18n.format("socketed.tooltip.attack.attacker"))
+							"" :
+							I18n.format("socketed.tooltip.attack.melee") + "/" :
+							I18n.format("socketed.tooltip.attack.ranged") + "/") +
+							(this.getAOEAroundSelf() ?
+							 this.getAOEAroundOther() ?
+							 I18n.format("socketed.tooltip.attack.both") :
+							 I18n.format("socketed.tooltip.attack.self") :
+							 I18n.format("socketed.tooltip.attack.attacker")),
+						   this.getBlockRange()
 						  );
 	}
 	
