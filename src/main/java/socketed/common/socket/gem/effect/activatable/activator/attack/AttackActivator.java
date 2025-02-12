@@ -24,15 +24,19 @@ public abstract class AttackActivator extends GenericActivator {
 	@SerializedName("Affects Self")
 	protected final Boolean affectsSelf;
 	
+	@SerializedName("Affects Other")
+	protected final Boolean affectsOther;
+	
 	@SerializedName("Allows Melee")
 	protected Boolean allowsMelee;
 	
 	@SerializedName("Allows Ranged")
 	protected Boolean allowsRanged;
 	
-	public AttackActivator(boolean affectsSelf, boolean allowsMelee, boolean allowsRanged) {
+	public AttackActivator(boolean affectsSelf, boolean affectsOther, boolean allowsMelee, boolean allowsRanged) {
 		super();
 		this.affectsSelf = affectsSelf;
+		this.affectsOther = affectsOther;
 		this.allowsMelee = allowsMelee;
 		this.allowsRanged = allowsRanged;
 	}
@@ -42,6 +46,13 @@ public abstract class AttackActivator extends GenericActivator {
 	 */
 	public boolean getAffectsSelf() {
 		return this.affectsSelf;
+	}
+	
+	/**
+	 * @return if this activator should affect the other entity involved (ex. Attacker/Target)
+	 */
+	public boolean getAffectsOther() {
+		return this.affectsOther;
 	}
 	
 	/**
@@ -59,20 +70,23 @@ public abstract class AttackActivator extends GenericActivator {
 	}
 	
 	/**
-	 * Called during LivingAttackEvent depending on if melee/ranged options match
+	 * Called during LivingAttackEvent
 	 * Only called on the server thread
 	 * Target and attacker can not be the same entity
 	 * @param effect the effect to be performed if this activator is successful
 	 * @param player the player that is the source of the effect
 	 * @param target the target of the attack, may be the player
 	 * @param attacker the attacker performing the attack, may be the player
-	 * @param directlyActivated if the source of the effect is the attacker's weapon rather than the player's cache
+	 * @param isMelee if the attack is a melee attack
+	 * @param isRanged if the attack is a ranged attack
+	 * @param directlyActivated if the source of the effect is the attacker's weapon rather than the player's effect cache
 	 * @param source the damagesource of the attack for additional context
 	 */
-	public abstract void attemptAttackActivation(ActivatableGemEffect effect, EntityPlayer player, EntityLivingBase target, EntityLivingBase attacker, boolean directlyActivated, DamageSource source);
+	public abstract void attemptAttackActivation(ActivatableGemEffect effect, EntityPlayer player, EntityLivingBase target, EntityLivingBase attacker, boolean isMelee, boolean isRanged, boolean directlyActivated, DamageSource source);
 	
 	/**
 	 * AffectsSelf: Required
+	 * AffectsOther: Required
 	 * AllowsMelee: Optional, default true
 	 * AllowsRanged: Optional, default false
 	 */
@@ -82,7 +96,7 @@ public abstract class AttackActivator extends GenericActivator {
 		if(this.allowsRanged == null) this.allowsRanged = false;
 		
 		if(this.affectsSelf == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Activator, must define if it affects self");
-		else if(!this.allowsMelee && !this.allowsRanged) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Activator, must allow at least either melee or ranged");
+		else if(this.affectsOther == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Activator, must define if it affects other entity");
 		else return true;
 		return false;
 	}
@@ -133,9 +147,7 @@ public abstract class AttackActivator extends GenericActivator {
 					ActivatableGemEffect activatableGemEffect = (ActivatableGemEffect)effect;
 					if(activatableGemEffect.getActivatorType() instanceof AttackActivator) {
 						AttackActivator attackActivator = ((AttackActivator)activatableGemEffect.getActivatorType());
-						if((attackActivator.getAllowsMelee() && isMelee) || (attackActivator.getAllowsRanged() && isRanged)) {
-							attackActivator.attemptAttackActivation(activatableGemEffect, player, player, attacker, false, source);
-						}
+						attackActivator.attemptAttackActivation(activatableGemEffect, player, player, attacker, isMelee, isRanged, false, source);
 					}
 				}
 			}
@@ -151,9 +163,7 @@ public abstract class AttackActivator extends GenericActivator {
 					ActivatableGemEffect activatableGemEffect = (ActivatableGemEffect)effect;
 					if(activatableGemEffect.getActivatorType() instanceof AttackActivator) {
 						AttackActivator attackActivator = ((AttackActivator)activatableGemEffect.getActivatorType());
-						if((attackActivator.getAllowsMelee() && isMelee) || (attackActivator.getAllowsRanged() && isRanged)) {
-							attackActivator.attemptAttackActivation(activatableGemEffect, player, target, player, false, source);
-						}
+						attackActivator.attemptAttackActivation(activatableGemEffect, player, target, player, isMelee, isRanged, false, source);
 					}
 				}
 			}
@@ -172,9 +182,7 @@ public abstract class AttackActivator extends GenericActivator {
 					ActivatableGemEffect activatableGemEffect = (ActivatableGemEffect)effect;
 					if(activatableGemEffect.getActivatorType() instanceof AttackActivator) {
 						AttackActivator attackActivator = ((AttackActivator)activatableGemEffect.getActivatorType());
-						if((attackActivator.getAllowsMelee() && isMelee) || (attackActivator.getAllowsRanged() && isRanged)) {
-							attackActivator.attemptAttackActivation(activatableGemEffect, player, target, player, true, source);
-						}
+						attackActivator.attemptAttackActivation(activatableGemEffect, player, target, player, isMelee, isRanged, true, source);
 					}
 				}
 			}

@@ -30,7 +30,7 @@ public abstract class PassiveActivator extends GenericActivator {
 	}
 	
 	/**
-	 * Called every x ticks as defined by the activation rate
+	 * Called on LivingUpdateEvent for players
 	 * Only called on the server thread
 	 * @param effect the effect to be performed if this activator is successful
 	 * @param player the player that is the source of the effect
@@ -68,9 +68,7 @@ public abstract class PassiveActivator extends GenericActivator {
 					ActivatableGemEffect activatableGemEffect = (ActivatableGemEffect)effect;
 					if(activatableGemEffect.getActivatorType() instanceof PassiveActivator) {
 						PassiveActivator passiveActivator = (PassiveActivator)activatableGemEffect.getActivatorType();
-						if(player.ticksExisted%passiveActivator.getActivationRate() == 0) {
-							passiveActivator.attemptPassiveActivation(activatableGemEffect, player);
-						}
+						passiveActivator.attemptPassiveActivation(activatableGemEffect, player);
 					}
 				}
 			}

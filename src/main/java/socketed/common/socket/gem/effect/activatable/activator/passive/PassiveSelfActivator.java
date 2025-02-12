@@ -8,7 +8,7 @@ import socketed.common.socket.gem.effect.activatable.ActivatableGemEffect;
 
 public class PassiveSelfActivator extends PassiveActivator {
 	
-	public static final String TYPE_NAME = "Passive Self";
+	public static final String TYPE_NAME = "Passive";
 	
 	public PassiveSelfActivator(int activationRate) {
 		super(activationRate);
@@ -16,7 +16,9 @@ public class PassiveSelfActivator extends PassiveActivator {
 	
 	@Override
 	public void attemptPassiveActivation(ActivatableGemEffect effect, EntityPlayer player) {
-		effect.performEffect(player, player);
+		if(player.ticksExisted % this.getActivationRate() == 0) {
+			effect.performEffect(player, player);
+		}
 	}
 	
 	@SideOnly(Side.CLIENT)

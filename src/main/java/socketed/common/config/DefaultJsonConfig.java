@@ -9,11 +9,11 @@ import socketed.common.socket.gem.GemCombinationType;
 import socketed.common.socket.gem.GemType;
 import socketed.common.socket.gem.effect.activatable.KnockbackGemEffect;
 import socketed.common.socket.gem.effect.activatable.activator.attack.AttackingActivator;
+import socketed.common.socket.gem.effect.activatable.activator.passive.PassiveSelfAOEActivator;
 import socketed.common.socket.gem.filter.ItemFilter;
 import socketed.common.socket.gem.util.RandomValueRange;
 import socketed.common.socket.gem.effect.AttributeGemEffect;
 import socketed.common.socket.gem.effect.activatable.PotionGemEffect;
-import socketed.common.socket.gem.effect.activatable.activator.passive.PassiveAOEActivator;
 import socketed.common.socket.gem.effect.activatable.activator.passive.PassiveSelfActivator;
 import socketed.common.socket.gem.filter.OreFilter;
 import socketed.common.socket.gem.effect.slot.SocketedSlotTypes;
@@ -71,7 +71,7 @@ public abstract class DefaultJsonConfig {
                                                 new AttributeGemEffect(SocketedSlotTypes.BODY, SharedMonsterAttributes.MOVEMENT_SPEED.getName(), new RandomValueRange(0.05F, false), 1)),
                                         Collections.singletonList(new OreFilter("dustRedstone"))));
         registerDefaultGemType("glowstone", new GemType("socketed.tooltip.default.glowstone", 1, TextFormatting.YELLOW,
-                                         Collections.singletonList(new PotionGemEffect(SocketedSlotTypes.HEAD, new PassiveAOEActivator(40, 16), MobEffects.GLOWING.getRegistryName().toString(), 0, 41)),
+                                         Collections.singletonList(new PotionGemEffect(SocketedSlotTypes.HEAD, new PassiveSelfAOEActivator(40, 16, false), MobEffects.GLOWING.getRegistryName().toString(), 0, 41)),
                                          Collections.singletonList(new OreFilter("dustGlowstone"))));
         registerDefaultGemType("piston", new GemType("socketed.tooltip.default.piston", 1, TextFormatting.AQUA,
                                                         Collections.singletonList(new KnockbackGemEffect(SocketedSlotTypes.HAND, new AttackingActivator(false, true, true, false, true), 2.0F, false)),
@@ -89,6 +89,6 @@ public abstract class DefaultJsonConfig {
                 "socketed.tooltip.default.rgb", TextFormatting.GOLD, true,false, true, false,
                 Arrays.asList("redstone", "lucky", "diamond"),
                 Arrays.asList(new PotionGemEffect(SocketedSlotTypes.ALL, new PassiveSelfActivator(9), MobEffects.GLOWING.getRegistryName().toString(), 0, 10),
-                              new PotionGemEffect(SocketedSlotTypes.ALL, new PassiveAOEActivator(40, 8), MobEffects.GLOWING.getRegistryName().toString(), 0, 41))));
+                              new PotionGemEffect(SocketedSlotTypes.ALL, new PassiveSelfAOEActivator(40, 8, false), MobEffects.GLOWING.getRegistryName().toString(), 0, 41))));
     }
 }

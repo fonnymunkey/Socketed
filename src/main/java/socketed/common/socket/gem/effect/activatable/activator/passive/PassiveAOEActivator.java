@@ -1,27 +1,20 @@
 package socketed.common.socket.gem.effect.activatable.activator.passive;
 
 import com.google.gson.annotations.SerializedName;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.Socketed;
-import socketed.common.socket.gem.effect.activatable.ActivatableGemEffect;
 
-import java.util.List;
-
-public class PassiveAOEActivator extends PassiveActivator {
-	
-	public static final String TYPE_NAME = "Passive AOE";
+public abstract class PassiveAOEActivator extends PassiveActivator {
 	
 	@SerializedName("Block Range")
 	protected final Integer blockRange;
 	
-	public PassiveAOEActivator(int activationRate, int blockRange) {
+	@SerializedName("Affects Self")
+	protected Boolean affectsSelf;
+	
+	public PassiveAOEActivator(int activationRate, int blockRange, boolean affectsSelf) {
 		super(activationRate);
 		this.blockRange = blockRange;
+		this.affectsSelf = affectsSelf;
 	}
 	
 	/**
@@ -31,30 +24,21 @@ public class PassiveAOEActivator extends PassiveActivator {
 		return this.blockRange;
 	}
 	
-	@Override
-	public void attemptPassiveActivation(ActivatableGemEffect effect, EntityPlayer player) {
-		List<EntityLivingBase> entitiesNearby = player.world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(player.getPosition()).grow(this.getBlockRange()));
-		for(EntityLivingBase entity : entitiesNearby) {
-			if(entity != player) effect.performEffect(player, entity);
-		}
-	}
-	
-	@SideOnly(Side.CLIENT)
-	@Override
-	public String getTooltipString() {
-		return I18n.format("socketed.tooltip.activator.passive_aoe", this.getBlockRange());
-	}
-	
-	@Override
-	public String getTypeName() {
-		return TYPE_NAME;
+	/**
+	 * @return if this activator should affect the player source of the effect
+	 */
+	public boolean getAffectsSelf() {
+		return this.affectsSelf;
 	}
 	
 	/**
 	 * BlockRange: Required
+	 * AffectsSelf: Optional, default false
 	 */
 	@Override
 	public boolean validate() {
+		if(this.affectsSelf == null) this.affectsSelf = false;
+		
 		if(super.validate()) {
 			if(this.blockRange == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Activator, block range must be defined");
 			else if(this.blockRange < 1) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Activator, block range must be greater than 0");
