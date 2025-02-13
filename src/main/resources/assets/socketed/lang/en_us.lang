@@ -88,3 +88,5 @@ attribute.name.socketed.durability=Durability
 socketed.tooltip.effect.ignite=Ignites for %ds
 socketed.tooltip.effect.knockback=Knocks Back
 socketed.tooltip.effect.knockback_inverted=Pulls
+
+socketed.tooltip.effect.deathtotem=Death Totem Chance: %s

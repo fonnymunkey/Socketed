@@ -84,6 +84,7 @@ public class JsonConfig {
         SocketedUtil.registerEffectType(PotionGemEffect.TYPE_NAME, PotionGemEffect.class, Socketed.MODID);
         SocketedUtil.registerEffectType(IgniteGemEffect.TYPE_NAME, IgniteGemEffect.class, Socketed.MODID);
         SocketedUtil.registerEffectType(KnockbackGemEffect.TYPE_NAME, KnockbackGemEffect.class, Socketed.MODID);
+        SocketedUtil.registerEffectType(DeathTotemGemEffect.TYPE_NAME, DeathTotemGemEffect.class, Socketed.MODID);
         SocketedUtil.registerActivator(PassiveSelfActivator.TYPE_NAME, PassiveSelfActivator.class, Socketed.MODID);
         SocketedUtil.registerActivator(PassiveSelfAOEActivator.TYPE_NAME, PassiveSelfAOEActivator.class, Socketed.MODID);
         SocketedUtil.registerActivator(AttackingActivator.TYPE_NAME, AttackingActivator.class, Socketed.MODID);
