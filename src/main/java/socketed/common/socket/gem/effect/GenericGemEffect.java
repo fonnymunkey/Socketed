@@ -13,6 +13,7 @@ public abstract class GenericGemEffect {
 
     @SerializedName(TYPE_FIELD)
     protected final String type = this.getTypeName();
+    
     @SerializedName("Equipment Slot Type")
     protected final ISlotType slotType;
     

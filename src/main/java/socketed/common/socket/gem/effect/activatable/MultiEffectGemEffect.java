@@ -1,0 +1,82 @@
+package socketed.common.socket.gem.effect.activatable;
+
+import com.google.gson.annotations.SerializedName;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import socketed.Socketed;
+import socketed.common.socket.gem.effect.activatable.activator.MultiEffectActivator;
+import socketed.common.socket.gem.effect.activatable.activator.GenericActivator;
+import socketed.common.socket.gem.effect.activatable.callback.IEffectCallback;
+import socketed.common.socket.gem.effect.activatable.target.GenericTarget;
+import socketed.common.socket.gem.effect.slot.ISlotType;
+import socketed.common.socket.gem.effect.slot.SocketedSlotTypes;
+
+import javax.annotation.Nullable;
+import java.util.List;
+
+public class MultiEffectGemEffect extends ActivatableGemEffect {
+    
+    public static final String TYPE_NAME = "Multi Effect";
+    
+    @SerializedName("Sub-Effects")
+    private final List<ActivatableGemEffect> effects;
+    
+    public MultiEffectGemEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets, List<ActivatableGemEffect> effects) {
+        super(slotType, activator, targets);
+        this.effects = effects;
+    }
+
+    @Override
+    public void performEffect(@Nullable IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget) {
+        if(playerSource != null && effectTarget != null && !playerSource.world.isRemote) {
+            for(ActivatableGemEffect effect : this.effects) {
+                //Shouldn't be possible after validation, but sanity check
+                if(!(effect.getActivator() instanceof MultiEffectActivator)) continue;
+                ((MultiEffectActivator)effect.getActivator()).attemptMultiEffectActivation(effect, callback, playerSource, effectTarget);
+            }
+        }
+    }
+    
+    //TODO handle this better for activators/targets/conditions, add tooltip override option to gem for less bloat on complicated effects
+    @SideOnly(Side.CLIENT)
+    @Override
+    public String getTooltipString(boolean onItem) {
+        return "";
+    }
+    
+    @Override
+    public String getTypeName() {
+        return TYPE_NAME;
+    }
+    
+    /**
+     * Effects: Required, atleast two, must use MultiEffectActivator for activators and ALL for ISlotType
+     */
+    @Override
+    public boolean validate() {
+        if(super.validate()) {
+            if(this.effects == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, sub-effects list invalid");
+            else if(this.effects.size() < 2) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, must have at least two sub-effects");
+            else {
+                for(ActivatableGemEffect effect : this.effects) {
+                    if(effect == null || !effect.validate()) {
+                        Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, sub-effect invalid");
+                        return false;
+                    }
+                    else if(!(effect.getActivator() instanceof MultiEffectActivator)) {
+                        Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, sub-effect activator must be a Multi Effect activator");
+                        return false;
+                    }
+                    else if(effect.getSlotType() != SocketedSlotTypes.ALL) {
+                        Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, sub-effect slot type must be ALL");
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+}

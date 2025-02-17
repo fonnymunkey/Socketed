@@ -9,18 +9,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import socketed.Socketed;
 import socketed.common.socket.gem.GemCombinationType;
 import socketed.common.socket.gem.GemType;
-import socketed.common.socket.gem.effect.activatable.IgniteGemEffect;
-import socketed.common.socket.gem.effect.activatable.KnockbackGemEffect;
-import socketed.common.socket.gem.effect.activatable.activator.attack.AttackedAOEActivator;
-import socketed.common.socket.gem.effect.activatable.activator.attack.AttackingAOEActivator;
-import socketed.common.socket.gem.effect.activatable.activator.passive.PassiveSelfAOEActivator;
+import socketed.common.socket.gem.effect.activatable.*;
+import socketed.common.socket.gem.effect.activatable.activator.*;
+import socketed.common.socket.gem.effect.activatable.condition.ChanceCondition;
+import socketed.common.socket.gem.effect.activatable.condition.GenericCondition;
+import socketed.common.socket.gem.effect.activatable.condition.MultiCondition;
+import socketed.common.socket.gem.effect.activatable.target.*;
 import socketed.common.socket.gem.util.RandomValueRange;
 import socketed.common.socket.gem.effect.*;
-import socketed.common.socket.gem.effect.activatable.PotionGemEffect;
-import socketed.common.socket.gem.effect.activatable.activator.GenericActivator;
-import socketed.common.socket.gem.effect.activatable.activator.attack.AttackedActivator;
-import socketed.common.socket.gem.effect.activatable.activator.attack.AttackingActivator;
-import socketed.common.socket.gem.effect.activatable.activator.passive.PassiveSelfActivator;
 import socketed.common.socket.gem.effect.slot.SocketedSlotTypes;
 import socketed.common.socket.gem.effect.slot.ISlotType;
 import socketed.common.socket.GenericSocket;
@@ -48,6 +44,8 @@ public class JsonConfig {
     public static final Map<String, Class<? extends GenericFilter>> filterDeserializerMap = new HashMap<>();
     public static final Map<String, Class<? extends GenericGemEffect>> gemEffectDeserializerMap = new HashMap<>();
     public static final Map<String, Class<? extends GenericActivator>> activatorDeserializerMap = new HashMap<>();
+    public static final Map<String, Class<? extends GenericTarget>> targetDeserializerMap = new HashMap<>();
+    public static final Map<String, Class<? extends GenericCondition>> conditionDeserializerMap = new HashMap<>();
     public static final Map<String, Class<? extends ISlotType>> slotTypeDeserializerMap = new HashMap<>();
     public static final Map<String, Function<NBTTagCompound, ? extends GenericSocket>> socketNBTDeserializerMap = new HashMap<>();
     
@@ -80,18 +78,31 @@ public class JsonConfig {
     public static void init() {
         SocketedUtil.registerFilterType(ItemFilter.TYPE_NAME, ItemFilter.class, Socketed.MODID);
         SocketedUtil.registerFilterType(OreFilter.TYPE_NAME, OreFilter.class, Socketed.MODID);
+        
         SocketedUtil.registerEffectType(AttributeGemEffect.TYPE_NAME, AttributeGemEffect.class, Socketed.MODID);
         SocketedUtil.registerEffectType(PotionGemEffect.TYPE_NAME, PotionGemEffect.class, Socketed.MODID);
         SocketedUtil.registerEffectType(IgniteGemEffect.TYPE_NAME, IgniteGemEffect.class, Socketed.MODID);
         SocketedUtil.registerEffectType(KnockbackGemEffect.TYPE_NAME, KnockbackGemEffect.class, Socketed.MODID);
-        SocketedUtil.registerEffectType(DeathTotemGemEffect.TYPE_NAME, DeathTotemGemEffect.class, Socketed.MODID);
-        SocketedUtil.registerActivator(PassiveSelfActivator.TYPE_NAME, PassiveSelfActivator.class, Socketed.MODID);
-        SocketedUtil.registerActivator(PassiveSelfAOEActivator.TYPE_NAME, PassiveSelfAOEActivator.class, Socketed.MODID);
+        SocketedUtil.registerEffectType(UndyingTotemGemEffect.TYPE_NAME, UndyingTotemGemEffect.class, Socketed.MODID);
+        SocketedUtil.registerEffectType(CancelEventGemEffect.TYPE_NAME, CancelEventGemEffect.class, Socketed.MODID);
+        SocketedUtil.registerEffectType(MultiEffectGemEffect.TYPE_NAME, MultiEffectGemEffect.class, Socketed.MODID);
+        
+        SocketedUtil.registerActivator(PassiveActivator.TYPE_NAME, PassiveActivator.class, Socketed.MODID);
         SocketedUtil.registerActivator(AttackingActivator.TYPE_NAME, AttackingActivator.class, Socketed.MODID);
         SocketedUtil.registerActivator(AttackedActivator.TYPE_NAME, AttackedActivator.class, Socketed.MODID);
-        SocketedUtil.registerActivator(AttackingAOEActivator.TYPE_NAME, AttackingAOEActivator.class, Socketed.MODID);
-        SocketedUtil.registerActivator(AttackedAOEActivator.TYPE_NAME, AttackedAOEActivator.class, Socketed.MODID);
+        SocketedUtil.registerActivator(DeathTotemCheckActivator.TYPE_NAME, DeathTotemCheckActivator.class, Socketed.MODID);
+        SocketedUtil.registerActivator(MultiEffectActivator.TYPE_NAME, MultiEffectActivator.class, Socketed.MODID);
+        
+        SocketedUtil.registerTarget(SelfTarget.TYPE_NAME, SelfTarget.class, Socketed.MODID);
+        SocketedUtil.registerTarget(OtherTarget.TYPE_NAME, OtherTarget.class, Socketed.MODID);
+        SocketedUtil.registerTarget(SelfAOETarget.TYPE_NAME, SelfAOETarget.class, Socketed.MODID);
+        SocketedUtil.registerTarget(OtherAOETarget.TYPE_NAME, OtherAOETarget.class, Socketed.MODID);
+        
+        SocketedUtil.registerCondition(MultiCondition.TYPE_NAME, MultiCondition.class, Socketed.MODID);
+        SocketedUtil.registerCondition(ChanceCondition.TYPE_NAME, ChanceCondition.class, Socketed.MODID);
+        
         SocketedUtil.registerSlotTypes(SocketedSlotTypes.class, Socketed.MODID);
+        
         SocketedUtil.registerSocket(GenericSocket.TYPE_NAME, GenericSocket::new, Socketed.MODID);
         SocketedUtil.registerSocket(TieredSocket.TYPE_NAME, TieredSocket::new, Socketed.MODID);
         

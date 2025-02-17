@@ -8,13 +8,15 @@ import socketed.common.attributes.SocketedAttributes;
 import socketed.common.socket.gem.GemCombinationType;
 import socketed.common.socket.gem.GemType;
 import socketed.common.socket.gem.effect.activatable.KnockbackGemEffect;
-import socketed.common.socket.gem.effect.activatable.activator.attack.AttackingActivator;
-import socketed.common.socket.gem.effect.activatable.activator.passive.PassiveSelfAOEActivator;
+import socketed.common.socket.gem.effect.activatable.activator.AttackingActivator;
+import socketed.common.socket.gem.effect.activatable.activator.PassiveActivator;
+import socketed.common.socket.gem.effect.activatable.target.OtherTarget;
+import socketed.common.socket.gem.effect.activatable.target.SelfAOETarget;
+import socketed.common.socket.gem.effect.activatable.target.SelfTarget;
 import socketed.common.socket.gem.filter.ItemFilter;
 import socketed.common.socket.gem.util.RandomValueRange;
 import socketed.common.socket.gem.effect.AttributeGemEffect;
 import socketed.common.socket.gem.effect.activatable.PotionGemEffect;
-import socketed.common.socket.gem.effect.activatable.activator.passive.PassiveSelfActivator;
 import socketed.common.socket.gem.filter.OreFilter;
 import socketed.common.socket.gem.effect.slot.SocketedSlotTypes;
 
@@ -52,7 +54,7 @@ public abstract class DefaultJsonConfig {
                                             Arrays.asList(new OreFilter("stone"),
                                                           new OreFilter("cobblestone"))));
         registerDefaultGemType("sticky", new GemType("socketed.tooltip.default.sticky", 0, TextFormatting.DARK_GREEN,
-                                      Collections.singletonList(new PotionGemEffect(SocketedSlotTypes.BODY, new PassiveSelfActivator(9), MobEffects.SLOWNESS.getRegistryName().toString(), 0, 10)),
+                                      Collections.singletonList(new PotionGemEffect(SocketedSlotTypes.BODY, new PassiveActivator(null, 9), Collections.singletonList(new SelfTarget(null)), MobEffects.SLOWNESS.getRegistryName().toString(), 0, 10)),
                                       Collections.singletonList(new OreFilter("slimeball"))));
         registerDefaultGemType("lucky", new GemType("socketed.tooltip.default.lucky", 2, TextFormatting.GREEN,
                                      Collections.singletonList(new AttributeGemEffect(SocketedSlotTypes.ALL, SharedMonsterAttributes.LUCK.getName(), new RandomValueRange(2, false), 0)),
@@ -71,13 +73,13 @@ public abstract class DefaultJsonConfig {
                                                 new AttributeGemEffect(SocketedSlotTypes.BODY, SharedMonsterAttributes.MOVEMENT_SPEED.getName(), new RandomValueRange(0.05F, false), 1)),
                                         Collections.singletonList(new OreFilter("dustRedstone"))));
         registerDefaultGemType("glowstone", new GemType("socketed.tooltip.default.glowstone", 1, TextFormatting.YELLOW,
-                                         Collections.singletonList(new PotionGemEffect(SocketedSlotTypes.HEAD, new PassiveSelfAOEActivator(40, 16, false), MobEffects.GLOWING.getRegistryName().toString(), 0, 41)),
+                                         Collections.singletonList(new PotionGemEffect(SocketedSlotTypes.HEAD, new PassiveActivator(null, 40), Collections.singletonList(new SelfAOETarget(null, 16)), MobEffects.GLOWING.getRegistryName().toString(), 0, 41)),
                                          Collections.singletonList(new OreFilter("dustGlowstone"))));
         registerDefaultGemType("piston", new GemType("socketed.tooltip.default.piston", 1, TextFormatting.AQUA,
-                                                        Collections.singletonList(new KnockbackGemEffect(SocketedSlotTypes.HAND, new AttackingActivator(false, true, true, false, true), 2.0F, false)),
+                                                        Collections.singletonList(new KnockbackGemEffect(SocketedSlotTypes.HAND, new AttackingActivator(null, true, false, true), Collections.singletonList(new OtherTarget(null)), 2.0F, false)),
                                                         Collections.singletonList(new ItemFilter("minecraft:piston", 0, false))));
         registerDefaultGemType("sticky_piston", new GemType("socketed.tooltip.default.sticky_piston", 1, TextFormatting.GREEN,
-                                                     Collections.singletonList(new KnockbackGemEffect(SocketedSlotTypes.HAND, new AttackingActivator(false, true, true, false, true), 2.0F, true)),
+                                                     Collections.singletonList(new KnockbackGemEffect(SocketedSlotTypes.HAND, new AttackingActivator(null, true, false, true), Collections.singletonList(new OtherTarget(null)), 2.0F, true)),
                                                      Collections.singletonList(new ItemFilter("minecraft:sticky_piston", 0, false))));
         
         //Gem Combination Types
@@ -86,9 +88,8 @@ public abstract class DefaultJsonConfig {
                 Arrays.asList("diamond", "diamond", "diamond"),
                 Collections.singletonList(new AttributeGemEffect(SocketedSlotTypes.HAND, SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new RandomValueRange(9, false), 0))));
         registerDefaultGemCombinationType("rgb", new GemCombinationType(
-                "socketed.tooltip.default.rgb", TextFormatting.GOLD, true,false, true, false,
-                Arrays.asList("redstone", "lucky", "diamond"),
-                Arrays.asList(new PotionGemEffect(SocketedSlotTypes.ALL, new PassiveSelfActivator(9), MobEffects.GLOWING.getRegistryName().toString(), 0, 10),
-                              new PotionGemEffect(SocketedSlotTypes.ALL, new PassiveSelfAOEActivator(40, 8, false), MobEffects.GLOWING.getRegistryName().toString(), 0, 41))));
+				"socketed.tooltip.default.rgb", TextFormatting.GOLD, true, false, true, false,
+				Arrays.asList("redstone", "lucky", "diamond"),
+                Collections.singletonList(new PotionGemEffect(SocketedSlotTypes.ALL, new PassiveActivator(null, 40), Arrays.asList(new SelfTarget(null), new SelfAOETarget(null, 8)), MobEffects.GLOWING.getRegistryName().toString(), 0, 41))));
     }
 }

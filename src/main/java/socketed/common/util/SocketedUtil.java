@@ -15,6 +15,8 @@ import socketed.common.socket.gem.GemCombinationType;
 import socketed.common.socket.gem.GemType;
 import socketed.common.socket.gem.effect.GenericGemEffect;
 import socketed.common.socket.gem.effect.activatable.activator.GenericActivator;
+import socketed.common.socket.gem.effect.activatable.target.GenericTarget;
+import socketed.common.socket.gem.effect.activatable.condition.GenericCondition;
 import socketed.common.socket.gem.filter.GenericFilter;
 import socketed.common.socket.gem.effect.slot.ISlotType;
 import socketed.common.socket.GenericSocket;
@@ -46,6 +48,16 @@ public abstract class SocketedUtil {
     public static void registerActivator(String typeName, Class<? extends GenericActivator> typeClass, String modid) {
         Socketed.LOGGER.log(Level.INFO, "Registering Activator " + typeName + " from " + modid);
         JsonConfig.activatorDeserializerMap.put(typeName, typeClass);
+    }
+    
+    public static void registerTarget(String typeName, Class<? extends GenericTarget> typeClass, String modid) {
+        Socketed.LOGGER.log(Level.INFO, "Registering Target " + typeName + " from " + modid);
+        JsonConfig.targetDeserializerMap.put(typeName, typeClass);
+    }
+    
+    public static void registerCondition(String typeName, Class<? extends GenericCondition> typeClass, String modid) {
+        Socketed.LOGGER.log(Level.INFO, "Registering Condition " + typeName + " from " + modid);
+        JsonConfig.conditionDeserializerMap.put(typeName, typeClass);
     }
 
     public static <T extends Enum<T> & ISlotType> void registerSlotTypes(Class<T> typeClass, String modid) {

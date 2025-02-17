@@ -10,9 +10,12 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.Socketed;
 import socketed.common.socket.gem.effect.activatable.activator.GenericActivator;
+import socketed.common.socket.gem.effect.activatable.callback.IEffectCallback;
+import socketed.common.socket.gem.effect.activatable.target.GenericTarget;
 import socketed.common.socket.gem.effect.slot.ISlotType;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class PotionGemEffect extends ActivatableGemEffect {
     
@@ -29,38 +32,25 @@ public class PotionGemEffect extends ActivatableGemEffect {
 
     private transient Potion potion;
     
-    public PotionGemEffect(ISlotType slotType, GenericActivator activator, String potionName, int amplifier, int duration) {
-        super(slotType, activator);
+    public PotionGemEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets, String potionName, int amplifier, int duration) {
+        super(slotType, activator, targets);
         this.potionName = potionName;
         this.amplifier = amplifier;
         this.duration = duration;
     }
 
-    @Nonnull
-    public Potion getPotion() {
-        return this.potion;
-    }
-
-    public int getAmplifier() {
-        return this.amplifier;
-    }
-
-    public int getDuration() {
-        return this.duration;
-    }
-
     @Override
-    public void performEffect(EntityPlayer player, EntityLivingBase entity) {
-        if(entity != null && !entity.world.isRemote) {
-            entity.addPotionEffect(new PotionEffect(this.getPotion(), this.getDuration(), this.getAmplifier()));
+    public void performEffect(@Nullable IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget) {
+        if(playerSource != null && effectTarget != null && !playerSource.world.isRemote) {
+            effectTarget.addPotionEffect(new PotionEffect(this.potion, this.duration, this.amplifier));
         }
     }
     
     @SideOnly(Side.CLIENT)
     @Override
     public String getTooltipString(boolean onItem) {
-        String tooltip = this.getActivatorType().getTooltipString() + " " + I18n.format(this.getPotion().getName());
-        int potionLvl = this.getAmplifier() + 1;
+        String tooltip = this.getActivator().getTooltipString() + " " + I18n.format(this.potion.getName());
+        int potionLvl = this.amplifier + 1;
         if(potionLvl == 1) return tooltip;
         else if(potionLvl > 1 && potionLvl <= 10) return tooltip + " " + I18n.format("enchantment.level." + potionLvl);
         else return tooltip + " " + potionLvl;

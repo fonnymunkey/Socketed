@@ -9,7 +9,12 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.Socketed;
 import socketed.common.socket.gem.effect.activatable.activator.GenericActivator;
+import socketed.common.socket.gem.effect.activatable.callback.IEffectCallback;
+import socketed.common.socket.gem.effect.activatable.target.GenericTarget;
 import socketed.common.socket.gem.effect.slot.ISlotType;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class KnockbackGemEffect extends ActivatableGemEffect {
 	
@@ -21,25 +26,17 @@ public class KnockbackGemEffect extends ActivatableGemEffect {
 	@SerializedName("Inverted")
 	private Boolean inverted;
 	
-	public KnockbackGemEffect(ISlotType slotType, GenericActivator activator, float strength, boolean inverted) {
-		super(slotType, activator);
+	public KnockbackGemEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets, float strength, boolean inverted) {
+		super(slotType, activator, targets);
 		this.strength = strength;
 		this.inverted = inverted;
 	}
 	
-	public float getStrength() {
-		return this.strength;
-	}
-	
-	public boolean getInverted() {
-		return this.inverted;
-	}
-	
 	@Override
-	public void performEffect(EntityPlayer player, EntityLivingBase entity) {
-		if(entity != null && !entity.world.isRemote && entity != player) {
-			if(this.getInverted()) knockBackIgnoreKBRes(entity, 0.5F + this.getStrength(), entity.posX - player.posX, entity.posZ - player.posZ);
-			else knockBackIgnoreKBRes(entity, 0.5F + this.getStrength(), player.posX - entity.posX, player.posZ - entity.posZ);
+	public void performEffect(@Nullable IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget) {
+		if(playerSource != null && effectTarget != null && !playerSource.world.isRemote && effectTarget != playerSource) {
+			if(this.inverted) knockBackIgnoreKBRes(effectTarget, 0.5F + this.strength, effectTarget.posX - playerSource.posX, effectTarget.posZ - playerSource.posZ);
+			else knockBackIgnoreKBRes(effectTarget, 0.5F + this.strength, playerSource.posX - effectTarget.posX, playerSource.posZ - effectTarget.posZ);
 		}
 	}
 	
@@ -71,7 +68,7 @@ public class KnockbackGemEffect extends ActivatableGemEffect {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public String getTooltipString(boolean onItem) {
-		return this.getActivatorType().getTooltipString() + " " + (this.getInverted() ? I18n.format("socketed.tooltip.effect.knockback_inverted") : I18n.format("socketed.tooltip.effect.knockback"));
+		return this.getActivator().getTooltipString() + " " + (this.inverted ? I18n.format("socketed.tooltip.effect.knockback_inverted") : I18n.format("socketed.tooltip.effect.knockback"));
 	}
 	
 	@Override
