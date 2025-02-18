@@ -39,7 +39,12 @@ public class MultiCondition extends GenericCondition {
 	public boolean validate() {
 		if(this.logicType == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Condition, must define logic type");
 		else if(this.conditions == null || this.conditions.isEmpty()) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Condition, must define sub-conditions");
-		else return true;
+		else {
+			for(GenericCondition condition : this.conditions)
+				if(!condition.validate())
+					return false;
+			return true;
+		}
 		return false;
 	}
 	

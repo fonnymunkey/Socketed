@@ -7,9 +7,15 @@ import net.minecraft.util.text.TextFormatting;
 import socketed.common.attributes.SocketedAttributes;
 import socketed.common.socket.gem.GemCombinationType;
 import socketed.common.socket.gem.GemType;
+import socketed.common.socket.gem.effect.activatable.HurtResistantTimeGemEffect;
 import socketed.common.socket.gem.effect.activatable.KnockbackGemEffect;
+import socketed.common.socket.gem.effect.activatable.MultiEffectGemEffect;
 import socketed.common.socket.gem.effect.activatable.activator.AttackingActivator;
+import socketed.common.socket.gem.effect.activatable.activator.MultiEffectActivator;
 import socketed.common.socket.gem.effect.activatable.activator.PassiveActivator;
+import socketed.common.socket.gem.effect.activatable.condition.ChanceCondition;
+import socketed.common.socket.gem.effect.activatable.condition.MultiCondition;
+import socketed.common.socket.gem.effect.activatable.condition.PotionActiveCondition;
 import socketed.common.socket.gem.effect.activatable.target.OtherTarget;
 import socketed.common.socket.gem.effect.activatable.target.SelfAOETarget;
 import socketed.common.socket.gem.effect.activatable.target.SelfTarget;
@@ -81,6 +87,22 @@ public abstract class DefaultJsonConfig {
         registerDefaultGemType("sticky_piston", new GemType("socketed.tooltip.default.sticky_piston", 1, TextFormatting.GREEN,
                                                      Collections.singletonList(new KnockbackGemEffect(SocketedSlotTypes.HAND, new AttackingActivator(null, true, false, true), Collections.singletonList(new OtherTarget(null)), 2.0F, true)),
                                                      Collections.singletonList(new ItemFilter("minecraft:sticky_piston", 0, false))));
+
+        registerDefaultGemType("multi_condition_test", new GemType("MultiTestGem", 0, TextFormatting.ITALIC,
+                                                        Collections.singletonList(new MultiEffectGemEffect(
+                                                                SocketedSlotTypes.ALL,
+                                                                new AttackingActivator(new MultiCondition(
+                                                                        MultiCondition.ConditionLogicType.AND,
+                                                                        Arrays.asList(
+                                                                                new ChanceCondition(1.0F),
+                                                                                new PotionActiveCondition("minecraft:speed", null, null)
+                                                                        )), true, false, true),
+                                                                Collections.singletonList(new SelfTarget(null)),
+                                                                Arrays.asList(
+                                                                        new HurtResistantTimeGemEffect(SocketedSlotTypes.ALL, new MultiEffectActivator(null), Collections.singletonList(new SelfTarget(null)), 0, true),
+                                                                        new PotionGemEffect(SocketedSlotTypes.ALL, new MultiEffectActivator(null), Collections.singletonList(new SelfTarget(null)), "minecraft:strength", 0, 100)
+                                                                )
+                                                        )), Collections.singletonList(new ItemFilter("minecraft:soul_sand", 0, false))));
         
         //Gem Combination Types
         registerDefaultGemCombinationType("three_diamonds", new GemCombinationType(

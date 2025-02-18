@@ -11,9 +11,7 @@ import socketed.common.socket.gem.GemCombinationType;
 import socketed.common.socket.gem.GemType;
 import socketed.common.socket.gem.effect.activatable.*;
 import socketed.common.socket.gem.effect.activatable.activator.*;
-import socketed.common.socket.gem.effect.activatable.condition.ChanceCondition;
-import socketed.common.socket.gem.effect.activatable.condition.GenericCondition;
-import socketed.common.socket.gem.effect.activatable.condition.MultiCondition;
+import socketed.common.socket.gem.effect.activatable.condition.*;
 import socketed.common.socket.gem.effect.activatable.target.*;
 import socketed.common.socket.gem.util.RandomValueRange;
 import socketed.common.socket.gem.effect.*;
@@ -86,6 +84,7 @@ public class JsonConfig {
         SocketedUtil.registerEffectType(UndyingTotemGemEffect.TYPE_NAME, UndyingTotemGemEffect.class, Socketed.MODID);
         SocketedUtil.registerEffectType(CancelEventGemEffect.TYPE_NAME, CancelEventGemEffect.class, Socketed.MODID);
         SocketedUtil.registerEffectType(MultiEffectGemEffect.TYPE_NAME, MultiEffectGemEffect.class, Socketed.MODID);
+        SocketedUtil.registerEffectType(HurtResistantTimeGemEffect.TYPE_NAME, HurtResistantTimeGemEffect.class, Socketed.MODID);
         
         SocketedUtil.registerActivator(PassiveActivator.TYPE_NAME, PassiveActivator.class, Socketed.MODID);
         SocketedUtil.registerActivator(AttackingActivator.TYPE_NAME, AttackingActivator.class, Socketed.MODID);
@@ -100,6 +99,7 @@ public class JsonConfig {
         
         SocketedUtil.registerCondition(MultiCondition.TYPE_NAME, MultiCondition.class, Socketed.MODID);
         SocketedUtil.registerCondition(ChanceCondition.TYPE_NAME, ChanceCondition.class, Socketed.MODID);
+        SocketedUtil.registerCondition(PotionActiveCondition.TYPE_NAME, PotionActiveCondition.class, Socketed.MODID);
         
         SocketedUtil.registerSlotTypes(SocketedSlotTypes.class, Socketed.MODID);
         
