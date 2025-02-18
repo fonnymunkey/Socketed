@@ -4,6 +4,9 @@ import com.google.gson.annotations.SerializedName;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import socketed.Socketed;
+import socketed.common.socket.gem.effect.activatable.callback.IEffectCallback;
+
+import javax.annotation.Nullable;
 
 public class ChanceCondition extends GenericCondition {
 	
@@ -18,7 +21,7 @@ public class ChanceCondition extends GenericCondition {
 	}
 	
 	@Override
-	public boolean testCondition(EntityPlayer playerSource, EntityLivingBase effectTarget) {
+	public boolean testCondition(@Nullable IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget) {
 		return playerSource.getRNG().nextFloat() < this.chance;
 	}
 	

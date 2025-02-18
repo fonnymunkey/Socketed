@@ -3,6 +3,9 @@ package socketed.common.socket.gem.effect.activatable.condition;
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import socketed.common.socket.gem.effect.activatable.callback.IEffectCallback;
+
+import javax.annotation.Nullable;
 
 public abstract class GenericCondition {
 	
@@ -14,7 +17,7 @@ public abstract class GenericCondition {
 	/**
 	 * @return true if this condition tests true
 	 */
-	public abstract boolean testCondition(EntityPlayer playerSource, EntityLivingBase effectTarget);
+	public abstract boolean testCondition(@Nullable IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget);
 	
 	/**
 	 * @return the user readable type name for the subclass used for deserialization

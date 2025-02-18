@@ -36,7 +36,7 @@ public class PassiveActivator extends GenericActivator {
 	 */
 	protected void attemptPassiveActivation(ActivatableGemEffect effect, EntityPlayer player) {
 		if(player.ticksExisted % this.activationRate == 0) {
-			if(this.testCondition(player, player)) {
+			if(this.testCondition(null, player, player)) {
 				effect.affectTargets(null, player, player);
 			}
 		}

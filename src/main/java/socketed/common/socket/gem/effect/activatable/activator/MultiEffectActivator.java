@@ -27,7 +27,7 @@ public class MultiEffectActivator extends GenericActivator {
 	 * @param effectTarget the entity that is the target of the original MultiEffectGemEffect's targets
 	 */
 	public void attemptMultiEffectActivation(ActivatableGemEffect effect, IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget) {
-		if(this.testCondition(playerSource, effectTarget)) {
+		if(this.testCondition(callback, playerSource, effectTarget)) {
 			effect.affectTargets(callback, playerSource, effectTarget);
 		}
 	}

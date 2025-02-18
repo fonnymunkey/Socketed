@@ -4,7 +4,9 @@ import com.google.gson.annotations.SerializedName;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import socketed.Socketed;
+import socketed.common.socket.gem.effect.activatable.callback.IEffectCallback;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class MultiCondition extends GenericCondition {
@@ -24,8 +26,8 @@ public class MultiCondition extends GenericCondition {
 	}
 	
 	@Override
-	public boolean testCondition(EntityPlayer playerSource, EntityLivingBase effectTarget) {
-		return this.logicType.test(this.conditions, playerSource, effectTarget);
+	public boolean testCondition(@Nullable IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget) {
+		return this.logicType.test(this.conditions, callback, playerSource, effectTarget);
 	}
 	
 	@Override
@@ -44,23 +46,23 @@ public class MultiCondition extends GenericCondition {
 	public enum ConditionLogicType {
 		AND {
 			@Override
-			public boolean test(List<GenericCondition> conditions, EntityPlayer playerSource, EntityLivingBase effectTarget) {
+			public boolean test(List<GenericCondition> conditions, @Nullable IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget) {
 				for(GenericCondition condition : conditions) {
-					if(!condition.testCondition(playerSource, effectTarget)) return false;
+					if(!condition.testCondition(callback, playerSource, effectTarget)) return false;
 				}
 				return true;
 			}
 		},
 		OR {
 			@Override
-			public boolean test(List<GenericCondition> conditions, EntityPlayer playerSource, EntityLivingBase effectTarget) {
+			public boolean test(List<GenericCondition> conditions, @Nullable IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget) {
 				for(GenericCondition condition : conditions) {
-					if(condition.testCondition(playerSource, effectTarget)) return true;
+					if(condition.testCondition(callback, playerSource, effectTarget)) return true;
 				}
 				return false;
 			}
 		};
 		
-		public abstract boolean test(List<GenericCondition> conditions, EntityPlayer playerSource, EntityLivingBase effectTarget);
+		public abstract boolean test(List<GenericCondition> conditions, @Nullable IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget);
 	}
 }

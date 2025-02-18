@@ -25,7 +25,7 @@ public class DeathTotemCheckActivator extends GenericActivator {
 	 * @param player the player that is the source of the effect
 	 */
 	public void attemptDeathTotemCheckActivation(ActivatableGemEffect effect, CancelEventCallback callback, EntityPlayer player) {
-		if(this.testCondition(player, player)) {
+		if(this.testCondition(callback, player, player)) {
 			effect.affectTargets(callback, player, player);
 		}
 	}

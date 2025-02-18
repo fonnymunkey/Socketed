@@ -6,6 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.Socketed;
+import socketed.common.socket.gem.effect.activatable.callback.IEffectCallback;
 import socketed.common.socket.gem.effect.activatable.condition.GenericCondition;
 
 import javax.annotation.Nullable;
@@ -28,8 +29,8 @@ public abstract class GenericActivator {
 	 * Tests if this activator should attempt to activate
 	 * @return true if there is no additional condition, or if the condition tests true
 	 */
-	protected boolean testCondition(EntityPlayer playerSource, EntityLivingBase effectTarget) {
-		return this.condition == null || this.condition.testCondition(playerSource, effectTarget);
+	protected boolean testCondition(@Nullable IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget) {
+		return this.condition == null || this.condition.testCondition(callback, playerSource, effectTarget);
 	}
 	
 	//TODO handle this better for activators/targets/conditions, add tooltip override option to gem for less bloat on complicated effects

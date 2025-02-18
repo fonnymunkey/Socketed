@@ -26,7 +26,7 @@ public class AttackedActivator extends AttackActivator {
 		//Player is being attacked
 		if(player == target) {
 			if((this.allowsMelee && isMelee) || this.allowsRanged && isRanged) {
-				if(this.testCondition(player, attacker)) {
+				if(this.testCondition(callback, player, attacker)) {
 					effect.affectTargets(callback, player, attacker);
 				}
 			}

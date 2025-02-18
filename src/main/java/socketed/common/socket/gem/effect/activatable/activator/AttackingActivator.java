@@ -31,7 +31,7 @@ public class AttackingActivator extends AttackActivator {
 		//Player is the attacker
 		if(player == attacker) {
 			if((this.allowsMelee && isMelee) || this.allowsRanged && isRanged) {
-				if(this.testCondition(player, target)) {
+				if(this.testCondition(callback, player, target)) {
 					effect.affectTargets(callback, player, target);
 				}
 			}

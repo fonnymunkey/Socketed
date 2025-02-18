@@ -18,7 +18,7 @@ public class SelfTarget extends GenericTarget {
 	
 	@Override
 	public void affectTarget(ActivatableGemEffect effect, @Nullable IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget) {
-		if(this.testCondition(playerSource, playerSource)) {
+		if(this.testCondition(callback, playerSource, playerSource)) {
 			effect.performEffect(callback, playerSource, playerSource);
 		}
 	}

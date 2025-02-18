@@ -29,7 +29,7 @@ public class SelfAOETarget extends GenericTarget {
 		List<EntityLivingBase> entitiesNearby = playerSource.world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(playerSource.getPosition()).grow(this.blockRange));
 		for(EntityLivingBase entity : entitiesNearby) {
 			if(entity != playerSource && entity != effectTarget) {
-				if(this.testCondition(playerSource, entity)) {
+				if(this.testCondition(callback, playerSource, entity)) {
 					effect.performEffect(callback, playerSource, entity);
 				}
 			}

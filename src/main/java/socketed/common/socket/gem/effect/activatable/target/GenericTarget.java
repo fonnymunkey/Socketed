@@ -37,8 +37,8 @@ public abstract class GenericTarget {
 	 * Tests if this target should attempt to activate for each specific entity
 	 * @return true if there is no additional condition, or if the condition tests true
 	 */
-	protected boolean testCondition(EntityPlayer playerSource, EntityLivingBase effectTarget) {
-		return this.condition == null || this.condition.testCondition(playerSource, effectTarget);
+	protected boolean testCondition(@Nullable IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget) {
+		return this.condition == null || this.condition.testCondition(callback, playerSource, effectTarget);
 	}
 	
 	/**
