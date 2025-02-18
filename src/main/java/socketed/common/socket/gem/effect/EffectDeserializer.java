@@ -38,6 +38,7 @@ public class EffectDeserializer implements JsonDeserializer<GenericGemEffect> {
                 .registerTypeAdapter(GenericTarget.class, targetDeserializer)
                 .registerTypeAdapter(ISlotType.class, slotTypeDeserializer)
                 .registerTypeAdapter(RandomValueRange.class, new RandomValueRange.Serializer())
+                .registerTypeAdapter(GenericGemEffect.class, this)
                 .create();
         this.typeReg = new HashMap<>();
     }

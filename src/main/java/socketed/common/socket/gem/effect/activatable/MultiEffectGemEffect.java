@@ -6,6 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.Socketed;
+import socketed.common.socket.gem.effect.GenericGemEffect;
 import socketed.common.socket.gem.effect.activatable.activator.MultiEffectActivator;
 import socketed.common.socket.gem.effect.activatable.activator.GenericActivator;
 import socketed.common.socket.gem.effect.activatable.callback.IEffectCallback;
@@ -21,9 +22,9 @@ public class MultiEffectGemEffect extends ActivatableGemEffect {
     public static final String TYPE_NAME = "Multi Effect";
     
     @SerializedName("Sub-Effects")
-    private final List<ActivatableGemEffect> effects;
+    private final List<GenericGemEffect> effects;
     
-    public MultiEffectGemEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets, List<ActivatableGemEffect> effects) {
+    public MultiEffectGemEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets, List<GenericGemEffect> effects) {
         super(slotType, activator, targets);
         this.effects = effects;
     }
@@ -31,10 +32,11 @@ public class MultiEffectGemEffect extends ActivatableGemEffect {
     @Override
     public void performEffect(@Nullable IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget) {
         if(playerSource != null && effectTarget != null && !playerSource.world.isRemote) {
-            for(ActivatableGemEffect effect : this.effects) {
+            for(GenericGemEffect effect : this.effects) {
                 //Shouldn't be possible after validation, but sanity check
-                if(!(effect.getActivator() instanceof MultiEffectActivator)) continue;
-                ((MultiEffectActivator)effect.getActivator()).attemptMultiEffectActivation(effect, callback, playerSource, effectTarget);
+                if(!(effect instanceof ActivatableGemEffect)) continue;
+                if(!(((ActivatableGemEffect)effect).getActivator() instanceof MultiEffectActivator)) continue;
+                ((MultiEffectActivator)((ActivatableGemEffect)effect).getActivator()).attemptMultiEffectActivation((ActivatableGemEffect)effect, callback, playerSource, effectTarget);
             }
         }
     }
@@ -60,12 +62,16 @@ public class MultiEffectGemEffect extends ActivatableGemEffect {
             if(this.effects == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, sub-effects list invalid");
             else if(this.effects.size() < 2) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, must have at least two sub-effects");
             else {
-                for(ActivatableGemEffect effect : this.effects) {
+                for(GenericGemEffect effect : this.effects) {
                     if(effect == null || !effect.validate()) {
                         Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, sub-effect invalid");
                         return false;
                     }
-                    else if(!(effect.getActivator() instanceof MultiEffectActivator)) {
+                    else if(!(effect instanceof ActivatableGemEffect)) {
+                        Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, sub-effect must be activatable");
+                        return false;
+                    }
+                    else if(!(((ActivatableGemEffect)effect).getActivator() instanceof MultiEffectActivator)) {
                         Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, sub-effect activator must be a Multi Effect activator");
                         return false;
                     }

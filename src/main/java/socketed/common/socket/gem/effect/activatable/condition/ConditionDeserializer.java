@@ -12,7 +12,9 @@ public class ConditionDeserializer implements JsonDeserializer<GenericCondition>
 	private final Map<String, Class<? extends GenericCondition>> typeReg;
 	
 	public ConditionDeserializer() {
-		this.gson = new GsonBuilder().create();
+		this.gson = new GsonBuilder()
+				.registerTypeAdapter(GenericCondition.class, this)
+				.create();
 		this.typeReg = new HashMap<>();
 	}
 	
