@@ -7,7 +7,7 @@ import net.minecraft.util.text.TextFormatting;
 import socketed.common.attributes.SocketedAttributes;
 import socketed.common.socket.gem.GemCombinationType;
 import socketed.common.socket.gem.GemType;
-import socketed.common.socket.gem.effect.activatable.HurtResistantTimeGemEffect;
+import socketed.common.socket.gem.effect.activatable.ExtraIframesGemEffect;
 import socketed.common.socket.gem.effect.activatable.KnockbackGemEffect;
 import socketed.common.socket.gem.effect.activatable.MultiEffectGemEffect;
 import socketed.common.socket.gem.effect.activatable.activator.AttackingActivator;
@@ -99,7 +99,7 @@ public abstract class DefaultJsonConfig {
                                                                         )), true, false, true),
                                                                 Collections.singletonList(new SelfTarget(null)),
                                                                 Arrays.asList(
-                                                                        new HurtResistantTimeGemEffect(SocketedSlotTypes.ALL, new MultiEffectActivator(null), Collections.singletonList(new SelfTarget(null)), 0, true),
+                                                                        new ExtraIframesGemEffect(SocketedSlotTypes.ALL, new MultiEffectActivator(null), Collections.singletonList(new SelfTarget(null)), 0, true),
                                                                         new PotionGemEffect(SocketedSlotTypes.ALL, new MultiEffectActivator(null), Collections.singletonList(new SelfTarget(null)), "minecraft:strength", 0, 100)
                                                                 )
                                                         )), Collections.singletonList(new ItemFilter("minecraft:soul_sand", 0, false))));

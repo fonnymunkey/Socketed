@@ -84,7 +84,8 @@ public class JsonConfig {
         SocketedUtil.registerEffectType(UndyingTotemGemEffect.TYPE_NAME, UndyingTotemGemEffect.class, Socketed.MODID);
         SocketedUtil.registerEffectType(CancelEventGemEffect.TYPE_NAME, CancelEventGemEffect.class, Socketed.MODID);
         SocketedUtil.registerEffectType(MultiEffectGemEffect.TYPE_NAME, MultiEffectGemEffect.class, Socketed.MODID);
-        SocketedUtil.registerEffectType(HurtResistantTimeGemEffect.TYPE_NAME, HurtResistantTimeGemEffect.class, Socketed.MODID);
+        SocketedUtil.registerEffectType(ExtraIframesGemEffect.TYPE_NAME, ExtraIframesGemEffect.class, Socketed.MODID);
+        SocketedUtil.registerEffectType(BypassIframeGemEffect.TYPE_NAME, BypassIframeGemEffect.class, Socketed.MODID);
         
         SocketedUtil.registerActivator(PassiveActivator.TYPE_NAME, PassiveActivator.class, Socketed.MODID);
         SocketedUtil.registerActivator(AttackingActivator.TYPE_NAME, AttackingActivator.class, Socketed.MODID);
@@ -100,6 +101,14 @@ public class JsonConfig {
         SocketedUtil.registerCondition(MultiCondition.TYPE_NAME, MultiCondition.class, Socketed.MODID);
         SocketedUtil.registerCondition(ChanceCondition.TYPE_NAME, ChanceCondition.class, Socketed.MODID);
         SocketedUtil.registerCondition(PotionActiveCondition.TYPE_NAME, PotionActiveCondition.class, Socketed.MODID);
+        SocketedUtil.registerCondition(HealthPercentCondition.TYPE_NAME, HealthPercentCondition.class, Socketed.MODID);
+        SocketedUtil.registerCondition(ElevationCondition.TYPE_NAME, ElevationCondition.class, Socketed.MODID);
+        SocketedUtil.registerCondition(IsBurningCondition.TYPE_NAME, IsBurningCondition.class, Socketed.MODID);
+        SocketedUtil.registerCondition(IsWetCondition.TYPE_NAME, IsWetCondition.class, Socketed.MODID);
+        SocketedUtil.registerCondition(LightLevelCondition.TYPE_NAME, LightLevelCondition.class, Socketed.MODID);
+        SocketedUtil.registerCondition(IsBossCondition.TYPE_NAME, IsBossCondition.class, Socketed.MODID);
+        SocketedUtil.registerCondition(BiomeCondition.TYPE_NAME, BiomeCondition.class, Socketed.MODID);
+        SocketedUtil.registerCondition(BiomeTypeCondition.TYPE_NAME, BiomeTypeCondition.class, Socketed.MODID);
         
         SocketedUtil.registerSlotTypes(SocketedSlotTypes.class, Socketed.MODID);
         

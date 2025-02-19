@@ -14,27 +14,22 @@ import socketed.common.socket.gem.effect.slot.ISlotType;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class HurtResistantTimeGemEffect extends ActivatableGemEffect {
+public class ExtraIframesGemEffect extends ActivatableGemEffect {
 
-	public static final String TYPE_NAME = "Hurt Resistant Time";
+	public static final String TYPE_NAME = "Extra Iframes";
 
 	@SerializedName("Tick Amount")
 	private final Integer ticks;
 
-	@SerializedName("Set To Amount")
-	protected Boolean setToAmount;
-
-	public HurtResistantTimeGemEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets, int ticks, boolean setToAmount) {
+	public ExtraIframesGemEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets, int ticks, boolean setToAmount) {
 		super(slotType, activator, targets);
 		this.ticks = ticks;
-		this.setToAmount = setToAmount;
 	}
 	
 	@Override
 	public void performEffect(@Nullable IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget) {
 		if(playerSource != null && effectTarget != null && !playerSource.world.isRemote) {
-			if(this.setToAmount) effectTarget.hurtResistantTime = this.ticks;
-			else effectTarget.hurtResistantTime += this.ticks;
+			effectTarget.hurtResistantTime += this.ticks;
 		}
 	}
 	
@@ -52,12 +47,9 @@ public class HurtResistantTimeGemEffect extends ActivatableGemEffect {
 
 	/**
 	 * Tick Amount: Required, non-negative
-	 * Set To Amount: Optional, default false (adding, not setting)
 	 */
 	@Override
 	public boolean validate() {
-		if(this.setToAmount == null) this.setToAmount = false;
-
 		if(super.validate()) {
 			if(this.ticks == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, tick amount must be defined");
 			else if(this.ticks < 0) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, tick amount can not be negative");

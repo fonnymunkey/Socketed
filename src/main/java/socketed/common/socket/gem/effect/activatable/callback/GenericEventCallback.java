@@ -2,15 +2,15 @@ package socketed.common.socket.gem.effect.activatable.callback;
 
 import net.minecraftforge.fml.common.eventhandler.Event;
 
-public class GenericEventCallback implements IEffectCallback {
+public class GenericEventCallback<T extends Event> implements IEffectCallback {
 
-    private final Class<? extends Event> event;
+    private final T event;
 
-    public GenericEventCallback(Class<? extends Event> event) {
+    public GenericEventCallback(T event) {
         this.event = event;
     }
 
-    public Class<? extends Event> getEvent() {
+    public T getEvent() {
         return event;
     }
 }
