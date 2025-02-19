@@ -9,31 +9,36 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import socketed.Socketed;
 import socketed.common.capabilities.effectscache.CapabilityEffectsCacheHandler;
 import socketed.common.capabilities.effectscache.ICapabilityEffectsCache;
 import socketed.common.capabilities.socketable.CapabilitySocketableHandler;
 import socketed.common.capabilities.socketable.ICapabilitySocketable;
-import socketed.common.socket.gem.effect.GenericGemEffect;
 import socketed.common.socket.gem.effect.activatable.ActivatableGemEffect;
-import socketed.common.socket.gem.effect.activatable.callback.CancelEventCallback;
+import socketed.common.socket.gem.effect.activatable.callback.GenericEventCallback;
+import socketed.common.socket.gem.effect.activatable.condition.DamageSourceCondition;
 import socketed.common.socket.gem.effect.activatable.condition.GenericCondition;
 import socketed.common.socket.gem.effect.slot.SocketedSlotTypes;
 
 import javax.annotation.Nullable;
 
 public abstract class AttackActivator extends GenericActivator {
-	
-	@SerializedName("Allows Melee")
-	protected Boolean allowsMelee;
-	
-	@SerializedName("Allows Ranged")
-	protected Boolean allowsRanged;
-	
-	public AttackActivator(@Nullable GenericCondition condition, boolean allowsMelee, boolean allowsRanged) {
+
+	@SerializedName("Directly Activated")
+	protected Boolean directlyActivated;
+
+	public AttackActivator(@Nullable GenericCondition condition, boolean directlyActivated) {
 		super(condition);
-		this.allowsMelee = allowsMelee;
-		this.allowsRanged = allowsRanged;
+		this.directlyActivated = directlyActivated;
+	}
+
+	/**
+	 * DirectlyActivated: Optional, default false
+	 */
+	@Override
+	public boolean validate() {
+		if(this.directlyActivated == null) this.directlyActivated = false;
+
+		return super.validate();
 	}
 	
 	/**
@@ -43,31 +48,11 @@ public abstract class AttackActivator extends GenericActivator {
 	 * @param effect the effect parent of this activator
 	 * @param callback the Cancellable callback to allow for the effect to cancel the LivingAttackEvent
 	 * @param player the player that is the source of the effect
-	 * @param target the target of the attack, may be the player
-	 * @param attacker the attacker performing the attack, may be the player
-	 * @param isMelee if the attack is a melee attack
-	 * @param isRanged if the attack is a ranged attack
+	 * @param other the other entity involved in the attack event, can be attacker or target
 	 * @param directlyActivated if the source of the effect is the attacker's weapon rather than the player's effect cache
-	 * @param source the damagesource of the attack for additional context
 	 */
-	protected abstract void attemptAttackActivation(ActivatableGemEffect effect, CancelEventCallback callback, EntityPlayer player, EntityLivingBase target, EntityLivingBase attacker, boolean isMelee, boolean isRanged, boolean directlyActivated, DamageSource source);
-	
-	/**
-	 * AllowsMelee: Optional, default true
-	 * AllowsRanged: Optional, default false
-	 */
-	@Override
-	public boolean validate() {
-		if(this.allowsMelee == null) this.allowsMelee = true;
-		if(this.allowsRanged == null) this.allowsRanged = false;
-		
-		if(super.validate()) {
-			if(!this.allowsMelee && !this.allowsRanged) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Activator, must allow at least either melee or ranged");
-			else return true;
-		}
-		return false;
-	}
-	
+	protected abstract void attemptAttackActivation(ActivatableGemEffect effect, GenericEventCallback<LivingAttackEvent> callback, EntityPlayer player, EntityLivingBase other, boolean directlyActivated);
+
 	@Mod.EventBusSubscriber
 	public static class EventHandler {
 		
@@ -82,8 +67,8 @@ public abstract class AttackActivator extends GenericActivator {
 			DamageSource source = event.getSource();
 			
 			//Prioritize checking the direct attacker, prevent ranged pet attacks from triggering attacker effects such as lycanites
-			boolean isMelee = isDamageSourceMelee(source);
-			boolean isRanged = !isMelee && isDamageSourceRanged(source);
+			boolean isMelee = DamageSourceCondition.isDamageSourceMelee(source);
+			boolean isRanged = !isMelee && DamageSourceCondition.isDamageSourceRanged(source);
 			
 			EntityLivingBase target = event.getEntityLiving();
 			EntityLivingBase attacker;
@@ -95,59 +80,48 @@ public abstract class AttackActivator extends GenericActivator {
 			if(target == attacker) return;
 			
 			//Allow for cancelling the attack from effects
-			CancelEventCallback callback = new CancelEventCallback(false);
+			GenericEventCallback<LivingAttackEvent> callback = new GenericEventCallback<>(event);
 			
 			//AttackedActivator handling
 			if(target instanceof EntityPlayer) {
-				handleAttacked(callback, (EntityPlayer)target, attacker, isMelee, isRanged, source);
+				handleAttacked(callback, (EntityPlayer)target, attacker);
 			}
 			
-			//Cancel before offensive effects if defensive effects cancelled attack
-			if(callback.isCancelled()) {
-				event.setCanceled(true);
+			//Return before offensive effects if defensive effects cancelled attack
+			if(callback.getEvent().isCanceled()) {
 				return;
 			}
 			
 			//AttackingActivator handling
 			if(attacker instanceof EntityPlayer) {
-				handleAttacking(callback, (EntityPlayer)attacker, target, isMelee, isRanged, source);
-			}
-			
-			if(callback.isCancelled()) {
-				event.setCanceled(true);
+				handleAttacking(callback, (EntityPlayer)attacker, target);
 			}
 		}
 		
-		private static void handleAttacked(CancelEventCallback callback, EntityPlayer player, EntityLivingBase attacker, boolean isMelee, boolean isRanged, DamageSource source) {
+		private static void handleAttacked(GenericEventCallback<LivingAttackEvent> callback, EntityPlayer player, EntityLivingBase attacker) {
 			ICapabilityEffectsCache cachedEffects = player.getCapability(CapabilityEffectsCacheHandler.CAP_EFFECTS_CACHE, null);
 			if(cachedEffects == null) return;
 			
 			//Handle cached effects
-			for(GenericGemEffect effect : cachedEffects.getActiveEffects()) {
-				if(effect instanceof ActivatableGemEffect) {
-					ActivatableGemEffect activatableGemEffect = (ActivatableGemEffect)effect;
-					if(activatableGemEffect.getActivator() instanceof AttackActivator) {
-						AttackActivator attackActivator = ((AttackActivator)activatableGemEffect.getActivator());
-						attackActivator.attemptAttackActivation(activatableGemEffect, callback, player, player, attacker, isMelee, isRanged, false, source);
-					}
-				}
-			}
+			GenericActivator.filterForActivator(cachedEffects.getActiveEffects(), AttackedActivator.class)
+					.forEach(effect -> {
+						AttackedActivator activator = (AttackedActivator) effect.getActivator();
+						activator.attemptAttackActivation(effect, callback, player, attacker, false);
+					});
+
+			//TODO: implement direct activation via first aid compat
 		}
 		
-		private static void handleAttacking(CancelEventCallback callback, EntityPlayer player, EntityLivingBase target, boolean isMelee, boolean isRanged, DamageSource source) {
+		private static void handleAttacking(GenericEventCallback<LivingAttackEvent> callback, EntityPlayer player, EntityLivingBase target) {
 			ICapabilityEffectsCache cachedEffects = player.getCapability(CapabilityEffectsCacheHandler.CAP_EFFECTS_CACHE, null);
 			if(cachedEffects == null) return;
 			
 			//Handle cached effects
-			for(GenericGemEffect effect : cachedEffects.getActiveEffects()) {
-				if(effect instanceof ActivatableGemEffect) {
-					ActivatableGemEffect activatableGemEffect = (ActivatableGemEffect)effect;
-					if(activatableGemEffect.getActivator() instanceof AttackActivator) {
-						AttackActivator attackActivator = ((AttackActivator)activatableGemEffect.getActivator());
-						attackActivator.attemptAttackActivation(activatableGemEffect, callback, player, target, player, isMelee, isRanged, false, source);
-					}
-				}
-			}
+			GenericActivator.filterForActivator(cachedEffects.getActiveEffects(), AttackingActivator.class)
+					.forEach(effect ->{
+						AttackingActivator activator = (AttackingActivator) effect.getActivator();
+						activator.attemptAttackActivation(effect, callback, player, target, false);
+					});
 			
 			//Handle direct activation effects
 			//RLCombat swaps offhand into mainhand before posting LivingAttack for offhand attacks
@@ -158,23 +132,11 @@ public abstract class AttackActivator extends GenericActivator {
 			if(sockets == null) return;
 			
 			//TODO: RLCombat compat to get whether the attack is being posted from mainhand or offhand for more accurate slot type check
-			for(GenericGemEffect effect : sockets.getAllActiveEffects(SocketedSlotTypes.HAND)) {
-				if(effect instanceof ActivatableGemEffect) {
-					ActivatableGemEffect activatableGemEffect = (ActivatableGemEffect)effect;
-					if(activatableGemEffect.getActivator() instanceof AttackActivator) {
-						AttackActivator attackActivator = ((AttackActivator)activatableGemEffect.getActivator());
-						attackActivator.attemptAttackActivation(activatableGemEffect, callback, player, target, player, isMelee, isRanged, true, source);
-					}
-				}
-			}
-		}
-		
-		private static boolean isDamageSourceMelee(DamageSource source) {
-			return source.getImmediateSource() instanceof EntityLivingBase;
-		}
-		
-		private static boolean isDamageSourceRanged(DamageSource source) {
-			return !(source.getImmediateSource() instanceof EntityLivingBase) && source.getTrueSource() instanceof EntityLivingBase;
+			GenericActivator.filterForActivator(sockets.getAllActiveEffects(SocketedSlotTypes.HAND), AttackingActivator.class)
+					.forEach(effect -> {
+						AttackingActivator activator = (AttackingActivator) effect.getActivator();
+						activator.attemptAttackActivation(effect, callback, player, target, true);
+					});
 		}
 	}
 }

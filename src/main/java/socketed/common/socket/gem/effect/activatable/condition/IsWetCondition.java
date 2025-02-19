@@ -6,26 +6,21 @@ import socketed.common.socket.gem.effect.activatable.callback.IEffectCallback;
 
 import javax.annotation.Nullable;
 
-public class IsWetCondition extends GenericCondition {
+public class IsWetCondition extends EntityPropertyCondition {
 
 	public static final String TYPE_NAME = "Is Wet";
 
-	public IsWetCondition() {
-		super();
+	public IsWetCondition(boolean checkForPlayer) {
+		super(checkForPlayer);
 	}
 	
 	@Override
 	public boolean testCondition(@Nullable IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget) {
-		return effectTarget.isWet();
+		return determineAffectedEntity(playerSource,effectTarget).isWet();
 	}
 	
 	@Override
 	public String getTypeName() {
 		return TYPE_NAME;
-	}
-
-	@Override
-	public boolean validate() {
-		return true;
 	}
 }

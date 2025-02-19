@@ -14,15 +14,16 @@ public class LightLevelCondition extends ComparingCondition {
 	@SerializedName("Light Level")
 	protected final Integer lightLvl;
 
-	public LightLevelCondition(int lightLvl, ConditionComparisonType comparisonType) {
-		super(comparisonType);
+	public LightLevelCondition(int lightLvl, ConditionComparisonType comparisonType, boolean checkForPlayer) {
+		super(comparisonType, checkForPlayer);
 		this.lightLvl = lightLvl;
 	}
 	
 	@Override
 	public boolean testCondition(@Nullable IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget) {
-		int currLightLvl = effectTarget.world.getLight(effectTarget.getPosition());
-		return comparisonType.test(currLightLvl, this.lightLvl, callback, playerSource, effectTarget);
+		EntityLivingBase entityToTestFor = determineAffectedEntity(playerSource, effectTarget);
+		int currLightLvl = entityToTestFor.world.getLight(entityToTestFor.getPosition());
+		return comparisonType.test(currLightLvl, this.lightLvl);
 	}
 	
 	@Override

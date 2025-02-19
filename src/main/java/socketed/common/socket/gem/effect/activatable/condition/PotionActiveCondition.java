@@ -10,7 +10,7 @@ import socketed.common.socket.gem.effect.activatable.callback.IEffectCallback;
 
 import javax.annotation.Nullable;
 
-public class PotionActiveCondition extends GenericCondition {
+public class PotionActiveCondition extends EntityPropertyCondition {
 
 	public static final String TYPE_NAME = "Potion Active";
 
@@ -25,8 +25,8 @@ public class PotionActiveCondition extends GenericCondition {
 
 	private transient Potion potion;
 
-	public PotionActiveCondition(String potionName, Integer minAmplifier, Integer minDuration) {
-		super();
+	public PotionActiveCondition(String potionName, Integer minAmplifier, Integer minDuration, boolean checkForPlayer) {
+		super(checkForPlayer);
 		this.potionName = potionName;
 		this.minAmplifier = minAmplifier;
 		this.minDuration = minDuration;
@@ -53,11 +53,13 @@ public class PotionActiveCondition extends GenericCondition {
 	 */
 	@Override
 	public boolean validate() {
-		if(this.potionName == null || this.potionName.isEmpty()) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Condition, potion name null or empty");
-		else {
-			this.potion = Potion.getPotionFromResourceLocation(this.potionName);
-			if(this.potion == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Condition, " + this.potionName + ", potion does not exist");
-			else return true;
+		if(super.validate()) {
+			if (this.potionName == null || this.potionName.isEmpty()) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Condition, potion name null or empty");
+			else {
+				this.potion = Potion.getPotionFromResourceLocation(this.potionName);
+				if (this.potion == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Condition, " + this.potionName + ", potion does not exist");
+				else return true;
+			}
 		}
 		return false;
 	}

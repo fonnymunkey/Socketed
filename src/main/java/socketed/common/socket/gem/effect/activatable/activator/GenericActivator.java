@@ -6,10 +6,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.Socketed;
+import socketed.common.socket.gem.effect.GenericGemEffect;
+import socketed.common.socket.gem.effect.activatable.ActivatableGemEffect;
 import socketed.common.socket.gem.effect.activatable.callback.IEffectCallback;
 import socketed.common.socket.gem.effect.activatable.condition.GenericCondition;
 
 import javax.annotation.Nullable;
+import java.util.List;
+import java.util.stream.Stream;
 
 public abstract class GenericActivator {
 	
@@ -51,5 +55,19 @@ public abstract class GenericActivator {
 		if(this.condition != null && !this.condition.validate()) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Activator, invalid condition");
 		else return true;
 		return false;
+	}
+
+	/**
+	 * Filters a List of GemEffects for all ActivatableGemEffects that use a specified Activator
+	 * @return a filtered List of ActivatableGemEffects
+	 */
+	public static <T extends GenericActivator> Stream<ActivatableGemEffect> filterForActivator(List<GenericGemEffect> effects, Class<T> activatorType){
+		return effects.stream()
+				.filter(effect -> effect instanceof ActivatableGemEffect)
+				//filter for activator being of provided type
+				.filter(effect -> activatorType.isInstance(((ActivatableGemEffect) effect).getActivator()))
+				//cast to ActivatableGemEffect
+				.map(ActivatableGemEffect.class::cast);
+
 	}
 }

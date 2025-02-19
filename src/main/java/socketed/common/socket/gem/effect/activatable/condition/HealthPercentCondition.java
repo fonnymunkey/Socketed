@@ -15,16 +15,17 @@ public class HealthPercentCondition extends ComparingCondition {
 	@SerializedName("Health Percent")
 	protected final Float healthPercent;
 
-	public HealthPercentCondition(float healthPercent, ConditionComparisonType comparisonType) {
-		super(comparisonType);
+	public HealthPercentCondition(float healthPercent, ConditionComparisonType comparisonType, boolean checkForPlayer) {
+		super(comparisonType, checkForPlayer);
 		this.healthPercent = healthPercent;
 	}
 	
 	@Override
 	public boolean testCondition(@Nullable IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget) {
-		float currHealthPercent = effectTarget.getHealth() / effectTarget.getMaxHealth();
+		EntityLivingBase entityToTestFor = determineAffectedEntity(playerSource, effectTarget);
+		float currHealthPercent = entityToTestFor.getHealth() / entityToTestFor.getMaxHealth();
 		if (!Float.isFinite(currHealthPercent)) return false;
-		return comparisonType.test(currHealthPercent, this.healthPercent, callback, playerSource, effectTarget);
+		return comparisonType.test(currHealthPercent, this.healthPercent);
 	}
 	
 	@Override

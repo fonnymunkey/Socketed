@@ -82,10 +82,10 @@ public abstract class DefaultJsonConfig {
                                          Collections.singletonList(new PotionGemEffect(SocketedSlotTypes.HEAD, new PassiveActivator(null, 40), Collections.singletonList(new SelfAOETarget(null, 16)), MobEffects.GLOWING.getRegistryName().toString(), 0, 41)),
                                          Collections.singletonList(new OreFilter("dustGlowstone"))));
         registerDefaultGemType("piston", new GemType("socketed.tooltip.default.piston", 1, TextFormatting.AQUA,
-                                                        Collections.singletonList(new KnockbackGemEffect(SocketedSlotTypes.HAND, new AttackingActivator(null, true, false, true), Collections.singletonList(new OtherTarget(null)), 2.0F, false)),
+                                                        Collections.singletonList(new KnockbackGemEffect(SocketedSlotTypes.HAND, new AttackingActivator(null, true), Collections.singletonList(new OtherTarget(null)), 2.0F, false)),
                                                         Collections.singletonList(new ItemFilter("minecraft:piston", 0, false))));
         registerDefaultGemType("sticky_piston", new GemType("socketed.tooltip.default.sticky_piston", 1, TextFormatting.GREEN,
-                                                     Collections.singletonList(new KnockbackGemEffect(SocketedSlotTypes.HAND, new AttackingActivator(null, true, false, true), Collections.singletonList(new OtherTarget(null)), 2.0F, true)),
+                                                     Collections.singletonList(new KnockbackGemEffect(SocketedSlotTypes.HAND, new AttackingActivator(null, true), Collections.singletonList(new OtherTarget(null)), 2.0F, true)),
                                                      Collections.singletonList(new ItemFilter("minecraft:sticky_piston", 0, false))));
 
         registerDefaultGemType("multi_condition_test", new GemType("MultiTestGem", 0, TextFormatting.ITALIC,
@@ -95,8 +95,8 @@ public abstract class DefaultJsonConfig {
                                                                         MultiCondition.ConditionLogicType.AND,
                                                                         Arrays.asList(
                                                                                 new ChanceCondition(1.0F),
-                                                                                new PotionActiveCondition("minecraft:speed", null, null)
-                                                                        )), true, false, true),
+                                                                                new PotionActiveCondition("minecraft:speed", null, null, true)
+                                                                        )), true),
                                                                 Collections.singletonList(new SelfTarget(null)),
                                                                 Arrays.asList(
                                                                         new ExtraIframesGemEffect(SocketedSlotTypes.ALL, new MultiEffectActivator(null), Collections.singletonList(new SelfTarget(null)), 0, true),

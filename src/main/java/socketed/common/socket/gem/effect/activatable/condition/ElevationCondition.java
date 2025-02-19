@@ -15,15 +15,15 @@ public class ElevationCondition extends ComparingCondition {
 	@SerializedName("Y Level")
 	protected final Integer yLvl;
 
-	public ElevationCondition(int yLvl, ConditionComparisonType comparisonType) {
-		super(comparisonType);
+	public ElevationCondition(int yLvl, ConditionComparisonType comparisonType, boolean checkForPlayer) {
+		super(comparisonType, checkForPlayer);
 		this.yLvl = yLvl;
 	}
 	
 	@Override
 	public boolean testCondition(@Nullable IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget) {
-		int currYLvl = effectTarget.getPosition().getY();
-		return comparisonType.test(currYLvl, this.yLvl, callback, playerSource, effectTarget);
+		int currYLvl = determineAffectedEntity(playerSource, effectTarget).getPosition().getY();
+		return comparisonType.test(currYLvl, this.yLvl);
 	}
 	
 	@Override

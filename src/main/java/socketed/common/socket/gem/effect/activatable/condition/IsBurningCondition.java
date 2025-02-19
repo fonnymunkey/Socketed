@@ -6,26 +6,21 @@ import socketed.common.socket.gem.effect.activatable.callback.IEffectCallback;
 
 import javax.annotation.Nullable;
 
-public class IsBurningCondition extends GenericCondition {
+public class IsBurningCondition extends EntityPropertyCondition {
 
 	public static final String TYPE_NAME = "Is Burning";
 
-	public IsBurningCondition() {
-		super();
+	public IsBurningCondition(boolean checkForPlayer) {
+		super(checkForPlayer);
 	}
 	
 	@Override
 	public boolean testCondition(@Nullable IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget) {
-		return effectTarget.isBurning();
+		return determineAffectedEntity(playerSource, effectTarget).isBurning();
 	}
 	
 	@Override
 	public String getTypeName() {
 		return TYPE_NAME;
-	}
-
-	@Override
-	public boolean validate() {
-		return true;
 	}
 }
