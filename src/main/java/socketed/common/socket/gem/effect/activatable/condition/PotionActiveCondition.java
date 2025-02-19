@@ -34,7 +34,7 @@ public class PotionActiveCondition extends EntityPropertyCondition {
 	
 	@Override
 	public boolean testCondition(@Nullable IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget) {
-		PotionEffect effect = playerSource.getActivePotionEffect(potion);
+		PotionEffect effect = determineAffectedEntity(playerSource, effectTarget).getActivePotionEffect(potion);
 		if(effect == null) return false;
 		if(this.minAmplifier != null && effect.getAmplifier() < this.minAmplifier) return false;
 		if(this.minDuration != null && effect.getDuration() < this.minDuration) return false;

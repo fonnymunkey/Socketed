@@ -81,16 +81,9 @@ public class PassiveActivator extends GenericActivator {
 			
 			ICapabilityEffectsCache cachedEffects = player.getCapability(CapabilityEffectsCacheHandler.CAP_EFFECTS_CACHE, null);
 			if(cachedEffects == null) return;
-			
-			for(GenericGemEffect effect : cachedEffects.getActiveEffects()) {
-				if(effect instanceof ActivatableGemEffect) {
-					ActivatableGemEffect activatableGemEffect = (ActivatableGemEffect)effect;
-					if(activatableGemEffect.getActivator() instanceof PassiveActivator) {
-						PassiveActivator passiveActivator = (PassiveActivator)activatableGemEffect.getActivator();
-						passiveActivator.attemptPassiveActivation(activatableGemEffect, player);
-					}
-				}
-			}
+
+			GenericActivator.filterForActivator(cachedEffects.getActiveEffects(), PassiveActivator.class)
+					.forEach(effect -> ((PassiveActivator) effect.getActivator()).attemptPassiveActivation(effect, player));
 		}
 	}
 }
