@@ -4,11 +4,12 @@ import com.google.gson.annotations.SerializedName;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import socketed.common.socket.gem.effect.activatable.callback.GenericEventCallback;
 import socketed.common.socket.gem.effect.activatable.callback.IEffectCallback;
 
 import javax.annotation.Nullable;
+import java.lang.reflect.Method;
 
 public class DamageSourceCondition extends GenericCondition {
 	public static final String TYPE_NAME = "Damage Source";
@@ -29,13 +30,19 @@ public class DamageSourceCondition extends GenericCondition {
 	@Override
 	public boolean testCondition(@Nullable IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget) {
 		if(!(callback instanceof GenericEventCallback)) return false;
-		if(!(((GenericEventCallback<?>) callback).getEvent() instanceof LivingAttackEvent)) return false;
-		LivingAttackEvent event = (LivingAttackEvent) ((GenericEventCallback<?>) callback).getEvent();
-		DamageSource source = event.getSource();
+		try {
+			Event event = ((GenericEventCallback<?>) callback).getEvent();
+			//Works for LivingAttack, LivingHurt, LivingDamage, DDD GatherDefenses, DDD DetermineDamage
+			Method method = event.getClass().getMethod("getSource");
+			DamageSource source = (DamageSource) method.invoke(event); // Invoke event.getSource()
+			if(source == null) return false;
 
-		if(this.allowsMelee && isDamageSourceMelee(source)) return true;
-		else if(this.allowsRanged && isDamageSourceRanged(source)) return true;
-		else return this.allowsOther;
+			if (this.allowsMelee && isDamageSourceMelee(source)) return true;
+			else if (this.allowsRanged && isDamageSourceRanged(source)) return true;
+			else return this.allowsOther;
+		} catch (Exception exception) {
+			return false;
+		}
     }
 	
 	@Override

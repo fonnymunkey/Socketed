@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import socketed.common.capabilities.effectscache.CapabilityEffectsCacheHandler;
@@ -46,12 +47,18 @@ public abstract class AttackActivator extends GenericActivator {
 	 * Target and attacker can not be the same entity
 	 * If the callback is cancelled, cancels the LivingAttackEvent
 	 * @param effect the effect parent of this activator
-	 * @param callback the Cancellable callback to allow for the effect to cancel the LivingAttackEvent
+	 * @param callback the GenericEvent callback to allow for the effect to cancel the LivingAttackEvent and conditions to check the DamageSource
 	 * @param player the player that is the source of the effect
-	 * @param other the other entity involved in the attack event, can be attacker or target
+	 * @param other the other entity involved in the attack event, can be attacker (Attacked) or target (Attacking)
 	 * @param directlyActivated if the source of the effect is the attacker's weapon rather than the player's effect cache
 	 */
-	protected abstract void attemptAttackActivation(ActivatableGemEffect effect, GenericEventCallback<LivingAttackEvent> callback, EntityPlayer player, EntityLivingBase other, boolean directlyActivated);
+	protected void attemptAttackActivation(ActivatableGemEffect effect, GenericEventCallback<? extends Event> callback, EntityPlayer player, EntityLivingBase other, boolean directlyActivated) {
+		//Check if direct activation is required
+		if(directlyActivated != this.directlyActivated) return;
+		if(this.testCondition(callback, player, other)) {
+			effect.affectTargets(callback, player, other);
+		}
+	}
 
 	@Mod.EventBusSubscriber
 	public static class EventHandler {
@@ -109,7 +116,8 @@ public abstract class AttackActivator extends GenericActivator {
 						activator.attemptAttackActivation(effect, callback, player, attacker, false);
 					});
 
-			//TODO: implement direct activation via first aid compat
+			//can't do direct activation via first aid since that is only calculated right before living damage
+			//TODO: could do direct activation of active shield
 		}
 		
 		private static void handleAttacking(GenericEventCallback<LivingAttackEvent> callback, EntityPlayer player, EntityLivingBase target) {
