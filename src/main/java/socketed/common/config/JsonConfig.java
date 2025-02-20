@@ -109,6 +109,7 @@ public class JsonConfig {
         SocketedUtil.registerCondition(IsBossCondition.TYPE_NAME, IsBossCondition.class, Socketed.MODID);
         SocketedUtil.registerCondition(BiomeCondition.TYPE_NAME, BiomeCondition.class, Socketed.MODID);
         SocketedUtil.registerCondition(BiomeTypeCondition.TYPE_NAME, BiomeTypeCondition.class, Socketed.MODID);
+        SocketedUtil.registerCondition(DamageSourceCondition.TYPE_NAME, DamageSourceCondition.class, Socketed.MODID);
         
         SocketedUtil.registerSlotTypes(SocketedSlotTypes.class, Socketed.MODID);
         

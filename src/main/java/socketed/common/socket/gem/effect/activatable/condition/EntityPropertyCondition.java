@@ -12,8 +12,6 @@ import socketed.common.socket.gem.effect.activatable.callback.IEffectCallback;
 import javax.annotation.Nullable;
 
 public abstract class EntityPropertyCondition extends GenericCondition {
-	public static final String TYPE_NAME = "Entity Property";
-
 	@SerializedName("Check For Player")
 	private Boolean checkForPlayer;
 
@@ -24,11 +22,6 @@ public abstract class EntityPropertyCondition extends GenericCondition {
 
 	protected EntityLivingBase determineAffectedEntity(EntityPlayer player, EntityLivingBase target){
 		return this.checkForPlayer ? player : target;
-	}
-	
-	@Override
-	public String getTypeName() {
-		return TYPE_NAME;
 	}
 
 	/**

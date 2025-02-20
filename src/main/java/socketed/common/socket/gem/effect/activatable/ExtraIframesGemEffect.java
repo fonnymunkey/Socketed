@@ -29,7 +29,7 @@ public class ExtraIframesGemEffect extends ActivatableGemEffect {
 	@Override
 	public void performEffect(@Nullable IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget) {
 		if(playerSource != null && effectTarget != null && !playerSource.world.isRemote) {
-			effectTarget.hurtResistantTime += this.ticks;
+			effectTarget.hurtResistantTime = effectTarget.maxHurtResistantTime + this.ticks;
 		}
 	}
 	
@@ -46,13 +46,12 @@ public class ExtraIframesGemEffect extends ActivatableGemEffect {
 	}
 
 	/**
-	 * Tick Amount: Required, non-negative
+	 * Tick Amount: Required
 	 */
 	@Override
 	public boolean validate() {
 		if(super.validate()) {
 			if(this.ticks == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, tick amount must be defined");
-			else if(this.ticks < 0) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, tick amount can not be negative");
 			else return true;
 		}
 		return false;

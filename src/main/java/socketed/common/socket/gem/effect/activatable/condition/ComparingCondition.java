@@ -5,9 +5,6 @@ import socketed.Socketed;
 
 
 public abstract class ComparingCondition extends EntityPropertyCondition {
-	
-	public static final String TYPE_NAME = "Comparing";
-
 	@SerializedName("Comparison Type")
 	protected final ConditionComparisonType comparisonType;
 
