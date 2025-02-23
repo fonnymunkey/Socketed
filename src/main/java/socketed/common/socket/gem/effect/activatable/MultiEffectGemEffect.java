@@ -3,6 +3,8 @@ package socketed.common.socket.gem.effect.activatable;
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.Socketed;
@@ -15,6 +17,7 @@ import socketed.common.socket.gem.effect.slot.ISlotType;
 import socketed.common.socket.gem.effect.slot.SocketedSlotTypes;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MultiEffectGemEffect extends ActivatableGemEffect {
@@ -27,6 +30,12 @@ public class MultiEffectGemEffect extends ActivatableGemEffect {
     public MultiEffectGemEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets, List<GenericGemEffect> effects) {
         super(slotType, activator, targets);
         this.effects = effects;
+    }
+
+        super(multiEffect.slotType, multiEffect.activator, multiEffect.targets);
+        this.effects = new ArrayList<>();
+        for (GenericGemEffect effect : multiEffect.effects)
+            this.effects.add(effect.instantiate());
     }
 
     @Override
@@ -53,6 +62,11 @@ public class MultiEffectGemEffect extends ActivatableGemEffect {
         return TYPE_NAME;
     }
     
+    @Override
+    public MultiEffectGemEffect instantiate() {
+        return new MultiEffectGemEffect(this);
+    }
+
     /**
      * Effects: Required, atleast two, must use MultiEffectActivator for activators and ALL for ISlotType
      */
@@ -84,5 +98,29 @@ public class MultiEffectGemEffect extends ActivatableGemEffect {
             }
         }
         return false;
+    }
+
+    @Override
+    public NBTTagCompound writeToNBT() {
+        NBTTagCompound nbt = new NBTTagCompound();
+        NBTTagList effectList = new NBTTagList();
+        if (!this.effects.isEmpty()) {
+            for (GenericGemEffect effect : this.effects)
+                effectList.appendTag(effect.writeToNBT());
+            nbt.setTag("Sub-Effects", effectList);
+        }
+        return nbt;
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound nbt) {
+        if (nbt.hasKey("Sub-Effects")) {
+            NBTTagList effectList = nbt.getTagList("Sub-Effects", 10);
+            //todo: somewhat lazy check, will reroll any instantiation if somehow the saving/reading fails due to for example config changes
+            Socketed.LOGGER.info("this effects size {}, nbt size {}", this.effects.size(), effectList.tagCount());
+            if(this.effects.size() == effectList.tagCount())
+                for (int i = 0; i < effectList.tagCount(); i++)
+                    this.effects.get(i).readFromNBT(effectList.getCompoundTagAt(i));
+        }
     }
 }

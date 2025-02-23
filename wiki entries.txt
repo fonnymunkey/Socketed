@@ -40,12 +40,12 @@ Filter
 	- Ore Dictionary Name, required, OreDictionary entry like oreGold
 	- Strict Metadata, default true
 
-Effect
+Effect (always needs an Equipment Slot Type)
 - Attribute
 	- Attribute Name, required, generic.attackDamage
 	- Modifier Amount, required, RandomValueRange
 	- Modifier Operation, required, 0=ADD, 1=MULT_BASE, 2=MULT_TOTAL
-- Activatable
+- Activatable (always needs list of Targets and an Activator)
 	- Potion
 		- Potion Name, required, modid:potionname
 		- Amplifier, required, any integer
