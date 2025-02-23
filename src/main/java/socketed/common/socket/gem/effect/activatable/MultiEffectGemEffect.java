@@ -32,6 +32,7 @@ public class MultiEffectGemEffect extends ActivatableGemEffect {
         this.effects = effects;
     }
 
+    public MultiEffectGemEffect(MultiEffectGemEffect multiEffect) {
         super(multiEffect.slotType, multiEffect.activator, multiEffect.targets);
         this.effects = new ArrayList<>();
         for (GenericGemEffect effect : multiEffect.effects)
