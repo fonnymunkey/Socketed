@@ -1,6 +1,6 @@
 package socketed.common.capabilities.socketable;
 
-import net.minecraft.item.*;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -14,9 +14,8 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import socketed.Socketed;
-import socketed.common.socket.gem.GemCombinationInstance;
-import socketed.common.config.ForgeConfig;
 import socketed.common.socket.GenericSocket;
+import socketed.common.socket.gem.GemCombinationInstance;
 import socketed.common.util.SocketedUtil;
 
 import javax.annotation.Nonnull;

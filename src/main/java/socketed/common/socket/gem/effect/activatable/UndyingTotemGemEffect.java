@@ -7,7 +7,6 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.common.socket.gem.effect.activatable.activator.GenericActivator;
-import socketed.common.socket.gem.effect.activatable.callback.CancelEventCallback;
 import socketed.common.socket.gem.effect.activatable.callback.IEffectCallback;
 import socketed.common.socket.gem.effect.activatable.target.GenericTarget;
 import socketed.common.socket.gem.effect.slot.ISlotType;
@@ -25,15 +24,12 @@ public class UndyingTotemGemEffect extends ActivatableGemEffect {
 	
 	@Override
 	public void performEffect(@Nullable IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget) {
-		if(playerSource != null && effectTarget != null && !playerSource.world.isRemote) {
-			if(effectTarget instanceof EntityPlayer && effectTarget.getHealth() <= 0.0F) {
-				if(callback instanceof CancelEventCallback) ((CancelEventCallback)callback).setCancelled(true);
-				effectTarget.setHealth(1.0F);
-				effectTarget.clearActivePotions();
-				effectTarget.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 900, 1));
-				effectTarget.addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, 100, 1));
-				effectTarget.world.setEntityState(effectTarget, (byte)35);
-			}
+		if(effectTarget != null && !effectTarget.world.isRemote) {
+			effectTarget.setHealth(1.0F);
+			effectTarget.clearActivePotions();
+			effectTarget.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 900, 1));
+			effectTarget.addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, 100, 1));
+			effectTarget.world.setEntityState(effectTarget, (byte)35);
 		}
 	}
 	

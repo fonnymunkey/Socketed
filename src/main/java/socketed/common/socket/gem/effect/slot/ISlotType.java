@@ -2,6 +2,7 @@ package socketed.common.socket.gem.effect.slot;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+
 import java.util.Set;
 
 public interface ISlotType {

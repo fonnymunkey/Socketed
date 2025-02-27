@@ -17,14 +17,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import socketed.common.capabilities.effectscache.CapabilityEffectsCacheHandler;
 import socketed.common.capabilities.socketable.CapabilitySocketableHandler;
+import socketed.common.command.AddSocketCommand;
 import socketed.common.config.JsonConfig;
 import socketed.common.container.GuiHandlerSocketing;
 import socketed.common.init.ModItems;
 import socketed.common.init.ModRecipes;
-import socketed.common.proxy.IProxy;
-import socketed.common.command.AddSocketCommand;
 import socketed.common.loot.LootFunctionAddSocketsRandomly;
 import socketed.common.loot.LootFunctionSetSockets;
+import socketed.common.proxy.IProxy;
 
 @Mod(modid = Socketed.MODID, name = Socketed.MODNAME, version = Socketed.VERSION)
 public class Socketed {

@@ -3,13 +3,6 @@ package socketed.common.socket.gem.effect.activatable.condition;
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import socketed.Socketed;
-import socketed.common.socket.gem.effect.activatable.callback.IEffectCallback;
-
-import javax.annotation.Nullable;
 
 public abstract class EntityPropertyCondition extends GenericCondition {
 	@SerializedName("Check For Player")

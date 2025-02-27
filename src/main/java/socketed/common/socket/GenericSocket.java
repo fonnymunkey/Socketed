@@ -8,8 +8,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.Socketed;
 import socketed.common.socket.gem.GemInstance;
-import socketed.common.socket.gem.effect.GenericGemEffect;
 import socketed.common.socket.gem.GemType;
+import socketed.common.socket.gem.effect.GenericGemEffect;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

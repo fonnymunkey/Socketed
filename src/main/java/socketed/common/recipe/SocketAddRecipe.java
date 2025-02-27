@@ -6,8 +6,8 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import socketed.common.capabilities.socketable.CapabilitySocketableHandler;
-import socketed.common.config.ForgeConfig;
 import socketed.common.capabilities.socketable.ICapabilitySocketable;
+import socketed.common.config.ForgeConfig;
 import socketed.common.item.ItemSocketGeneric;
 import socketed.common.socket.GenericSocket;
 

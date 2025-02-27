@@ -1,6 +1,6 @@
 package socketed.common.socket.gem.effect.activatable.callback;
 
-public class CancelEventCallback implements IEffectCallback {
+public class CancelEventCallback implements IEffectCallback, ICancellableCallback {
 	
 	private boolean cancelled;
 	

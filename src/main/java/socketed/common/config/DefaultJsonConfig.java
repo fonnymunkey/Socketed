@@ -7,9 +7,11 @@ import net.minecraft.util.text.TextFormatting;
 import socketed.common.attributes.SocketedAttributes;
 import socketed.common.socket.gem.GemCombinationType;
 import socketed.common.socket.gem.GemType;
+import socketed.common.socket.gem.effect.AttributeGemEffect;
 import socketed.common.socket.gem.effect.activatable.ExtraIframesGemEffect;
 import socketed.common.socket.gem.effect.activatable.KnockbackGemEffect;
 import socketed.common.socket.gem.effect.activatable.MultiEffectGemEffect;
+import socketed.common.socket.gem.effect.activatable.PotionGemEffect;
 import socketed.common.socket.gem.effect.activatable.activator.AttackingActivator;
 import socketed.common.socket.gem.effect.activatable.activator.MultiEffectActivator;
 import socketed.common.socket.gem.effect.activatable.activator.PassiveActivator;
@@ -19,14 +21,15 @@ import socketed.common.socket.gem.effect.activatable.condition.PotionActiveCondi
 import socketed.common.socket.gem.effect.activatable.target.OtherTarget;
 import socketed.common.socket.gem.effect.activatable.target.SelfAOETarget;
 import socketed.common.socket.gem.effect.activatable.target.SelfTarget;
-import socketed.common.socket.gem.filter.ItemFilter;
-import socketed.common.socket.gem.util.RandomValueRange;
-import socketed.common.socket.gem.effect.AttributeGemEffect;
-import socketed.common.socket.gem.effect.activatable.PotionGemEffect;
-import socketed.common.socket.gem.filter.OreFilter;
 import socketed.common.socket.gem.effect.slot.SocketedSlotTypes;
+import socketed.common.socket.gem.filter.ItemFilter;
+import socketed.common.socket.gem.filter.OreFilter;
+import socketed.common.socket.gem.util.RandomValueRange;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class DefaultJsonConfig {
     

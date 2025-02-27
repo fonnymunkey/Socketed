@@ -11,15 +11,15 @@ import socketed.Socketed;
 import socketed.common.config.*;
 import socketed.common.loot.DefaultSocketsGenerator;
 import socketed.common.loot.IItemCreationContext;
+import socketed.common.socket.GenericSocket;
 import socketed.common.socket.gem.GemCombinationType;
 import socketed.common.socket.gem.GemType;
 import socketed.common.socket.gem.effect.GenericGemEffect;
 import socketed.common.socket.gem.effect.activatable.activator.GenericActivator;
-import socketed.common.socket.gem.effect.activatable.target.GenericTarget;
 import socketed.common.socket.gem.effect.activatable.condition.GenericCondition;
-import socketed.common.socket.gem.filter.GenericFilter;
+import socketed.common.socket.gem.effect.activatable.target.GenericTarget;
 import socketed.common.socket.gem.effect.slot.ISlotType;
-import socketed.common.socket.GenericSocket;
+import socketed.common.socket.gem.filter.GenericFilter;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

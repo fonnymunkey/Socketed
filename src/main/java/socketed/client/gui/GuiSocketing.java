@@ -15,8 +15,8 @@ import socketed.Socketed;
 import socketed.common.capabilities.socketable.CapabilitySocketableHandler;
 import socketed.common.capabilities.socketable.ICapabilitySocketable;
 import socketed.common.container.ContainerSocketing;
-import socketed.common.socket.gem.GemType;
 import socketed.common.socket.GenericSocket;
+import socketed.common.socket.gem.GemType;
 import socketed.common.util.SocketedUtil;
 import socketed.mixin.vanilla.IGuiContainerMixin;
 

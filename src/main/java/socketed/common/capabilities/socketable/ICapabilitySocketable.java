@@ -1,11 +1,11 @@
 package socketed.common.capabilities.socketable;
 
 import net.minecraft.nbt.NBTTagCompound;
+import socketed.common.socket.GenericSocket;
 import socketed.common.socket.gem.GemCombinationInstance;
 import socketed.common.socket.gem.GemInstance;
 import socketed.common.socket.gem.effect.GenericGemEffect;
 import socketed.common.socket.gem.effect.slot.ISlotType;
-import socketed.common.socket.GenericSocket;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

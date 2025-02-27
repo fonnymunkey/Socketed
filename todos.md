@@ -9,6 +9,9 @@
   - or maybe a possibility for rare gems to roll directly with stats?
   - like there should be an api to create gems dynamically from attached nbt instead of statically via json
 
+- debuff limiting/reducing lvls/duration effect
+- eat/drink faster
+
 ### For addon mods
 - Baubles compat?
 - Gem effects
