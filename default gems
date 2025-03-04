@@ -2,16 +2,16 @@ new shit
 
 effects
     dmg change (livinghurt)
-    explosion
     +enchant lvl
     cant get aggrod
     livingdrops
     tp effect
 activators
-conditions
-    is specific mob
+    hurt activator
 attributes
     xp
+    minus followrange?
+    reduced trade cost
 
 
 done
@@ -32,12 +32,13 @@ tier 0
         +1 armor (armor)
     coal block
         ignite for 2 sec
+    gunpowder
+        small explosion on hit
 tier 1
     blaze rod
         ignite + attacking
     cobweb
         slowness for mobs around you in 6 blocks around you (legs)
-        place web on mobs you attack? (would need new code) todo
     glowstone dust
         glowing AOE 4 blocks (head
     glowstone block
@@ -62,6 +63,38 @@ tier 2
         absorption 1 (hand)
     sponge
         water breathing
+    anvil
+        stronger knockback, +2 atk dmg
+    rabbits foot (feet)
+        + 1 luck
+        + jump boost
+    pufferfish
+        poison on AOE
+    sea lantern
+        + blindness on mobs when hit with a low chance
+    clownfish
+        swim speed
+    obsidian
+        + dura on armor
+        + strength on weapon, on attacking with chance
+    tnt
+        bigger explosion
+tier3
+    ghast tear (only chestplate)
+        regeneration 1
+        health boost 1
+    totem
+        deathtotem check activator + undying totem effect + cancel event effect
+    end crystal
+        attacking activator + chance condition, undying totem effect, condition non boss, chance
+    beacon
+        glowing+invis on mobs in 32 blocks radius passive, only works on surface (light level 15)
+        chance for invis passive in darkness
+    god apple
+        absorption 2, fire res (if health <25%), not whole time
+    nether star
+        wither aoe on hit (armor)
+        + 5 atk dmg (weapon)
 
 
 todo:
@@ -69,52 +102,23 @@ todo:
 tier 0
     feather
         less fall dmg (would need new effect)
-    gunpowder
-        small explosion on hit (need new effect)
-
 tier 1
     flint
         + power enchant (would need custom code)
-
+    magma block
+        no magma dmg idk
 tier 2
     chorus flower
-        tp to surface when taking void dmg (needs some tweaks in dmg source condition, also tp effect)
-    lingering pots
-        reapplies the given buff when it runs out with a chance
+        tp to surface when taking void dmg (needs tp effect and hurt activator)
     quartz
         +xp earned (would need a new attribute/effect)
-    wither skelly skull
-        apply wither on mobs on attacked
-    anvil
-        stronger knockback, +2 atk dmg
     dragon breath
-        + iframes after hit (todo does that even work with attacked activator?)
-    rabbits foot
-        + luck
-        + jump boost
+        + iframes after hit (does that even work with attacked activator? --> nope)
     emerald block
         reduce trading cost (needs new effect)
-    sea lantern
-        + blindness on mobs when hit with a low chance
-    obsidian
-        + dura on armor
-        + strength on weapon, on attacking with chance
-    tnt
-        bigger explosion (new effect)
-    pufferfish
-        poison on AOE
-    clownfish
-        swim speed
-
-
 tier 3
     music discs
         makes creepers always drop music discs idk, chance
-    totem
-        deathtotem check activator + undying totem effect + cancel event effect
-    nether star
-        wither aoe on hit (armor)
-        + 5 atk dmg (weapon)
     zombie head
         cant get aggrod by zombies
     skelly head
@@ -124,33 +128,17 @@ tier 3
     gold
         cant get aggrod by pigmen (needs new effect)
         more gold drops in general
-    ghast tear (only chestplate)
-        regeneration 1
-        health boost 1
     ender eye
         cant get aggrod by endermen (needs an effect)
     dragon egg
         spawn egg drops? of that specific mob? (needs custom shit)
         resistance 1
-    beacon
-        glowing+invis on mobs in 32 blocks radius passive
-        chance for invis passive in darkness
-        only works on surface (light level 15)
-    god apple
-        absorption 2, fire res, not whole time tho
     elytra
         no fall dmg (would need new effect)
-    end crystal
-        attacking activator + chance condition, undying totem effect, condition non boss, chance
+        no hit wall dmg?
 
 
 gem combinations
     all the aoe+self tier 0s in one without the self
     golden carrot + spider eye -> invis + night vision (lose weakness effect of spider eye)
     ender pearl + chorus flower -> death totem check, cancel event, tp randomly (needs new effect)
-
-
-
-available items (some as blocks/ores)
-- magma block
-    no magma dmg idk

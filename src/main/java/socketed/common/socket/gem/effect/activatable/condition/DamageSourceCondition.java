@@ -20,11 +20,15 @@ public class DamageSourceCondition extends GenericCondition {
 	protected Boolean allowsRanged;
 	@SerializedName("Allows Other")
 	protected Boolean allowsOther;
+	@SerializedName("Allowed Damage Type")
+	protected String allowedDamageType;
 
-	public DamageSourceCondition(boolean allowsMelee, boolean allowsRanged) {
+	public DamageSourceCondition(boolean allowsMelee, boolean allowsRanged, boolean allowsOther, String allowedDamageType) {
 		super();
 		this.allowsMelee = allowsMelee;
 		this.allowsRanged = allowsRanged;
+		this.allowsOther = allowsOther;
+		this.allowedDamageType = allowedDamageType;
 	}
 	
 	@Override
@@ -36,6 +40,8 @@ public class DamageSourceCondition extends GenericCondition {
 			Method method = event.getClass().getMethod("getSource");
 			DamageSource source = (DamageSource) method.invoke(event); // Invoke event.getSource()
 			if(source == null) return false;
+
+			if(!this.allowedDamageType.isEmpty() && source.getDamageType().equals(allowedDamageType)) return true;
 
 			if (this.allowsMelee && isDamageSourceMelee(source)) return true;
 			else if (this.allowsRanged && isDamageSourceRanged(source)) return true;
@@ -54,12 +60,14 @@ public class DamageSourceCondition extends GenericCondition {
 	 * Allows Melee: optional, default true
 	 * Allows Ranged: optional, default true
 	 * Allows Other: optional, default true
+	 * Allowed Damage Type: optional, default empty
 	 */
 	@Override
 	public boolean validate() {
 		if(this.allowsMelee == null) this.allowsMelee = true;
 		if(this.allowsRanged == null) this.allowsRanged = true;
 		if(this.allowsOther == null) this.allowsOther = true;
+		if(this.allowedDamageType == null) this.allowedDamageType = "";
 
 		return true;
 	}

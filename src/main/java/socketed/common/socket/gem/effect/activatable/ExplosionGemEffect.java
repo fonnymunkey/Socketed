@@ -3,6 +3,7 @@ package socketed.common.socket.gem.effect.activatable;
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.Socketed;
@@ -14,22 +15,26 @@ import socketed.common.socket.gem.effect.slot.ISlotType;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ExtraIframesGemEffect extends ActivatableGemEffect {
+public class ExplosionGemEffect extends ActivatableGemEffect {
 
-	public static final String TYPE_NAME = "Extra Iframes";
+	public static final String TYPE_NAME = "Explosion";
 
-	@SerializedName("Tick Amount")
-	private final Integer ticks;
+	@SerializedName("Strength")
+	private final Float strength;
+	@SerializedName("Damages Terrain")
+	private Boolean damagesTerrain;
 
-	public ExtraIframesGemEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets, int ticks) {
+	public ExplosionGemEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets, float strength, boolean damagesTerrain) {
 		super(slotType, activator, targets);
-		this.ticks = ticks;
+		this.strength = strength;
+		this.damagesTerrain = damagesTerrain;
 	}
 	
 	@Override
 	public void performEffect(@Nullable IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget) {
 		if(playerSource != null && effectTarget != null && !playerSource.world.isRemote) {
-			effectTarget.hurtResistantTime = effectTarget.maxHurtResistantTime + this.ticks;
+			BlockPos pos = effectTarget.getPosition();
+			effectTarget.world.createExplosion(effectTarget,pos.getX(), pos.getY(), pos.getZ(), this.strength, this.damagesTerrain);
 		}
 	}
 	
@@ -46,12 +51,16 @@ public class ExtraIframesGemEffect extends ActivatableGemEffect {
 	}
 
 	/**
-	 * Tick Amount: Required
+	 * Strength: Required, positive float
+	 * Damages Terrain: Optional, default false
 	 */
 	@Override
 	public boolean validate() {
 		if(super.validate()) {
-			if(this.ticks == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, tick amount must be defined");
+			if(this.damagesTerrain == null) this.damagesTerrain = false;
+
+			if(this.strength == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, strength must be defined");
+			else if(this.strength <= 0) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, strength must be positive");
 			else return true;
 		}
 		return false;
