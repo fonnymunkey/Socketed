@@ -16,7 +16,7 @@ public class BypassIframeGemEffect extends ActivatableGemEffect {
 
 	public static final String TYPE_NAME = "Bypass Iframes";
 
-	public BypassIframeGemEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets, int ticks, boolean setToAmount) {
+	public BypassIframeGemEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets) {
 		super(slotType, activator, targets);
 	}
 	

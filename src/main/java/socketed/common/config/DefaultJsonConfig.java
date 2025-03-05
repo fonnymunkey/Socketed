@@ -8,10 +8,7 @@ import socketed.common.attributes.SocketedAttributes;
 import socketed.common.socket.gem.GemCombinationType;
 import socketed.common.socket.gem.GemType;
 import socketed.common.socket.gem.effect.AttributeGemEffect;
-import socketed.common.socket.gem.effect.activatable.ExtraIframesGemEffect;
-import socketed.common.socket.gem.effect.activatable.KnockbackGemEffect;
-import socketed.common.socket.gem.effect.activatable.MultiEffectGemEffect;
-import socketed.common.socket.gem.effect.activatable.PotionGemEffect;
+import socketed.common.socket.gem.effect.activatable.*;
 import socketed.common.socket.gem.effect.activatable.activator.AttackingActivator;
 import socketed.common.socket.gem.effect.activatable.activator.MultiEffectActivator;
 import socketed.common.socket.gem.effect.activatable.activator.PassiveActivator;
@@ -102,7 +99,7 @@ public abstract class DefaultJsonConfig {
                                                                         )), true),
                                                                 Collections.singletonList(new SelfTarget(null)),
                                                                 Arrays.asList(
-                                                                        new ExtraIframesGemEffect(SocketedSlotTypes.ALL, new MultiEffectActivator(null), Collections.singletonList(new SelfTarget(null)), 0, true),
+                                                                        new BypassIframeGemEffect(SocketedSlotTypes.ALL, new MultiEffectActivator(null), Collections.singletonList(new SelfTarget(null))),
                                                                         new PotionGemEffect(SocketedSlotTypes.ALL, new MultiEffectActivator(null), Collections.singletonList(new SelfTarget(null)), "minecraft:strength", 0, 100)
                                                                 )
                                                         )), Collections.singletonList(new ItemFilter("minecraft:soul_sand", 0, false))));
