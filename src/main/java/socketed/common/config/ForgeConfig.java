@@ -51,6 +51,10 @@ public class ForgeConfig {
         @Config.Comment("If enabled, Socketed will attempt to prevent items with sockets from being enchanted, and enchanted items from getting sockets")
         @Config.Name("Enchantment Lock")
         public boolean enchantmentLock = false;
+        
+        @Config.Comment("Only loads gem effects from built-in default effects including from addons, disable this when creating your own effects")
+        @Config.Name("Only Use Default Effects")
+        public boolean onlyUseDefaults = true;
     }
 
     public static class Client {

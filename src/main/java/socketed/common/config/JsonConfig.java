@@ -227,24 +227,35 @@ public class JsonConfig {
                     return;
                 }
             }
-            for(File file : files) {
-                if(file.isDirectory()) continue;
-                JsonElement elem = getJson(file);
-                if(elem == null) {
-                    Socketed.LOGGER.warn("Failed to parse gem type config file: " + file.getName());
-                    continue;
+            if(ForgeConfig.COMMON.onlyUseDefaults) {
+                Map<String, GemType> defaultMap = DefaultJsonConfig.getDefaultGemTypes();
+                for(Map.Entry<String, GemType> entry : defaultMap.entrySet()) {
+                    GemType gemType = entry.getValue();
+                    gemType.setName(entry.getKey());
+                    if(gemType.validate()) gemTypesDataMap.put(gemType.getName(), gemType);
+                    else Socketed.LOGGER.warn("Failed to load default gem type, validation failed: " + gemType.getName());
                 }
-                try {
-                    GemType gemType = gson.fromJson(elem, GemType.class);
-                    if(gemType == null) Socketed.LOGGER.warn("Failed to load gem type config file, invalid file: " + file.getName());
-                    else {
-                        gemType.setName(file.getName().split("\\.json")[0]);
-                        if(gemType.validate()) gemTypesDataMap.put(gemType.getName(), gemType);
-                        else Socketed.LOGGER.warn("Failed to load gem type config file, validation failed: " + file.getName());
+            }
+            else {
+                for(File file : files) {
+                    if(file.isDirectory()) continue;
+                    JsonElement elem = getJson(file);
+                    if(elem == null) {
+                        Socketed.LOGGER.warn("Failed to parse gem type config file: " + file.getName());
+                        continue;
                     }
-                }
-                catch(Exception e) {
-                    Socketed.LOGGER.warn("Failed to load gem type config file: " + file.getName() + ", " + e);
+                    try {
+                        GemType gemType = gson.fromJson(elem, GemType.class);
+                        if(gemType == null) Socketed.LOGGER.warn("Failed to load gem type config file, invalid file: " + file.getName());
+                        else {
+                            gemType.setName(file.getName().split("\\.json")[0]);
+                            if(gemType.validate()) gemTypesDataMap.put(gemType.getName(), gemType);
+                            else Socketed.LOGGER.warn("Failed to load gem type config file, validation failed: " + file.getName());
+                        }
+                    }
+                    catch(Exception e) {
+                        Socketed.LOGGER.warn("Failed to load gem type config file: " + file.getName() + ", " + e);
+                    }
                 }
             }
         }
@@ -293,24 +304,35 @@ public class JsonConfig {
                     return;
                 }
             }
-            for(File file : files) {
-                if(file.isDirectory()) continue;
-                JsonElement elem = getJson(file);
-                if(elem == null) {
-                    Socketed.LOGGER.warn("Failed to parse gem combination type config file: " + file.getName());
-                    continue;
+            if(ForgeConfig.COMMON.onlyUseDefaults) {
+                Map<String, GemCombinationType> defaultMap = DefaultJsonConfig.getDefaultGemCombinationTypes();
+                for(Map.Entry<String, GemCombinationType> entry : defaultMap.entrySet()) {
+                    GemCombinationType gemCombination = entry.getValue();
+                    gemCombination.setName(entry.getKey());
+                    if(gemCombination.validate()) gemCombinationDataMap.put(gemCombination.getName(), gemCombination);
+                    else Socketed.LOGGER.warn("Failed to load default gem combination type, validation failed: " + gemCombination.getName());
                 }
-                try {
-                    GemCombinationType gemCombination = gson.fromJson(elem, GemCombinationType.class);
-                    if(gemCombination == null) Socketed.LOGGER.warn("Failed to load gem combination type config file, invalid file: " + file.getName());
-                    else {
-                        gemCombination.setName(file.getName().split("\\.json")[0]);
-                        if(gemCombination.validate()) gemCombinationDataMap.put(gemCombination.getName(), gemCombination);
-                        else Socketed.LOGGER.warn("Failed to load gem combination type config file, validation failed: " + file.getName());
+            }
+            else {
+                for(File file : files) {
+                    if(file.isDirectory()) continue;
+                    JsonElement elem = getJson(file);
+                    if(elem == null) {
+                        Socketed.LOGGER.warn("Failed to parse gem combination type config file: " + file.getName());
+                        continue;
                     }
-                }
-                catch(Exception e) {
-                    Socketed.LOGGER.warn("Failed to load gem combination type config file: " + file.getName() + ", " + e);
+                    try {
+                        GemCombinationType gemCombination = gson.fromJson(elem, GemCombinationType.class);
+                        if(gemCombination == null) Socketed.LOGGER.warn("Failed to load gem combination type config file, invalid file: " + file.getName());
+                        else {
+                            gemCombination.setName(file.getName().split("\\.json")[0]);
+                            if(gemCombination.validate()) gemCombinationDataMap.put(gemCombination.getName(), gemCombination);
+                            else Socketed.LOGGER.warn("Failed to load gem combination type config file, validation failed: " + file.getName());
+                        }
+                    }
+                    catch(Exception e) {
+                        Socketed.LOGGER.warn("Failed to load gem combination type config file: " + file.getName() + ", " + e);
+                    }
                 }
             }
         }
