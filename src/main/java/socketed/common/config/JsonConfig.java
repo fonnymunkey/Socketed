@@ -91,6 +91,7 @@ public class JsonConfig {
         SocketedUtil.registerEffectType(MultiEffectGemEffect.TYPE_NAME, MultiEffectGemEffect.class, Socketed.MODID);
         SocketedUtil.registerEffectType(ExtraIframesGemEffect.TYPE_NAME, ExtraIframesGemEffect.class, Socketed.MODID);
         SocketedUtil.registerEffectType(BypassIframeGemEffect.TYPE_NAME, BypassIframeGemEffect.class, Socketed.MODID);
+        SocketedUtil.registerEffectType(ExplosionGemEffect.TYPE_NAME, ExplosionGemEffect.class, Socketed.MODID);
         
         SocketedUtil.registerActivator(PassiveActivator.TYPE_NAME, PassiveActivator.class, Socketed.MODID);
         SocketedUtil.registerActivator(AttackingActivator.TYPE_NAME, AttackingActivator.class, Socketed.MODID);
@@ -115,6 +116,8 @@ public class JsonConfig {
         SocketedUtil.registerCondition(BiomeCondition.TYPE_NAME, BiomeCondition.class, Socketed.MODID);
         SocketedUtil.registerCondition(BiomeTypeCondition.TYPE_NAME, BiomeTypeCondition.class, Socketed.MODID);
         SocketedUtil.registerCondition(DamageSourceCondition.TYPE_NAME, DamageSourceCondition.class, Socketed.MODID);
+        SocketedUtil.registerCondition(InvertedCondition.TYPE_NAME, InvertedCondition.class, Socketed.MODID);
+        SocketedUtil.registerCondition(IsSpecificEntityCondition.TYPE_NAME, IsSpecificEntityCondition.class, Socketed.MODID);
         
         SocketedUtil.registerSlotTypes(SocketedSlotTypes.class, Socketed.MODID);
         
