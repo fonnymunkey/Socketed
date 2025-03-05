@@ -14,39 +14,35 @@ import java.lang.reflect.Method;
 public class DamageSourceCondition extends GenericCondition {
 	public static final String TYPE_NAME = "Damage Source";
 
-	@SerializedName("Allows Melee")
-	protected Boolean allowsMelee;
-	@SerializedName("Allows Ranged")
-	protected Boolean allowsRanged;
-	@SerializedName("Allows Other")
-	protected Boolean allowsOther;
-	@SerializedName("Allowed Damage Type")
-	protected String allowedDamageType;
+	@SerializedName("Require Melee")
+	protected Boolean requireMelee;
+	@SerializedName("Require Ranged")
+	protected Boolean requireRanged;
+	@SerializedName("Required Damage Type")
+	protected String requiredDamageType;
 
-	public DamageSourceCondition(boolean allowsMelee, boolean allowsRanged, boolean allowsOther, String allowedDamageType) {
+	public DamageSourceCondition(boolean allowsMelee, boolean allowsRanged, String allowedDamageType) {
 		super();
-		this.allowsMelee = allowsMelee;
-		this.allowsRanged = allowsRanged;
-		this.allowsOther = allowsOther;
-		this.allowedDamageType = allowedDamageType;
+		this.requireMelee = allowsMelee;
+		this.requireRanged = allowsRanged;
+		this.requiredDamageType = allowedDamageType;
 	}
 	
 	@Override
 	public boolean testCondition(@Nullable IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget) {
 		if(!(callback instanceof GenericEventCallback)) return false;
 		try {
-			Event event = ((GenericEventCallback<?>) callback).getEvent();
+			Event event = ((GenericEventCallback<?>)callback).getEvent();
 			//Works for LivingAttack, LivingHurt, LivingDamage, DDD GatherDefenses, DDD DetermineDamage
 			Method method = event.getClass().getMethod("getSource");
-			DamageSource source = (DamageSource) method.invoke(event); // Invoke event.getSource()
+			DamageSource source = (DamageSource)method.invoke(event); // Invoke event.getSource()
 			if(source == null) return false;
-
-			if(!this.allowedDamageType.isEmpty() && source.getDamageType().equals(allowedDamageType)) return true;
-
-			if (this.allowsMelee && isDamageSourceMelee(source)) return true;
-			else if (this.allowsRanged && isDamageSourceRanged(source)) return true;
-			else return this.allowsOther;
-		} catch (Exception exception) {
+			
+			if(this.requireMelee && !isDamageSourceMelee(source)) return false;
+			else if(this.requireRanged && !isDamageSourceRanged(source)) return false;
+			else return this.requiredDamageType.isEmpty() || source.getDamageType().equals(requiredDamageType);
+		}
+		catch(Exception exception) {
 			return false;
 		}
     }
@@ -57,17 +53,15 @@ public class DamageSourceCondition extends GenericCondition {
 	}
 
 	/**
-	 * Allows Melee: optional, default true
-	 * Allows Ranged: optional, default true
-	 * Allows Other: optional, default true
-	 * Allowed Damage Type: optional, default empty
+	 * Require Melee: optional, default false
+	 * Require Ranged: optional, default false
+	 * Required Damage Type: optional, default empty
 	 */
 	@Override
 	public boolean validate() {
-		if(this.allowsMelee == null) this.allowsMelee = true;
-		if(this.allowsRanged == null) this.allowsRanged = true;
-		if(this.allowsOther == null) this.allowsOther = true;
-		if(this.allowedDamageType == null) this.allowedDamageType = "";
+		if(this.requireMelee == null) this.requireMelee = false;
+		if(this.requireRanged == null) this.requireRanged = false;
+		if(this.requiredDamageType == null) this.requiredDamageType = "";
 
 		return true;
 	}
