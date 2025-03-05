@@ -29,7 +29,7 @@ public class UndyingTotemGemEffect extends ActivatableGemEffect {
 			effectTarget.clearActivePotions();
 			effectTarget.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 900, 1));
 			effectTarget.addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, 100, 1));
-			effectTarget.world.setEntityState(effectTarget, (byte)35);
+			if(effectTarget instanceof EntityPlayer) effectTarget.world.setEntityState(effectTarget, (byte)35);
 		}
 	}
 	
