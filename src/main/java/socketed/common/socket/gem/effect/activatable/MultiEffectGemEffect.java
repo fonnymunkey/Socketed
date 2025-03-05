@@ -118,7 +118,7 @@ public class MultiEffectGemEffect extends ActivatableGemEffect {
         if (nbt.hasKey("Sub-Effects")) {
             NBTTagList effectList = nbt.getTagList("Sub-Effects", 10);
             //todo: somewhat lazy check, will reroll any instantiation if somehow the saving/reading fails due to for example config changes
-            Socketed.LOGGER.info("this effects size {}, nbt size {}", this.effects.size(), effectList.tagCount());
+            //Socketed.LOGGER.info("this effects size {}, nbt size {}", this.effects.size(), effectList.tagCount());
             if(this.effects.size() == effectList.tagCount())
                 for (int i = 0; i < effectList.tagCount(); i++)
                     this.effects.get(i).readFromNBT(effectList.getCompoundTagAt(i));
