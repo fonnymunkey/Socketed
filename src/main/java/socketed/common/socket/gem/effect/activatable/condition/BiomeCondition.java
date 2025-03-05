@@ -7,7 +7,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import socketed.Socketed;
-import socketed.common.socket.gem.effect.activatable.callback.IEffectCallback;
+import socketed.api.socket.gem.effect.activatable.callback.IEffectCallback;
+import socketed.api.socket.gem.effect.activatable.condition.GenericCondition;
 
 import javax.annotation.Nullable;
 

@@ -5,6 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
 import socketed.Socketed;
+import socketed.api.socket.gem.filter.GenericFilter;
 
 import javax.annotation.Nonnull;
 

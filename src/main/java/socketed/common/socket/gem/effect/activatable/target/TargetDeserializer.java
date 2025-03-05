@@ -1,9 +1,10 @@
 package socketed.common.socket.gem.effect.activatable.target;
 
 import com.google.gson.*;
+import socketed.api.socket.gem.effect.activatable.target.GenericTarget;
 import socketed.common.config.JsonConfig;
 import socketed.common.socket.gem.effect.activatable.condition.ConditionDeserializer;
-import socketed.common.socket.gem.effect.activatable.condition.GenericCondition;
+import socketed.api.socket.gem.effect.activatable.condition.GenericCondition;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;

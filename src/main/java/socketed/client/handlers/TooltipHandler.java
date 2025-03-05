@@ -12,14 +12,15 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import socketed.common.capabilities.socketable.CapabilitySocketableHandler;
-import socketed.common.capabilities.socketable.ICapabilitySocketable;
-import socketed.common.socket.gem.GemCombinationInstance;
-import socketed.common.socket.gem.GemCombinationType;
-import socketed.common.socket.gem.GemInstance;
-import socketed.common.socket.gem.GemType;
-import socketed.common.socket.gem.effect.GenericGemEffect;
-import socketed.common.util.SocketedUtil;
+import socketed.api.socket.gem.effect.slot.ISlotType;
+import socketed.api.common.capabilities.socketable.CapabilitySocketableHandler;
+import socketed.api.common.capabilities.socketable.ICapabilitySocketable;
+import socketed.api.socket.gem.GemCombinationInstance;
+import socketed.api.socket.gem.GemCombinationType;
+import socketed.api.socket.gem.GemInstance;
+import socketed.api.socket.gem.GemType;
+import socketed.api.socket.gem.effect.GenericGemEffect;
+import socketed.api.util.SocketedUtil;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -128,7 +129,7 @@ public class TooltipHandler {
                 //Effect Tooltips
                 for(GenericGemEffect effect : gemType.getEffects()) {
                     String tooltip = "  " + gemType.getColor() + effect.getTooltipString(false);
-                    tooltip += " " + SocketedUtil.getSlotTooltip(effect.getSlotType());
+                    tooltip += " " + ISlotType.getSlotTooltip(effect.getSlotType());
                     insertTooltip(tooltips, tooltip + TextFormatting.RESET);
                 }
             }

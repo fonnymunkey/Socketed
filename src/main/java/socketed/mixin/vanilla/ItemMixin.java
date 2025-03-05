@@ -15,11 +15,11 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import socketed.common.capabilities.socketable.CapabilitySocketableHandler;
-import socketed.common.capabilities.socketable.ICapabilitySocketable;
+import socketed.api.common.capabilities.socketable.CapabilitySocketableHandler;
+import socketed.api.common.capabilities.socketable.ICapabilitySocketable;
 import socketed.common.socket.gem.effect.AttributeGemEffect;
-import socketed.common.socket.gem.effect.GenericGemEffect;
-import socketed.common.socket.gem.effect.slot.SocketedSlotTypes;
+import socketed.api.socket.gem.effect.GenericGemEffect;
+import socketed.api.socket.gem.effect.slot.SocketedSlotTypes;
 
 import java.util.List;
 

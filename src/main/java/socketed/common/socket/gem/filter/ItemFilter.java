@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import socketed.Socketed;
+import socketed.api.socket.gem.filter.GenericFilter;
 
 public class ItemFilter extends GenericFilter {
 

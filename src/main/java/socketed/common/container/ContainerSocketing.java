@@ -6,12 +6,12 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import socketed.common.capabilities.socketable.CapabilitySocketableHandler;
-import socketed.common.capabilities.socketable.ICapabilitySocketable;
+import socketed.api.common.capabilities.socketable.CapabilitySocketableHandler;
+import socketed.api.common.capabilities.socketable.ICapabilitySocketable;
 import socketed.common.config.ForgeConfig;
-import socketed.common.socket.GenericSocket;
-import socketed.common.socket.gem.GemInstance;
-import socketed.common.util.SocketedUtil;
+import socketed.api.socket.GenericSocket;
+import socketed.api.socket.gem.GemInstance;
+import socketed.api.util.SocketedUtil;
 
 import javax.annotation.Nonnull;
 

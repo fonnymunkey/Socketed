@@ -1,6 +1,7 @@
 package socketed.common.socket.gem.effect.activatable.condition;
 
 import com.google.gson.*;
+import socketed.api.socket.gem.effect.activatable.condition.GenericCondition;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;

@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import socketed.common.loot.DefaultSocketsGenerator;
-import socketed.common.util.SocketedUtil;
+import socketed.api.util.SocketedUtil;
 
 @Mixin(EntityVillager.ListEnchantedItemForEmeralds.class)
 public abstract class EntityVillagerListEnchantedItemMixin {

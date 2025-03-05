@@ -12,12 +12,12 @@ import net.minecraftforge.fml.client.config.GuiUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.Socketed;
-import socketed.common.capabilities.socketable.CapabilitySocketableHandler;
-import socketed.common.capabilities.socketable.ICapabilitySocketable;
+import socketed.api.common.capabilities.socketable.CapabilitySocketableHandler;
+import socketed.api.common.capabilities.socketable.ICapabilitySocketable;
 import socketed.common.container.ContainerSocketing;
-import socketed.common.socket.GenericSocket;
-import socketed.common.socket.gem.GemType;
-import socketed.common.util.SocketedUtil;
+import socketed.api.socket.GenericSocket;
+import socketed.api.socket.gem.GemType;
+import socketed.api.util.SocketedUtil;
 import socketed.mixin.vanilla.IGuiContainerMixin;
 
 import java.util.Collections;

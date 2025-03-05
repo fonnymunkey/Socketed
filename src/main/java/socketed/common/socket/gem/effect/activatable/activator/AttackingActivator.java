@@ -2,7 +2,7 @@ package socketed.common.socket.gem.effect.activatable.activator;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import socketed.common.socket.gem.effect.activatable.condition.GenericCondition;
+import socketed.api.socket.gem.effect.activatable.condition.GenericCondition;
 
 import javax.annotation.Nullable;
 

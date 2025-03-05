@@ -9,7 +9,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.Socketed;
-import socketed.common.socket.GenericSocket;
+import socketed.api.socket.GenericSocket;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

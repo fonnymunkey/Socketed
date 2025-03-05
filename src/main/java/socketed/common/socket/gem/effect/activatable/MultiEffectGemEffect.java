@@ -8,13 +8,14 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.Socketed;
-import socketed.common.socket.gem.effect.GenericGemEffect;
-import socketed.common.socket.gem.effect.activatable.activator.GenericActivator;
+import socketed.api.socket.gem.effect.GenericGemEffect;
+import socketed.api.socket.gem.effect.activatable.ActivatableGemEffect;
+import socketed.api.socket.gem.effect.activatable.activator.GenericActivator;
 import socketed.common.socket.gem.effect.activatable.activator.MultiEffectActivator;
-import socketed.common.socket.gem.effect.activatable.callback.IEffectCallback;
-import socketed.common.socket.gem.effect.activatable.target.GenericTarget;
-import socketed.common.socket.gem.effect.slot.ISlotType;
-import socketed.common.socket.gem.effect.slot.SocketedSlotTypes;
+import socketed.api.socket.gem.effect.activatable.callback.IEffectCallback;
+import socketed.api.socket.gem.effect.activatable.target.GenericTarget;
+import socketed.api.socket.gem.effect.slot.ISlotType;
+import socketed.api.socket.gem.effect.slot.SocketedSlotTypes;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class MultiEffectGemEffect extends ActivatableGemEffect {
     }
 
     public MultiEffectGemEffect(MultiEffectGemEffect multiEffect) {
-        super(multiEffect.slotType, multiEffect.activator, multiEffect.targets);
+        super(multiEffect.getSlotType(), multiEffect.getActivator(), multiEffect.getTargets());
         this.effects = new ArrayList<>();
         for (GenericGemEffect effect : multiEffect.effects)
             this.effects.add(effect.instantiate());

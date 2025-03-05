@@ -10,15 +10,16 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import socketed.common.capabilities.effectscache.CapabilityEffectsCacheHandler;
-import socketed.common.capabilities.effectscache.ICapabilityEffectsCache;
-import socketed.common.capabilities.socketable.CapabilitySocketableHandler;
-import socketed.common.capabilities.socketable.ICapabilitySocketable;
-import socketed.common.socket.gem.effect.activatable.ActivatableGemEffect;
-import socketed.common.socket.gem.effect.activatable.callback.GenericEventCallback;
+import socketed.api.socket.gem.effect.activatable.activator.GenericActivator;
+import socketed.api.common.capabilities.effectscache.CapabilityEffectsCacheHandler;
+import socketed.api.common.capabilities.effectscache.ICapabilityEffectsCache;
+import socketed.api.common.capabilities.socketable.CapabilitySocketableHandler;
+import socketed.api.common.capabilities.socketable.ICapabilitySocketable;
+import socketed.api.socket.gem.effect.activatable.ActivatableGemEffect;
+import socketed.api.socket.gem.effect.activatable.callback.GenericEventCallback;
 import socketed.common.socket.gem.effect.activatable.condition.DamageSourceCondition;
-import socketed.common.socket.gem.effect.activatable.condition.GenericCondition;
-import socketed.common.socket.gem.effect.slot.SocketedSlotTypes;
+import socketed.api.socket.gem.effect.activatable.condition.GenericCondition;
+import socketed.api.socket.gem.effect.slot.SocketedSlotTypes;
 
 import javax.annotation.Nullable;
 

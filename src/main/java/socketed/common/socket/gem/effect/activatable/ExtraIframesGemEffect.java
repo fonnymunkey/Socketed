@@ -6,10 +6,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.Socketed;
-import socketed.common.socket.gem.effect.activatable.activator.GenericActivator;
-import socketed.common.socket.gem.effect.activatable.callback.IEffectCallback;
-import socketed.common.socket.gem.effect.activatable.target.GenericTarget;
-import socketed.common.socket.gem.effect.slot.ISlotType;
+import socketed.api.socket.gem.effect.activatable.ActivatableGemEffect;
+import socketed.api.socket.gem.effect.activatable.activator.GenericActivator;
+import socketed.api.socket.gem.effect.activatable.callback.IEffectCallback;
+import socketed.api.socket.gem.effect.activatable.target.GenericTarget;
+import socketed.api.socket.gem.effect.slot.ISlotType;
 
 import javax.annotation.Nullable;
 import java.util.List;

@@ -4,9 +4,10 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import socketed.common.socket.gem.effect.activatable.ActivatableGemEffect;
-import socketed.common.socket.gem.effect.activatable.callback.IEffectCallback;
-import socketed.common.socket.gem.effect.activatable.condition.GenericCondition;
+import socketed.api.socket.gem.effect.activatable.ActivatableGemEffect;
+import socketed.api.socket.gem.effect.activatable.activator.GenericActivator;
+import socketed.api.socket.gem.effect.activatable.callback.IEffectCallback;
+import socketed.api.socket.gem.effect.activatable.condition.GenericCondition;
 
 import javax.annotation.Nullable;
 

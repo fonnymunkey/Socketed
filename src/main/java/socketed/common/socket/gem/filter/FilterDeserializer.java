@@ -1,6 +1,7 @@
 package socketed.common.socket.gem.filter;
 
 import com.google.gson.*;
+import socketed.api.socket.gem.filter.GenericFilter;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;

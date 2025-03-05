@@ -2,10 +2,10 @@ package socketed.common.loot;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import socketed.common.capabilities.socketable.CapabilitySocketableHandler;
-import socketed.common.capabilities.socketable.ICapabilitySocketable;
+import socketed.api.common.capabilities.socketable.CapabilitySocketableHandler;
+import socketed.api.common.capabilities.socketable.ICapabilitySocketable;
 import socketed.common.config.ForgeConfig;
-import socketed.common.socket.TieredSocket;
+import socketed.api.socket.TieredSocket;
 
 import java.util.Random;
 

@@ -6,7 +6,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import socketed.Socketed;
-import socketed.common.socket.gem.effect.activatable.callback.IEffectCallback;
+import socketed.api.socket.gem.effect.activatable.callback.IEffectCallback;
+import socketed.api.socket.gem.effect.activatable.condition.GenericCondition;
 
 import javax.annotation.Nullable;
 

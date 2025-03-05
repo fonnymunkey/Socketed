@@ -2,9 +2,10 @@ package socketed.common.socket.gem.effect.activatable.target;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import socketed.common.socket.gem.effect.activatable.ActivatableGemEffect;
-import socketed.common.socket.gem.effect.activatable.callback.IEffectCallback;
-import socketed.common.socket.gem.effect.activatable.condition.GenericCondition;
+import socketed.api.socket.gem.effect.activatable.ActivatableGemEffect;
+import socketed.api.socket.gem.effect.activatable.callback.IEffectCallback;
+import socketed.api.socket.gem.effect.activatable.condition.GenericCondition;
+import socketed.api.socket.gem.effect.activatable.target.GenericTarget;
 
 import javax.annotation.Nullable;
 

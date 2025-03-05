@@ -6,8 +6,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import socketed.common.socket.GenericSocket;
-import socketed.common.socket.TieredSocket;
+import socketed.api.socket.GenericSocket;
+import socketed.api.socket.TieredSocket;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

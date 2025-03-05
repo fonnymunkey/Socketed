@@ -8,8 +8,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.Socketed;
-import socketed.common.socket.gem.effect.slot.ISlotType;
-import socketed.common.socket.gem.util.RandomValueRange;
+import socketed.api.socket.gem.effect.GenericGemEffect;
+import socketed.api.socket.gem.effect.slot.ISlotType;
+import socketed.api.socket.gem.util.RandomValueRange;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

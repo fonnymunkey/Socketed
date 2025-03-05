@@ -5,8 +5,9 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.fml.common.eventhandler.Event;
-import socketed.common.socket.gem.effect.activatable.callback.GenericEventCallback;
-import socketed.common.socket.gem.effect.activatable.callback.IEffectCallback;
+import socketed.api.socket.gem.effect.activatable.condition.GenericCondition;
+import socketed.api.socket.gem.effect.activatable.callback.GenericEventCallback;
+import socketed.api.socket.gem.effect.activatable.callback.IEffectCallback;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Method;

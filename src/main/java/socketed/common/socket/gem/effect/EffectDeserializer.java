@@ -1,14 +1,15 @@
 package socketed.common.socket.gem.effect;
 
 import com.google.gson.*;
+import socketed.api.socket.gem.effect.GenericGemEffect;
 import socketed.common.config.JsonConfig;
 import socketed.common.socket.gem.effect.activatable.activator.ActivatorDeserializer;
-import socketed.common.socket.gem.effect.activatable.activator.GenericActivator;
-import socketed.common.socket.gem.effect.activatable.target.GenericTarget;
+import socketed.api.socket.gem.effect.activatable.activator.GenericActivator;
+import socketed.api.socket.gem.effect.activatable.target.GenericTarget;
 import socketed.common.socket.gem.effect.activatable.target.TargetDeserializer;
-import socketed.common.socket.gem.effect.slot.ISlotType;
+import socketed.api.socket.gem.effect.slot.ISlotType;
 import socketed.common.socket.gem.effect.slot.SlotTypeDeserializer;
-import socketed.common.socket.gem.util.RandomValueRange;
+import socketed.api.socket.gem.util.RandomValueRange;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;

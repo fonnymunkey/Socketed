@@ -4,18 +4,20 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.text.TextFormatting;
+import socketed.api.socket.gem.effect.activatable.condition.ComparingCondition;
+import socketed.api.socket.gem.effect.activatable.target.GenericTarget;
 import socketed.common.attributes.SocketedAttributes;
-import socketed.common.socket.gem.GemCombinationType;
-import socketed.common.socket.gem.GemType;
+import socketed.api.socket.gem.GemCombinationType;
+import socketed.api.socket.gem.GemType;
 import socketed.common.socket.gem.effect.AttributeGemEffect;
 import socketed.common.socket.gem.effect.activatable.*;
 import socketed.common.socket.gem.effect.activatable.activator.*;
 import socketed.common.socket.gem.effect.activatable.condition.*;
 import socketed.common.socket.gem.effect.activatable.target.*;
-import socketed.common.socket.gem.effect.slot.SocketedSlotTypes;
+import socketed.api.socket.gem.effect.slot.SocketedSlotTypes;
 import socketed.common.socket.gem.filter.ItemFilter;
 import socketed.common.socket.gem.filter.OreFilter;
-import socketed.common.socket.gem.util.RandomValueRange;
+import socketed.api.socket.gem.util.RandomValueRange;
 
 import java.util.*;
 

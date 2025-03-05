@@ -8,10 +8,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.Socketed;
-import socketed.common.capabilities.effectscache.CapabilityEffectsCacheHandler;
-import socketed.common.capabilities.effectscache.ICapabilityEffectsCache;
-import socketed.common.socket.gem.effect.activatable.ActivatableGemEffect;
-import socketed.common.socket.gem.effect.activatable.condition.GenericCondition;
+import socketed.api.socket.gem.effect.activatable.activator.GenericActivator;
+import socketed.api.common.capabilities.effectscache.CapabilityEffectsCacheHandler;
+import socketed.api.common.capabilities.effectscache.ICapabilityEffectsCache;
+import socketed.api.socket.gem.effect.activatable.ActivatableGemEffect;
+import socketed.api.socket.gem.effect.activatable.condition.GenericCondition;
 
 import javax.annotation.Nullable;
 

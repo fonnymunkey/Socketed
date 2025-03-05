@@ -9,12 +9,12 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import socketed.common.capabilities.effectscache.CapabilityEffectsCacheHandler;
-import socketed.common.capabilities.effectscache.ICapabilityEffectsCache;
-import socketed.common.socket.gem.effect.GenericGemEffect;
-import socketed.common.socket.gem.effect.activatable.ActivatableGemEffect;
+import socketed.api.common.capabilities.effectscache.CapabilityEffectsCacheHandler;
+import socketed.api.common.capabilities.effectscache.ICapabilityEffectsCache;
+import socketed.api.socket.gem.effect.GenericGemEffect;
+import socketed.api.socket.gem.effect.activatable.ActivatableGemEffect;
 import socketed.common.socket.gem.effect.activatable.activator.DeathTotemCheckActivator;
-import socketed.common.socket.gem.effect.activatable.callback.CancelEventCallback;
+import socketed.api.socket.gem.effect.activatable.callback.CancelEventCallback;
 
 @Mixin(EntityLivingBase.class)
 public abstract class EntityLivingBaseMixin extends Entity {
