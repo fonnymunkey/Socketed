@@ -1,6 +1,5 @@
 ## Todos + Ideas
 - additional effect types: 
-  - +x lvl to specific enchant
   - lower merchant cost
   - plus gold from mobs (lol)
   - lifesteal + life degen

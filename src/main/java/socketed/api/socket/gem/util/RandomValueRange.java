@@ -35,6 +35,10 @@ public class RandomValueRange {
     public float getMax() {
         return this.max;
     }
+
+    public boolean getIsInteger() {
+        return this.isInteger;
+    }
     
     public float generateValue() {
         return this.generateValue(RAND);

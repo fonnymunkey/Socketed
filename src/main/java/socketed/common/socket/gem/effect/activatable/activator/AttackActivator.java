@@ -5,7 +5,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -17,6 +17,7 @@ import socketed.api.common.capabilities.socketable.CapabilitySocketableHandler;
 import socketed.api.common.capabilities.socketable.ICapabilitySocketable;
 import socketed.api.socket.gem.effect.activatable.ActivatableGemEffect;
 import socketed.api.socket.gem.effect.activatable.callback.GenericEventCallback;
+import socketed.api.util.SocketedUtil;
 import socketed.common.socket.gem.effect.activatable.condition.DamageSourceCondition;
 import socketed.api.socket.gem.effect.activatable.condition.GenericCondition;
 import socketed.api.socket.gem.effect.slot.SocketedSlotTypes;
@@ -44,11 +45,11 @@ public abstract class AttackActivator extends GenericActivator {
 	}
 	
 	/**
-	 * Called during LivingAttackEvent
+	 * Called during LivingHurtEvent
 	 * Target and attacker can not be the same entity
-	 * If the callback is cancelled, cancels the LivingAttackEvent
+	 * If the callback is cancelled, cancels the LivingHurtEvent
 	 * @param effect the effect parent of this activator
-	 * @param callback the GenericEvent callback to allow for the effect to cancel the LivingAttackEvent and conditions to check the DamageSource
+	 * @param callback the GenericEvent callback to allow for the effect to cancel the LivingHurtEvent and conditions to check the DamageSource
 	 * @param player the player that is the source of the effect
 	 * @param other the other entity involved in the attack event, can be attacker (Attacked) or target (Attacking)
 	 * @param directlyActivated if the source of the effect is the attacker's weapon rather than the player's effect cache
@@ -68,7 +69,7 @@ public abstract class AttackActivator extends GenericActivator {
 		 * Event handling for AttackActivators
 		 */
 		@SubscribeEvent(priority = EventPriority.LOW)
-		public static void onEntityHit(LivingAttackEvent event) {
+		public static void onEntityHit(LivingHurtEvent event) {
 			if(event.getEntityLiving() == null) return;
 			if(event.getEntityLiving().world.isRemote) return;
 			if(event.getSource() == null) return;
@@ -88,7 +89,7 @@ public abstract class AttackActivator extends GenericActivator {
 			if(target == attacker) return;
 			
 			//Allow for cancelling the attack from effects
-			GenericEventCallback<LivingAttackEvent> callback = new GenericEventCallback<>(event);
+			GenericEventCallback<LivingHurtEvent> callback = new GenericEventCallback<>(event);
 			
 			//AttackedActivator handling
 			if(target instanceof EntityPlayer) {
@@ -106,12 +107,12 @@ public abstract class AttackActivator extends GenericActivator {
 			}
 		}
 		
-		private static void handleAttacked(GenericEventCallback<LivingAttackEvent> callback, EntityPlayer player, EntityLivingBase attacker) {
+		private static void handleAttacked(GenericEventCallback<LivingHurtEvent> callback, EntityPlayer player, EntityLivingBase attacker) {
 			ICapabilityEffectsCache cachedEffects = player.getCapability(CapabilityEffectsCacheHandler.CAP_EFFECTS_CACHE, null);
 			if(cachedEffects == null) return;
 			
 			//Handle cached effects
-			GenericActivator.filterForActivator(cachedEffects.getActiveEffects(), AttackedActivator.class)
+			SocketedUtil.filterForActivator(cachedEffects.getActiveEffects(), AttackedActivator.class)
 					.forEach(effect -> {
 						AttackedActivator activator = (AttackedActivator) effect.getActivator();
 						activator.attemptAttackActivation(effect, callback, player, attacker, false);
@@ -121,12 +122,12 @@ public abstract class AttackActivator extends GenericActivator {
 			//TODO: could do direct activation of active shield
 		}
 		
-		private static void handleAttacking(GenericEventCallback<LivingAttackEvent> callback, EntityPlayer player, EntityLivingBase target) {
+		private static void handleAttacking(GenericEventCallback<LivingHurtEvent> callback, EntityPlayer player, EntityLivingBase target) {
 			ICapabilityEffectsCache cachedEffects = player.getCapability(CapabilityEffectsCacheHandler.CAP_EFFECTS_CACHE, null);
 			if(cachedEffects == null) return;
 			
 			//Handle cached effects
-			GenericActivator.filterForActivator(cachedEffects.getActiveEffects(), AttackingActivator.class)
+			SocketedUtil.filterForActivator(cachedEffects.getActiveEffects(), AttackingActivator.class)
 					.forEach(effect ->{
 						AttackingActivator activator = (AttackingActivator) effect.getActivator();
 						activator.attemptAttackActivation(effect, callback, player, target, false);
@@ -141,7 +142,7 @@ public abstract class AttackActivator extends GenericActivator {
 			if(sockets == null) return;
 			
 			//TODO: RLCombat compat to get whether the attack is being posted from mainhand or offhand for more accurate slot type check
-			GenericActivator.filterForActivator(sockets.getAllActiveEffects(SocketedSlotTypes.HAND), AttackingActivator.class)
+			SocketedUtil.filterForActivator(sockets.getAllActiveEffects(SocketedSlotTypes.HAND), AttackingActivator.class)
 					.forEach(effect -> {
 						AttackingActivator activator = (AttackingActivator) effect.getActivator();
 						activator.attemptAttackActivation(effect, callback, player, target, true);

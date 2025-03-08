@@ -5,6 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import org.apache.logging.log4j.Level;
 import socketed.Socketed;
+import socketed.api.socket.gem.effect.activatable.ActivatableGemEffect;
 import socketed.common.config.*;
 import socketed.common.loot.DefaultSocketsGenerator;
 import socketed.common.loot.IItemCreationContext;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public abstract class SocketedUtil {
     
@@ -183,5 +185,31 @@ public abstract class SocketedUtil {
     //These ItemStacks would not involve sockets anyways so ignore them if accessed during loading
     public static boolean hasCompletedLoading() {
         return JsonConfig.completedLoading;
+    }
+
+    /**
+     * Filters a List of GemEffects for all ActivatableGemEffects that use a specified Activator
+     * @return a filtered List of ActivatableGemEffects
+     */
+    public static <T extends GenericActivator> Stream<ActivatableGemEffect> filterForActivator(List<GenericGemEffect> effects, Class<T> activatorType){
+        return effects.stream()
+                .filter(effect -> effect instanceof ActivatableGemEffect)
+                //filter for activator being of provided type
+                .filter(effect -> activatorType.isInstance(((ActivatableGemEffect) effect).getActivator()))
+                //cast to ActivatableGemEffect
+                .map(ActivatableGemEffect.class::cast);
+
+    }
+
+    /**
+     * Filters a List of GemEffects for all GemEffects of a specified type
+     * @return a filtered List of GenericGemEffects
+     */
+    public static <T extends GenericGemEffect> Stream<T> filterForEffectType(List<GenericGemEffect> effects, Class<T> effectType){
+        return effects.stream()
+                //filter for effect being of provided type
+                .filter(effect -> effectType.isAssignableFrom(effect.getClass()))
+                //cast the resulting list to that effect type
+                .map(effectType::cast);
     }
 }

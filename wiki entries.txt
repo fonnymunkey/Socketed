@@ -22,8 +22,3 @@ Effect
 Activator
 RLSocketed:
 - Dodge
-DistinctSocketedDescriptions:
-- DDD Attacking
-	- Directly Activated, default false
-- DDD Attacked
-	- Directly Activated, default false

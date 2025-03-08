@@ -35,17 +35,50 @@ socketed.tooltip.attack.target=Target
 socketed.tooltip.attack.attacker=Attacker
 socketed.tooltip.attack.both=Both
 
-socketed.tooltip.default.obsidian_damage=Obsidian Tipped
-socketed.tooltip.default.stone_damage=Whet Stone
-socketed.tooltip.default.sticky=Sticky
-socketed.tooltip.default.lucky=Lucky
-socketed.tooltip.default.streamlined=Streamlined
-socketed.tooltip.default.diamond=Diamond Imbued
-socketed.tooltip.default.redstone=Energized
-socketed.tooltip.default.lapis=Enchanting Attuned
-socketed.tooltip.default.glowstone=Radiant
-socketed.tooltip.default.piston=Piston Actuated
-socketed.tooltip.default.sticky_piston=Grabber
+# Tier 0
+socketed.tooltip.default.poison_potato=Radiate Poison
+socketed.tooltip.default.spider_eye=Radiate Weakness
+socketed.tooltip.default.slimeball=Radiate Slowness
+socketed.tooltip.default.sugar=Speedy
+socketed.tooltip.default.dead_bush=Thorny
+socketed.tooltip.default.iron=Iron plated
+socketed.tooltip.default.coal=Ignite
+socketed.tooltip.default.gunpowder=Explosion!
+# Tier 1
+socketed.tooltip.default.blazerod=Ignite
+socketed.tooltip.default.glowstone=+4 Light Radius
+socketed.tooltip.default.glowstone_block=+12 Light Radius
+socketed.tooltip.default.redstone=Hasty
+socketed.tooltip.default.cobweb=Slow them!
+socketed.tooltip.default.emerald=So Lucky
+socketed.tooltip.default.gold_carrot=Night Vision underground
+socketed.tooltip.default.piston=Knockback!
+socketed.tooltip.default.sticky_piston=Pull!
+socketed.tooltip.default.diamond=Diamond reinforced
+socketed.tooltip.default.flint=Pew pew
+# Tier 2
+socketed.tooltip.default.gapple=It's a Gold Apple
+socketed.tooltip.default.sponge=Menger Sponge
+socketed.tooltip.default.witherskull=Wither them!
+socketed.tooltip.default.anvil=Anvil to the face
+socketed.tooltip.default.rabbitfoot=Uppies
+socketed.tooltip.default.pufferfish=Poison them!
+socketed.tooltip.default.sealantern=Blind them!
+socketed.tooltip.default.tropicalfish=Don't bonk your head
+socketed.tooltip.default.obsidian=Obsidian tipped
+socketed.tooltip.default.tnt=Explosions!
+socketed.tooltip.default.quartz=XP Farm
+socketed.tooltip.default.emeraldblock=So cheap!
+# Tier 3
+socketed.tooltip.default.ghasttear=Pretty Healthy for a Ghast
+socketed.tooltip.default.totem=Just don't get hit
+socketed.tooltip.default.endcrystal=Crystal PvP
+socketed.tooltip.default.beacon=Blinding Lights
+socketed.tooltip.default.godapple=They call him Notch
+socketed.tooltip.default.netherstar=Wither them
+socketed.tooltip.default.skullzombie=Bad Zombie!
+socketed.tooltip.default.skullcreeper=Bad Creeper!
+socketed.tooltip.default.skullskeleton=Bad Skeleton!
 
 socketed.tooltip.default.three_diamonds=Could've been a diamond pick
 socketed.tooltip.default.rgb=RGB Effects
@@ -84,6 +117,8 @@ socketed.modifier.take.plus.2=+%s%% to -%s%% %s
 socketed.modifier.take.take.2=-%s%% to -%s%% %s
 
 attribute.name.socketed.durability=Durability
+attribute.name.socketed.xp=XP
+attribute.name.socketed.tradecost=Trade Costs
 
 socketed.tooltip.effect.ignite=Ignites for %ds
 socketed.tooltip.effect.knockback=Knocks Back

@@ -17,6 +17,7 @@ import socketed.api.socket.gem.GemType;
 import socketed.common.socket.gem.effect.AttributeGemEffect;
 import socketed.common.socket.gem.effect.EffectDeserializer;
 import socketed.api.socket.gem.effect.GenericGemEffect;
+import socketed.common.socket.gem.effect.PlusEnchantmentGemEffect;
 import socketed.common.socket.gem.effect.activatable.*;
 import socketed.common.socket.gem.effect.activatable.activator.*;
 import socketed.common.socket.gem.effect.activatable.condition.*;
@@ -95,12 +96,15 @@ public class JsonConfig {
         SocketedUtil.registerEffectType(ExtraIframesGemEffect.TYPE_NAME, ExtraIframesGemEffect.class, Socketed.MODID);
         SocketedUtil.registerEffectType(BypassIframeGemEffect.TYPE_NAME, BypassIframeGemEffect.class, Socketed.MODID);
         SocketedUtil.registerEffectType(ExplosionGemEffect.TYPE_NAME, ExplosionGemEffect.class, Socketed.MODID);
+        SocketedUtil.registerEffectType(RemoveTargetGemEffect.TYPE_NAME, RemoveTargetGemEffect.class, Socketed.MODID);
+        SocketedUtil.registerEffectType(PlusEnchantmentGemEffect.TYPE_NAME, PlusEnchantmentGemEffect.class, Socketed.MODID);
         
         SocketedUtil.registerActivator(PassiveActivator.TYPE_NAME, PassiveActivator.class, Socketed.MODID);
         SocketedUtil.registerActivator(AttackingActivator.TYPE_NAME, AttackingActivator.class, Socketed.MODID);
         SocketedUtil.registerActivator(AttackedActivator.TYPE_NAME, AttackedActivator.class, Socketed.MODID);
         SocketedUtil.registerActivator(DeathTotemCheckActivator.TYPE_NAME, DeathTotemCheckActivator.class, Socketed.MODID);
         SocketedUtil.registerActivator(MultiEffectActivator.TYPE_NAME, MultiEffectActivator.class, Socketed.MODID);
+        SocketedUtil.registerActivator(TargetedActivator.TYPE_NAME, TargetedActivator.class, Socketed.MODID);
         
         SocketedUtil.registerTarget(SelfTarget.TYPE_NAME, SelfTarget.class, Socketed.MODID);
         SocketedUtil.registerTarget(OtherTarget.TYPE_NAME, OtherTarget.class, Socketed.MODID);
@@ -121,6 +125,7 @@ public class JsonConfig {
         SocketedUtil.registerCondition(DamageSourceCondition.TYPE_NAME, DamageSourceCondition.class, Socketed.MODID);
         SocketedUtil.registerCondition(InvertedCondition.TYPE_NAME, InvertedCondition.class, Socketed.MODID);
         SocketedUtil.registerCondition(IsSpecificEntityCondition.TYPE_NAME, IsSpecificEntityCondition.class, Socketed.MODID);
+        SocketedUtil.registerCondition(DistanceCondition.TYPE_NAME, DistanceCondition.class, Socketed.MODID);
         
         SocketedUtil.registerSlotTypes(SocketedSlotTypes.class, Socketed.MODID);
         

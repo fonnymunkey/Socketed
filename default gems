@@ -2,17 +2,8 @@ new shit
 
 effects
     dmg change (livinghurt)
-    +enchant lvl
-    cant get aggrod
-    livingdrops
-    tp effect
 activators
     hurt activator
-attributes
-    xp
-    minus followrange?
-    reduced trade cost
-
 
 done
 
@@ -56,8 +47,8 @@ tier 1
     diamond
         +2 atk dmg (weapon)
         +1 armor, +1 toughness (armor)
-    obsidian
-        +8% durability (armor/body)
+    flint
+        + power enchant (would need custom code)
 tier 2
     gapple
         absorption 1 (hand)
@@ -79,6 +70,10 @@ tier 2
         + strength on weapon, on attacking with chance
     tnt
         bigger explosion
+    quartz
+        +xp earned (would need a new attribute/effect)
+    emerald block
+        reduce trading cost (needs new effect)
 tier3
     ghast tear (only chestplate)
         regeneration 1
@@ -95,50 +90,26 @@ tier3
     nether star
         wither aoe on hit (armor)
         + 5 atk dmg (weapon)
-
-
-todo:
-
-tier 0
-    feather
-        less fall dmg (would need new effect)
-tier 1
-    flint
-        + power enchant (would need custom code)
-    magma block
-        no magma dmg idk
-tier 2
-    chorus flower
-        tp to surface when taking void dmg (needs tp effect and hurt activator)
-    quartz
-        +xp earned (would need a new attribute/effect)
-    dragon breath
-        + iframes after hit (does that even work with attacked activator? --> nope)
-    emerald block
-        reduce trading cost (needs new effect)
-tier 3
-    music discs
-        makes creepers always drop music discs idk, chance
     zombie head
         cant get aggrod by zombies
     skelly head
         cant get aggrod by skellies
     creeper head
         cant get aggrod by creepers
-    gold
-        cant get aggrod by pigmen (needs new effect)
-        more gold drops in general
     ender eye
         cant get aggrod by endermen (needs an effect)
+
+
+todo:
+
+tier 2
+    dragon breath
+        + iframes after hit (does that even work with attacked activator? --> nope)
+tier 3
     dragon egg
-        spawn egg drops? of that specific mob? (needs custom shit)
         resistance 1
-    elytra
-        no fall dmg (would need new effect)
-        no hit wall dmg?
 
 
 gem combinations
     all the aoe+self tier 0s in one without the self
     golden carrot + spider eye -> invis + night vision (lose weakness effect of spider eye)
-    ender pearl + chorus flower -> death totem check, cancel event, tp randomly (needs new effect)

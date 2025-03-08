@@ -56,18 +56,4 @@ public abstract class GenericActivator {
 		else return true;
 		return false;
 	}
-
-	/**
-	 * Filters a List of GemEffects for all ActivatableGemEffects that use a specified Activator
-	 * @return a filtered List of ActivatableGemEffects
-	 */
-	protected static <T extends GenericActivator> Stream<ActivatableGemEffect> filterForActivator(List<GenericGemEffect> effects, Class<T> activatorType){
-		return effects.stream()
-				.filter(effect -> effect instanceof ActivatableGemEffect)
-				//filter for activator being of provided type
-				.filter(effect -> activatorType.isInstance(((ActivatableGemEffect) effect).getActivator()))
-				//cast to ActivatableGemEffect
-				.map(ActivatableGemEffect.class::cast);
-
-	}
 }
