@@ -5,6 +5,9 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingDamageEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.Event;
@@ -25,21 +28,31 @@ import socketed.api.socket.gem.effect.slot.SocketedSlotTypes;
 import javax.annotation.Nullable;
 
 public abstract class AttackActivator extends GenericActivator {
+	public enum EventType{
+		ATTACK,
+		HURT,
+		DAMAGE
+	}
 
 	@SerializedName("Directly Activated")
 	protected Boolean directlyActivated;
+	@SerializedName("Event Type")
+	protected EventType eventType;
 
-	public AttackActivator(@Nullable GenericCondition condition, boolean directlyActivated) {
+	public AttackActivator(@Nullable GenericCondition condition, boolean directlyActivated, EventType eventType) {
 		super(condition);
 		this.directlyActivated = directlyActivated;
+		this.eventType = eventType;
 	}
 
 	/**
 	 * DirectlyActivated: Optional, default false
+	 * Event Type: Optional, default HURT
 	 */
 	@Override
 	public boolean validate() {
 		if(this.directlyActivated == null) this.directlyActivated = false;
+		if(this.eventType == null) this.eventType = EventType.HURT;
 
 		return super.validate();
 	}
@@ -54,9 +67,11 @@ public abstract class AttackActivator extends GenericActivator {
 	 * @param other the other entity involved in the attack event, can be attacker (Attacked) or target (Attacking)
 	 * @param directlyActivated if the source of the effect is the attacker's weapon rather than the player's effect cache
 	 */
-	protected void attemptAttackActivation(ActivatableGemEffect effect, GenericEventCallback<? extends Event> callback, EntityPlayer player, EntityLivingBase other, boolean directlyActivated) {
+	protected void attemptAttackActivation(ActivatableGemEffect effect, GenericEventCallback<? extends Event> callback, EntityPlayer player, EntityLivingBase other, boolean directlyActivated, EventType type) {
 		//Check if direct activation is required
 		if(directlyActivated != this.directlyActivated) return;
+		//Check if it's in the correct event
+		if(type != this.eventType) return;
 		if(this.testCondition(callback, player, other)) {
 			effect.affectTargets(callback, player, other);
 		}
@@ -69,11 +84,22 @@ public abstract class AttackActivator extends GenericActivator {
 		 * Event handling for AttackActivators
 		 */
 		@SubscribeEvent(priority = EventPriority.LOW)
-		public static void onEntityHit(LivingHurtEvent event) {
+		public static void onLivingAttack(LivingAttackEvent event) {
+			handleEvent(event, event.getSource(), EventType.ATTACK, new GenericEventCallback<>(event));
+		}
+		@SubscribeEvent(priority = EventPriority.LOW)
+		public static void onLivingHurt(LivingHurtEvent event) {
+			handleEvent(event, event.getSource(), EventType.HURT, new GenericEventCallback<>(event));
+		}
+		@SubscribeEvent(priority = EventPriority.LOW)
+		public static void onLivingDamage(LivingDamageEvent event) {
+			handleEvent(event, event.getSource(), EventType.DAMAGE, new GenericEventCallback<>(event));
+		}
+
+		private static void handleEvent(LivingEvent event, DamageSource source, EventType type, GenericEventCallback<? extends LivingEvent> callback) {
 			if(event.getEntityLiving() == null) return;
 			if(event.getEntityLiving().world.isRemote) return;
-			if(event.getSource() == null) return;
-			DamageSource source = event.getSource();
+			if(source == null) return;
 			
 			//Prioritize checking the direct attacker, prevent ranged pet attacks from triggering attacker effects such as lycanites
 			boolean isMelee = DamageSourceCondition.isDamageSourceMelee(source);
@@ -87,13 +113,10 @@ public abstract class AttackActivator extends GenericActivator {
 			
 			//Dont trigger on self damage if that manages to happen
 			if(target == attacker) return;
-			
-			//Allow for cancelling the attack from effects
-			GenericEventCallback<LivingHurtEvent> callback = new GenericEventCallback<>(event);
-			
+
 			//AttackedActivator handling
 			if(target instanceof EntityPlayer) {
-				handleAttacked(callback, (EntityPlayer)target, attacker);
+				handleAttacked(callback, (EntityPlayer)target, attacker, type);
 			}
 			
 			//Return before offensive effects if defensive effects cancelled attack
@@ -103,11 +126,11 @@ public abstract class AttackActivator extends GenericActivator {
 			
 			//AttackingActivator handling
 			if(attacker instanceof EntityPlayer) {
-				handleAttacking(callback, (EntityPlayer)attacker, target);
+				handleAttacking(callback, (EntityPlayer)attacker, target, type);
 			}
 		}
 		
-		private static void handleAttacked(GenericEventCallback<LivingHurtEvent> callback, EntityPlayer player, EntityLivingBase attacker) {
+		private static void handleAttacked(GenericEventCallback<? extends LivingEvent> callback, EntityPlayer player, EntityLivingBase attacker, EventType type) {
 			ICapabilityEffectsCache cachedEffects = player.getCapability(CapabilityEffectsCacheHandler.CAP_EFFECTS_CACHE, null);
 			if(cachedEffects == null) return;
 			
@@ -115,14 +138,14 @@ public abstract class AttackActivator extends GenericActivator {
 			SocketedUtil.filterForActivator(cachedEffects.getActiveEffects(), AttackedActivator.class)
 					.forEach(effect -> {
 						AttackedActivator activator = (AttackedActivator) effect.getActivator();
-						activator.attemptAttackActivation(effect, callback, player, attacker, false);
+						activator.attemptAttackActivation(effect, callback, player, attacker, false, type);
 					});
 
 			//can't do direct activation via first aid since that is only calculated right before living damage
 			//TODO: could do direct activation of active shield
 		}
 		
-		private static void handleAttacking(GenericEventCallback<LivingHurtEvent> callback, EntityPlayer player, EntityLivingBase target) {
+		private static void handleAttacking(GenericEventCallback<? extends LivingEvent> callback, EntityPlayer player, EntityLivingBase target, EventType type) {
 			ICapabilityEffectsCache cachedEffects = player.getCapability(CapabilityEffectsCacheHandler.CAP_EFFECTS_CACHE, null);
 			if(cachedEffects == null) return;
 			
@@ -130,7 +153,7 @@ public abstract class AttackActivator extends GenericActivator {
 			SocketedUtil.filterForActivator(cachedEffects.getActiveEffects(), AttackingActivator.class)
 					.forEach(effect ->{
 						AttackingActivator activator = (AttackingActivator) effect.getActivator();
-						activator.attemptAttackActivation(effect, callback, player, target, false);
+						activator.attemptAttackActivation(effect, callback, player, target, false, type);
 					});
 			
 			//Handle direct activation effects
@@ -145,7 +168,7 @@ public abstract class AttackActivator extends GenericActivator {
 			SocketedUtil.filterForActivator(sockets.getAllActiveEffects(SocketedSlotTypes.HAND), AttackingActivator.class)
 					.forEach(effect -> {
 						AttackingActivator activator = (AttackingActivator) effect.getActivator();
-						activator.attemptAttackActivation(effect, callback, player, target, true);
+						activator.attemptAttackActivation(effect, callback, player, target, true, type);
 					});
 		}
 	}

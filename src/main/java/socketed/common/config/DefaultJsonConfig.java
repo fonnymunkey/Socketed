@@ -126,7 +126,7 @@ public abstract class DefaultJsonConfig {
                 TextFormatting.DARK_GRAY,
                 Collections.singletonList(new IgniteGemEffect(
                         SocketedSlotTypes.HAND,
-                        new AttackingActivator(null, true),
+                        new AttackingActivator(null, true, AttackActivator.EventType.HURT),
                         Collections.singletonList(new OtherTarget(null)),
                         3)),
                 Collections.singletonList(new OreFilter("blockCoal"))));
@@ -137,7 +137,7 @@ public abstract class DefaultJsonConfig {
                 TextFormatting.RED,
                 Collections.singletonList(new ExplosionGemEffect(
                         SocketedSlotTypes.HAND,
-                        new AttackingActivator(new ChanceCondition(0.1F), true),
+                        new AttackingActivator(new ChanceCondition(0.1F), true, AttackActivator.EventType.HURT),
                         Collections.singletonList(new OtherTarget(null)),
                         1, false)),
                 Collections.singletonList(new OreFilter("gunpowder"))));
@@ -150,7 +150,7 @@ public abstract class DefaultJsonConfig {
                 TextFormatting.DARK_RED,
                 Collections.singletonList(new IgniteGemEffect(
                         SocketedSlotTypes.HAND,
-                        new AttackingActivator(null, true),
+                        new AttackingActivator(null, true, AttackActivator.EventType.HURT),
                         Collections.singletonList(new OtherTarget(null)),
                         6)),
                 Collections.singletonList(new ItemFilter("minecraft:blaze_rod", 0 , false))));
@@ -243,7 +243,7 @@ public abstract class DefaultJsonConfig {
                 TextFormatting.AQUA,
                 Collections.singletonList(new KnockbackGemEffect(
                         SocketedSlotTypes.HAND,
-                        new AttackingActivator(null, true),
+                        new AttackingActivator(null, true, AttackActivator.EventType.HURT),
                         ONLYOTHER,
                         2.0F,
                         false)),
@@ -255,7 +255,7 @@ public abstract class DefaultJsonConfig {
                 TextFormatting.GREEN,
                 Collections.singletonList(new KnockbackGemEffect(
                         SocketedSlotTypes.HAND,
-                        new AttackingActivator(null, true),
+                        new AttackingActivator(null, true, AttackActivator.EventType.HURT),
                         ONLYOTHER,
                         2.0F,
                         true)),
@@ -314,7 +314,7 @@ public abstract class DefaultJsonConfig {
                 TextFormatting.DARK_GRAY,
                 Collections.singletonList(new PotionGemEffect(
                         SocketedSlotTypes.HAND,
-                        new AttackingActivator(new MultiCondition(MultiCondition.ConditionLogicType.AND,Arrays.asList(new ChanceCondition(0.25F), new HealthPercentCondition(0.25F, ComparingCondition.ConditionComparisonType.LESS_EQUAL, false))), true),
+                        new AttackingActivator(new MultiCondition(MultiCondition.ConditionLogicType.AND,Arrays.asList(new ChanceCondition(0.25F), new HealthPercentCondition(0.25F, ComparingCondition.ConditionComparisonType.LESS_EQUAL, false))), true, AttackActivator.EventType.HURT),
                         Arrays.asList(new OtherTarget(null), new OtherAOETarget(null,3)),
                         MobEffects.WITHER.getRegistryName().toString(),
                         0,
@@ -328,7 +328,7 @@ public abstract class DefaultJsonConfig {
                 Arrays.asList(
                         new KnockbackGemEffect(
                             SocketedSlotTypes.HAND,
-                            new AttackingActivator(null, true),
+                            new AttackingActivator(null, true, AttackActivator.EventType.HURT),
                             ONLYOTHER,
                             4.0F,
                             false),
@@ -356,7 +356,7 @@ public abstract class DefaultJsonConfig {
                 TextFormatting.DARK_GRAY,
                 Collections.singletonList(new PotionGemEffect(
                         SocketedSlotTypes.HAND,
-                        new AttackingActivator(new MultiCondition(MultiCondition.ConditionLogicType.AND,Arrays.asList(new ChanceCondition(0.25F), new HealthPercentCondition(0.25F, ComparingCondition.ConditionComparisonType.LESS_EQUAL, false))), true),
+                        new AttackingActivator(new MultiCondition(MultiCondition.ConditionLogicType.AND,Arrays.asList(new ChanceCondition(0.25F), new HealthPercentCondition(0.25F, ComparingCondition.ConditionComparisonType.LESS_EQUAL, false))), true, AttackActivator.EventType.HURT),
                         Arrays.asList(new OtherTarget(null), new OtherAOETarget(null,3)),
                         MobEffects.POISON.getRegistryName().toString(),
                         0,
@@ -369,7 +369,7 @@ public abstract class DefaultJsonConfig {
                 TextFormatting.AQUA,
                 Collections.singletonList(new PotionGemEffect(
                         SocketedSlotTypes.HAND,
-                        new AttackingActivator(new MultiCondition(MultiCondition.ConditionLogicType.AND,Arrays.asList(new ChanceCondition(0.25F), new HealthPercentCondition(0.25F, ComparingCondition.ConditionComparisonType.LESS_EQUAL, false))), true),
+                        new AttackingActivator(new MultiCondition(MultiCondition.ConditionLogicType.AND,Arrays.asList(new ChanceCondition(0.25F), new HealthPercentCondition(0.25F, ComparingCondition.ConditionComparisonType.LESS_EQUAL, false))), true, AttackActivator.EventType.HURT),
                         Arrays.asList(new OtherTarget(null), new OtherAOETarget(null,3)),
                         MobEffects.BLINDNESS.getRegistryName().toString(),
                         0,
@@ -390,7 +390,7 @@ public abstract class DefaultJsonConfig {
                 Arrays.asList(
                         new PotionGemEffect(
                                 SocketedSlotTypes.HAND,
-                                new AttackingActivator(new ChanceCondition(0.2F), true),
+                                new AttackingActivator(new ChanceCondition(0.2F), true, AttackActivator.EventType.HURT),
                                 ONLYSELF,
                                 MobEffects.STRENGTH.getRegistryName().toString(),
                                 0,
@@ -404,7 +404,7 @@ public abstract class DefaultJsonConfig {
                 TextFormatting.RED,
                 Collections.singletonList(new ExplosionGemEffect(
                         SocketedSlotTypes.HAND,
-                        new AttackingActivator(new ChanceCondition(0.2F), true),
+                        new AttackingActivator(new ChanceCondition(0.2F), true, AttackActivator.EventType.HURT),
                         Collections.singletonList(new OtherTarget(null)),
                         2, false)),
                 Collections.singletonList(new ItemFilter("minecraft:tnt", 0, false))));
@@ -471,10 +471,14 @@ public abstract class DefaultJsonConfig {
                 "socketed.tooltip.default.endcrystal",
                 3,
                 TextFormatting.LIGHT_PURPLE,
-                Collections.singletonList(new UndyingTotemGemEffect(
+                Collections.singletonList(new MultiEffectGemEffect(
                         SocketedSlotTypes.HAND,
-                        new AttackingActivator(new MultiCondition(MultiCondition.ConditionLogicType.AND, Arrays.asList(new ChanceCondition(0.05F), new InvertedCondition(new IsBossCondition()))), true),
-                        ONLYOTHER
+                        new AttackingActivator(new MultiCondition(MultiCondition.ConditionLogicType.AND, Arrays.asList(new ChanceCondition(0.05F), new InvertedCondition(new IsBossCondition()))), true, AttackActivator.EventType.ATTACK),
+                        ONLYOTHER,
+                        Arrays.asList(
+                                new UndyingTotemGemEffect(SocketedSlotTypes.ALL, new MultiEffectActivator(null), ONLYOTHER),
+                                new CancelEventGemEffect(SocketedSlotTypes.ALL, new MultiEffectActivator(null), ONLYOTHER)
+                        )
                 )),
                 Collections.singletonList(new ItemFilter("minecraft:end_crystal", 0, false))));
 
@@ -519,7 +523,7 @@ public abstract class DefaultJsonConfig {
                 Arrays.asList(
                         new PotionGemEffect(
                                 SocketedSlotTypes.BODY,
-                                new AttackedActivator(null, false),
+                                new AttackedActivator(null, false, AttackActivator.EventType.HURT),
                                 Arrays.asList(new OtherTarget(null), new OtherAOETarget(null, 3)),
                                 MobEffects.WITHER.getRegistryName().toString(),
                                 0,

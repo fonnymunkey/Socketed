@@ -10,8 +10,8 @@ public class AttackedActivator extends AttackActivator {
 	
 	public static final String TYPE_NAME = "Attacked";
 	
-	public AttackedActivator(@Nullable GenericCondition condition, boolean directlyActivated) {
-		super(condition, directlyActivated);
+	public AttackedActivator(@Nullable GenericCondition condition, boolean directlyActivated, EventType type) {
+		super(condition, directlyActivated, type);
 	}
 	
 	//TODO handle this better for activators/targets/conditions, add tooltip override option to gem for less bloat on complicated effects
