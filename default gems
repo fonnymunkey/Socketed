@@ -49,20 +49,22 @@ tier 1
         +1 armor, +1 toughness (armor)
     flint
         + power enchant (would need custom code)
+    rabbits foot (feet)
+        + 1 luck
+        + jump boost
 tier 2
     gapple
         absorption 1 (hand)
     sponge
         water breathing
     anvil
-        stronger knockback, +2 atk dmg
-    rabbits foot (feet)
-        + 1 luck
-        + jump boost
+        stronger knockback on attacked
+    witherskull
+        wither on AOE
     pufferfish
         poison on AOE
     sea lantern
-        + blindness on mobs when hit with a low chance
+        + blindness on mobs when hit
     clownfish
         swim speed
     obsidian
