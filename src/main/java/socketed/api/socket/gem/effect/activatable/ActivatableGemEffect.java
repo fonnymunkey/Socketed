@@ -1,8 +1,11 @@
 package socketed.api.socket.gem.effect.activatable;
 
 import com.google.gson.annotations.SerializedName;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.Socketed;
 import socketed.api.socket.gem.effect.GenericGemEffect;
 import socketed.api.socket.gem.effect.activatable.activator.GenericActivator;
@@ -22,10 +25,14 @@ public abstract class ActivatableGemEffect extends GenericGemEffect {
     @SerializedName("Targets")
     protected final List<GenericTarget> targets;
     
-    protected ActivatableGemEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets) {
+    @SerializedName("Tooltip Key")
+    protected final String tooltipKey;
+    
+    protected ActivatableGemEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets, String tooltipKey) {
         super(slotType);
         this.activator = activator;
         this.targets = targets;
+        this.tooltipKey = tooltipKey;
     }
     
     @Nonnull
@@ -37,6 +44,28 @@ public abstract class ActivatableGemEffect extends GenericGemEffect {
     public List<GenericTarget> getTargets() {
         return this.targets;
     }
+    
+    @Nullable
+    public String getTooltipKey() {
+        return this.tooltipKey;
+    }
+    
+    @SideOnly(Side.CLIENT)
+    @Override
+    public String getTooltip(boolean onItem) {
+        StringBuilder tooltip;
+        if(this.getTooltipKey() == null) {
+            tooltip = new StringBuilder(this.getTooltipString()).append(" ").append(this.activator.getTooltipString());
+            for(GenericTarget target : this.targets) {
+                tooltip.append(" ").append(target.getTooltipString());
+            }
+        }
+        else tooltip = new StringBuilder(I18n.format(this.getTooltipKey()));
+        return tooltip.toString();
+    }
+    
+    @SideOnly(Side.CLIENT)
+    public abstract String getTooltipString();
     
     /**
      * Handles allowing targets to apply this effect to specific entities
@@ -61,6 +90,7 @@ public abstract class ActivatableGemEffect extends GenericGemEffect {
     /**
      * Activator: Required
      * Targets: Required, at least one
+     * TooltipKey: Optional, default null
      */
     @Override
     public boolean validate() {

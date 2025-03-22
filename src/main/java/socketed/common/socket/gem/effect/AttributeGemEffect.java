@@ -69,7 +69,7 @@ public class AttributeGemEffect extends GenericGemEffect {
     
     @SideOnly(Side.CLIENT)
     @Override
-    public String getTooltipString(boolean onItem) {
+    public String getTooltip(boolean onItem) {
         if(onItem) {
             AttributeModifier modifier = this.getModifier();
             if(modifier == null) return "";

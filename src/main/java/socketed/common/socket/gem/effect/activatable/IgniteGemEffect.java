@@ -23,9 +23,15 @@ public class IgniteGemEffect extends ActivatableGemEffect {
 	@SerializedName("Duration")
 	private final Integer duration;
 	
-	public IgniteGemEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets, int duration) {
-		super(slotType, activator, targets);
+	public IgniteGemEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets, int duration, String tooltipKey) {
+		super(slotType, activator, targets, tooltipKey);
 		this.duration = duration;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public String getTooltipString() {
+		return I18n.format("socketed.tooltip.effect.ignite", this.duration);
 	}
 	
 	@Override
@@ -33,12 +39,6 @@ public class IgniteGemEffect extends ActivatableGemEffect {
 		if(playerSource != null && effectTarget != null && !playerSource.world.isRemote) {
 			effectTarget.setFire(this.duration);
 		}
-	}
-	
-	@SideOnly(Side.CLIENT)
-	@Override
-	public String getTooltipString(boolean onItem) {
-		return this.getActivator().getTooltipString() + " " + I18n.format("socketed.tooltip.effect.ignite", this.duration);
 	}
 	
 	@Override

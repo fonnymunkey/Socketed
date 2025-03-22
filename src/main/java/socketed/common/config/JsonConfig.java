@@ -93,8 +93,8 @@ public class JsonConfig {
         SocketedUtil.registerEffectType(UndyingTotemGemEffect.TYPE_NAME, UndyingTotemGemEffect.class, Socketed.MODID);
         SocketedUtil.registerEffectType(CancelEventGemEffect.TYPE_NAME, CancelEventGemEffect.class, Socketed.MODID);
         SocketedUtil.registerEffectType(MultiEffectGemEffect.TYPE_NAME, MultiEffectGemEffect.class, Socketed.MODID);
-        SocketedUtil.registerEffectType(ExtraIframesGemEffect.TYPE_NAME, ExtraIframesGemEffect.class, Socketed.MODID);
-        SocketedUtil.registerEffectType(BypassIframeGemEffect.TYPE_NAME, BypassIframeGemEffect.class, Socketed.MODID);
+        SocketedUtil.registerEffectType(ExtraIFrameGemEffect.TYPE_NAME, ExtraIFrameGemEffect.class, Socketed.MODID);
+        SocketedUtil.registerEffectType(BypassIFrameGemEffect.TYPE_NAME, BypassIFrameGemEffect.class, Socketed.MODID);
         SocketedUtil.registerEffectType(ExplosionGemEffect.TYPE_NAME, ExplosionGemEffect.class, Socketed.MODID);
         SocketedUtil.registerEffectType(RemoveTargetGemEffect.TYPE_NAME, RemoveTargetGemEffect.class, Socketed.MODID);
         SocketedUtil.registerEffectType(PlusEnchantmentGemEffect.TYPE_NAME, PlusEnchantmentGemEffect.class, Socketed.MODID);

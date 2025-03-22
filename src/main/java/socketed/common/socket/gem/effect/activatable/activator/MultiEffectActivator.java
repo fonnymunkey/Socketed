@@ -33,7 +33,6 @@ public class MultiEffectActivator extends GenericActivator {
 		}
 	}
 	
-	//TODO handle this better for activators/targets/conditions, add tooltip override option to gem for less bloat on complicated effects
 	@SideOnly(Side.CLIENT)
 	@Override
 	public String getTooltipString() {

@@ -27,10 +27,16 @@ public class KnockbackGemEffect extends ActivatableGemEffect {
 	@SerializedName("Inverted")
 	private Boolean inverted;
 	
-	public KnockbackGemEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets, float strength, boolean inverted) {
-		super(slotType, activator, targets);
+	public KnockbackGemEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets, float strength, boolean inverted, String tooltipKey) {
+		super(slotType, activator, targets, tooltipKey);
 		this.strength = strength;
 		this.inverted = inverted;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public String getTooltipString() {
+		return this.inverted ? I18n.format("socketed.tooltip.effect.knockback.inverted") : I18n.format("socketed.tooltip.effect.knockback");
 	}
 	
 	@Override
@@ -64,12 +70,6 @@ public class KnockbackGemEffect extends ActivatableGemEffect {
 		//Protection from non-finite Y
 		if(!Double.isFinite(entityIn.motionY)) entityIn.motionY = 0;
 		entityIn.velocityChanged = true;
-	}
-	
-	@SideOnly(Side.CLIENT)
-	@Override
-	public String getTooltipString(boolean onItem) {
-		return this.getActivator().getTooltipString() + " " + (this.inverted ? I18n.format("socketed.tooltip.effect.knockback_inverted") : I18n.format("socketed.tooltip.effect.knockback"));
 	}
 	
 	@Override

@@ -1,6 +1,7 @@
 package socketed.common.socket.gem.effect.activatable;
 
 import com.google.gson.annotations.SerializedName;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,16 +29,36 @@ public class MultiEffectGemEffect extends ActivatableGemEffect {
     @SerializedName("Sub-Effects")
     private final List<GenericGemEffect> effects;
     
-    public MultiEffectGemEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets, List<GenericGemEffect> effects) {
-        super(slotType, activator, targets);
+    public MultiEffectGemEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets, List<GenericGemEffect> effects, String tooltipKey) {
+        super(slotType, activator, targets, tooltipKey);
         this.effects = effects;
     }
 
     public MultiEffectGemEffect(MultiEffectGemEffect multiEffect) {
-        super(multiEffect.getSlotType(), multiEffect.getActivator(), multiEffect.getTargets());
+        super(multiEffect.getSlotType(), multiEffect.getActivator(), multiEffect.getTargets(), multiEffect.getTooltipKey());
         this.effects = new ArrayList<>();
-        for (GenericGemEffect effect : multiEffect.effects)
+        for(GenericGemEffect effect : multiEffect.effects) {
             this.effects.add(effect.instantiate());
+        }
+    }
+    
+    @SideOnly(Side.CLIENT)
+    @Override
+    public String getTooltip(boolean onItem) {
+        StringBuilder tooltip;
+        if(this.getTooltipKey() == null) {
+            tooltip = new StringBuilder();
+            for(GenericGemEffect effect : this.effects) {
+                tooltip.append(effect.getTooltip(onItem)).append(" ");
+            }
+        }
+        else tooltip = new StringBuilder(I18n.format(this.getTooltipKey()));
+        return tooltip.toString();
+    }
+    
+    @SideOnly(Side.CLIENT)
+    public String getTooltipString() {
+        return "";
     }
 
     @Override
@@ -50,13 +71,6 @@ public class MultiEffectGemEffect extends ActivatableGemEffect {
                 ((MultiEffectActivator)((ActivatableGemEffect)effect).getActivator()).attemptMultiEffectActivation((ActivatableGemEffect)effect, callback, playerSource, effectTarget);
             }
         }
-    }
-    
-    //TODO handle this better for activators/targets/conditions, add tooltip override option to gem for less bloat on complicated effects
-    @SideOnly(Side.CLIENT)
-    @Override
-    public String getTooltipString(boolean onItem) {
-        return "";
     }
     
     @Override

@@ -78,29 +78,38 @@ public class TooltipHandler {
                     //Gem Combinations
                     for(GemCombinationInstance combination : sockets.getGemCombinations()) {
                         GemCombinationType combinationType = combination.getGemCombinationType();
-                        //Display Name Tooltip
+                        
+                        //Name
                         insertTooltip(tooltips, " " + TextFormatting.ITALIC + combinationType.getColor() + I18n.format(combinationType.getDisplayName()) + TextFormatting.RESET);
                         
-                        //Effect Tooltips
+                        //Description Per Effect
                         for(GenericGemEffect effect : combination.getGemEffectsForStack(stack)) {
-                            insertTooltip(tooltips, "  " + combinationType.getColor() + effect.getTooltipString(true) + TextFormatting.RESET);
+                            String effectTooltip = effect.getTooltip(true);
+                            if(effectTooltip != null && !effectTooltip.isEmpty()) {
+                                insertTooltip(tooltips, "  " + combinationType.getColor() + effectTooltip + TextFormatting.RESET);
+                            }
                         }
                     }
                     //Gems
                     List<GemInstance> gemInstances = sockets.getAllGems(false);
                     if(!gemInstances.isEmpty()) {
-                        Map<GemType,List<String>> mappedTips = new LinkedHashMap<>();
+                        Map<GemType, List<String>> mappedTips = new LinkedHashMap<>();
                         for(GemInstance gemInstance : gemInstances) {
                             gemType = gemInstance.getGemType();
                             List<String> tipsForType = mappedTips.get(gemType);
-                            //Display Name Tooltip
+                            
+                            //Name
                             if(tipsForType == null) {
                                 tipsForType = new ArrayList<>();
                                 tipsForType.add(" " + gemType.getColor() + I18n.format(gemType.getDisplayName()) + TextFormatting.RESET);
                             }
-                            //Effect Tooltips
+                            
+                            //Description Per Effect
                             for(GenericGemEffect effect : gemInstance.getGemEffectsForStack(stack)) {
-                                tipsForType.add("  " + gemType.getColor() + effect.getTooltipString(true) + TextFormatting.RESET);
+                                String effectTooltip = effect.getTooltip(true);
+                                if(effectTooltip != null && !effectTooltip.isEmpty()) {
+                                    tipsForType.add("  " + gemType.getColor() + effectTooltip + TextFormatting.RESET);
+                                }
                             }
                             mappedTips.put(gemType, tipsForType);
                         }
@@ -119,18 +128,20 @@ public class TooltipHandler {
         else {
             //In socket Tooltip
             insertTooltip(tooltips, TextFormatting.BOLD + I18n.format("socketed.tooltip.gem") + TextFormatting.RESET);
-            //Display Name Tooltip
+            
+            //Name
             insertTooltip(tooltips, " " + gemType.getColor() + I18n.format(gemType.getDisplayName()) + " " + I18n.format("socketed.tooltip.tier_" + gemType.getTier()) + TextFormatting.RESET);
             
             if(!GuiScreen.isShiftKeyDown()) {
                 insertTooltip(tooltips, TextFormatting.BOLD + "" + TextFormatting.GOLD + I18n.format("socketed.tooltip.holdshift") + TextFormatting.RESET);
             }
             else {
-                //Effect Tooltips
+                //Description Per Effect
                 for(GenericGemEffect effect : gemType.getEffects()) {
-                    String tooltip = "  " + gemType.getColor() + effect.getTooltipString(false);
-                    tooltip += " " + ISlotType.getSlotTooltip(effect.getSlotType());
-                    insertTooltip(tooltips, tooltip + TextFormatting.RESET);
+                    String effectTooltip = effect.getTooltip(false);
+                    if(effectTooltip != null && !effectTooltip.isEmpty()) {
+                        insertTooltip(tooltips, "  " + gemType.getColor() + ISlotType.getSlotTooltip(effect.getSlotType()) + " " + effectTooltip + TextFormatting.RESET);
+                    }
                 }
             }
         }

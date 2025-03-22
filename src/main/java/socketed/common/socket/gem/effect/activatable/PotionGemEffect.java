@@ -33,11 +33,21 @@ public class PotionGemEffect extends ActivatableGemEffect {
 
     private transient Potion potion;
     
-    public PotionGemEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets, String potionName, int amplifier, int duration) {
-        super(slotType, activator, targets);
+    public PotionGemEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets, String potionName, int amplifier, int duration, String tooltipKey) {
+        super(slotType, activator, targets, tooltipKey);
         this.potionName = potionName;
         this.amplifier = amplifier;
         this.duration = duration;
+    }
+    
+    @SideOnly(Side.CLIENT)
+    @Override
+    public String getTooltipString() {
+        String tooltip = I18n.format(this.potion.getName());
+        int potionLvl = this.amplifier + 1;
+        if(potionLvl == 1) return tooltip;
+        else if(potionLvl > 1 && potionLvl <= 10) return tooltip + " " + I18n.format("enchantment.level." + potionLvl);
+        else return tooltip + " " + potionLvl;
     }
 
     @Override
@@ -45,16 +55,6 @@ public class PotionGemEffect extends ActivatableGemEffect {
         if(playerSource != null && effectTarget != null && !playerSource.world.isRemote) {
             effectTarget.addPotionEffect(new PotionEffect(this.potion, this.duration, this.amplifier));
         }
-    }
-    
-    @SideOnly(Side.CLIENT)
-    @Override
-    public String getTooltipString(boolean onItem) {
-        String tooltip = this.getActivator().getTooltipString() + " " + I18n.format(this.potion.getName());
-        int potionLvl = this.amplifier + 1;
-        if(potionLvl == 1) return tooltip;
-        else if(potionLvl > 1 && potionLvl <= 10) return tooltip + " " + I18n.format("enchantment.level." + potionLvl);
-        else return tooltip + " " + potionLvl;
     }
     
     @Override

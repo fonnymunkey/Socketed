@@ -1,9 +1,12 @@
 package socketed.common.socket.gem.effect.activatable.target;
 
 import com.google.gson.annotations.SerializedName;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.Socketed;
 import socketed.api.socket.gem.effect.activatable.ActivatableGemEffect;
 import socketed.api.socket.gem.effect.activatable.callback.IEffectCallback;
@@ -35,6 +38,12 @@ public class OtherAOETarget extends GenericTarget {
 				}
 			}
 		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public String getTooltipString() {
+		return I18n.format("socketed.tooltip.target.otheraoe");
 	}
 	
 	@Override

@@ -1,5 +1,6 @@
 package socketed.common.socket.gem.effect.activatable.activator;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.api.socket.gem.effect.activatable.condition.GenericCondition;
@@ -14,16 +15,14 @@ public class AttackingActivator extends AttackActivator {
 		super(condition, directlyActivated, type);
 	}
 	
-	//TODO handle this better for activators/targets/conditions, add tooltip override option to gem for less bloat on complicated effects
 	@SideOnly(Side.CLIENT)
 	@Override
 	public String getTooltipString() {
-		return "";
+		return I18n.format("socketed.tooltip.activator.attacking");
 	}
 	
 	@Override
 	public String getTypeName() {
 		return TYPE_NAME;
 	}
-
 }

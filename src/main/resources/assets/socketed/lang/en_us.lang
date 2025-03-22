@@ -17,23 +17,69 @@ item.socketed.socket.socket_tier_3.name=§bEpic Socket
 item.socketed.socket.socket_tier_4.name=§5Legendary Socket
 item.socketed.socket.socket_tier_5.name=§4Ultimate Socket
 
+socketed.socketinggui.displayname=Socketing
+
+attribute.name.socketed.durability=Durability
+attribute.name.socketed.experience=XP
+attribute.name.socketed.tradecost=Trade Costs
+
 socketed.tooltip.socket=Sockets (%d/%d):
 socketed.tooltip.empty=Empty
 socketed.tooltip.holdshift=Hold <Shift> for more info
 
-socketed.tooltip.activator.passive_self=Passive:
-socketed.tooltip.activator.passive_self_aoe=Passive AOE (%db):
-socketed.tooltip.activator.attacking=Attacking (%s):
-socketed.tooltip.activator.attacking_aoe=Attacking AOE (%s/%db):
-socketed.tooltip.activator.attacked=Attacked (%s):
-socketed.tooltip.activator.attacked_aoe=Attacked AOE (%s/%db):
+socketed.tooltip.gem=In Socket:
 
-socketed.tooltip.attack.melee=Melee
-socketed.tooltip.attack.ranged=Ranged
-socketed.tooltip.attack.self=Self
-socketed.tooltip.attack.target=Target
-socketed.tooltip.attack.attacker=Attacker
-socketed.tooltip.attack.both=Both
+socketed.tooltip.generic=§6(Generic)
+socketed.tooltip.tier_0=§7(Common)
+socketed.tooltip.tier_1=§f(Uncommon)
+socketed.tooltip.tier_2=§e(Rare)
+socketed.tooltip.tier_3=§b(Epic)
+socketed.tooltip.tier_4=§5(Legendary)
+socketed.tooltip.tier_5=§4(Ultimate)
+
+socketed.tooltip.slottype.all=
+socketed.tooltip.slottype.none=()
+socketed.tooltip.slottype.body=(On Body)
+socketed.tooltip.slottype.head=(On Head)
+socketed.tooltip.slottype.chest=(On Chest)
+socketed.tooltip.slottype.legs=(On Legs)
+socketed.tooltip.slottype.feet=(On Feet)
+socketed.tooltip.slottype.hand=(In Hand)
+socketed.tooltip.slottype.mainhand=(In Mainhand)
+socketed.tooltip.slottype.offhand=(In Offhand)
+
+socketed.tooltip.effect.bypassiframe=Bypass IFrame
+socketed.tooltip.effect.cancelevent=Cancel Event
+socketed.tooltip.effect.explosion=Explosion
+socketed.tooltip.effect.extraiframe=Extra IFrame %d
+socketed.tooltip.effect.ignite=Ignite %d
+socketed.tooltip.effect.knockback=Knockback
+socketed.tooltip.effect.knockback.inverted=Pull
+socketed.tooltip.effect.removetarget=Remove Target
+socketed.tooltip.effect.undyingtotem=Undying Totem
+
+socketed.tooltip.effect.plusenchantment=%s + %d
+
+socketed.modifier.plus.plus.0=+%s to +%s %s
+socketed.modifier.take.plus.0=-%s to +%s %s
+socketed.modifier.take.take.0=-%s to -%s %s
+socketed.modifier.plus.plus.1=+%s%% to +%s%% %s
+socketed.modifier.take.plus.1=-%s%% to +%s%% %s
+socketed.modifier.take.take.1=-%s%% to -%s%% %s
+socketed.modifier.plus.plus.2=+%s%% to +%s%% %s
+socketed.modifier.take.plus.2=+%s%% to -%s%% %s
+socketed.modifier.take.take.2=-%s%% to -%s%% %s
+
+socketed.tooltip.activator.attacked=Attacked
+socketed.tooltip.activator.attacking=Attacking
+socketed.tooltip.activator.deathtotemcheck=Death Totem Check
+socketed.tooltip.activator.passive=Every %d Ticks
+socketed.tooltip.activator.targeted=Targeted
+
+socketed.tooltip.target.otheraoe=Other AOE
+socketed.tooltip.target.other=Other
+socketed.tooltip.target.selfaoe=Self AOE
+socketed.tooltip.target.self=Self
 
 # Tier 0
 socketed.tooltip.default.poison_potato=Radiate Poison
@@ -79,49 +125,6 @@ socketed.tooltip.default.netherstar=Wither them
 socketed.tooltip.default.skullzombie=Bad Zombie!
 socketed.tooltip.default.skullcreeper=Bad Creeper!
 socketed.tooltip.default.skullskeleton=Bad Skeleton!
-
+# Combination
 socketed.tooltip.default.three_diamonds=Could've been a diamond pick
 socketed.tooltip.default.rgb=RGB Effects
-
-socketed.tooltip.gem=In Socket:
-
-socketed.tooltip.generic=§6(Generic)
-socketed.tooltip.tier_0=§7(Common)
-socketed.tooltip.tier_1=§f(Uncommon)
-socketed.tooltip.tier_2=§e(Rare)
-socketed.tooltip.tier_3=§b(Epic)
-socketed.tooltip.tier_4=§5(Legendary)
-socketed.tooltip.tier_5=§4(Ultimate)
-
-socketed.tooltip.slottype.all=
-socketed.tooltip.slottype.none=()
-socketed.tooltip.slottype.body=(On Body)
-socketed.tooltip.slottype.head=(On Head)
-socketed.tooltip.slottype.chest=(On Chest)
-socketed.tooltip.slottype.legs=(On Legs)
-socketed.tooltip.slottype.feet=(On Feet)
-socketed.tooltip.slottype.hand=(In Hand)
-socketed.tooltip.slottype.mainhand=(In Mainhand)
-socketed.tooltip.slottype.offhand=(In Offhand)
-
-socketed.socketinggui.displayname=Socketing
-
-socketed.modifier.plus.plus.0=+%s to +%s %s
-socketed.modifier.take.plus.0=-%s to +%s %s
-socketed.modifier.take.take.0=-%s to -%s %s
-socketed.modifier.plus.plus.1=+%s%% to +%s%% %s
-socketed.modifier.take.plus.1=-%s%% to +%s%% %s
-socketed.modifier.take.take.1=-%s%% to -%s%% %s
-socketed.modifier.plus.plus.2=+%s%% to +%s%% %s
-socketed.modifier.take.plus.2=+%s%% to -%s%% %s
-socketed.modifier.take.take.2=-%s%% to -%s%% %s
-
-attribute.name.socketed.durability=Durability
-attribute.name.socketed.xp=XP
-attribute.name.socketed.tradecost=Trade Costs
-
-socketed.tooltip.effect.ignite=Ignites for %ds
-socketed.tooltip.effect.knockback=Knocks Back
-socketed.tooltip.effect.knockback_inverted=Pulls
-
-socketed.tooltip.effect.deathtotem=Death Totem Chance: %s

@@ -1,5 +1,6 @@
 package socketed.common.socket.gem.effect.activatable;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -13,12 +14,18 @@ import socketed.api.socket.gem.effect.slot.ISlotType;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class BypassIframeGemEffect extends ActivatableGemEffect {
+public class BypassIFrameGemEffect extends ActivatableGemEffect {
 
-	public static final String TYPE_NAME = "Bypass Iframes";
+	public static final String TYPE_NAME = "Bypass IFrame";
 
-	public BypassIframeGemEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets) {
-		super(slotType, activator, targets);
+	public BypassIFrameGemEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets, String tooltipKey) {
+		super(slotType, activator, targets, tooltipKey);
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public String getTooltipString() {
+		return I18n.format("socketed.tooltip.effect.bypassiframe");
 	}
 	
 	@Override
@@ -26,13 +33,6 @@ public class BypassIframeGemEffect extends ActivatableGemEffect {
 		if(playerSource != null && effectTarget != null && !playerSource.world.isRemote) {
 			effectTarget.hurtResistantTime = 0;
 		}
-	}
-	
-	//TODO handle this better for activators/targets/conditions, add tooltip override option to gem for less bloat on complicated effects
-	@SideOnly(Side.CLIENT)
-	@Override
-	public String getTooltipString(boolean onItem) {
-		return "";
 	}
 	
 	@Override

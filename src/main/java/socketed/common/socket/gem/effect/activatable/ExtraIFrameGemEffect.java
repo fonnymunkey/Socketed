@@ -1,6 +1,7 @@
 package socketed.common.socket.gem.effect.activatable;
 
 import com.google.gson.annotations.SerializedName;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -15,16 +16,22 @@ import socketed.api.socket.gem.effect.slot.ISlotType;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ExtraIframesGemEffect extends ActivatableGemEffect {
+public class ExtraIFrameGemEffect extends ActivatableGemEffect {
 
-	public static final String TYPE_NAME = "Extra Iframes";
+	public static final String TYPE_NAME = "Extra IFrame";
 
 	@SerializedName("Tick Amount")
 	private final Integer ticks;
 
-	public ExtraIframesGemEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets, int ticks) {
-		super(slotType, activator, targets);
+	public ExtraIFrameGemEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets, int ticks, String tooltipKey) {
+		super(slotType, activator, targets, tooltipKey);
 		this.ticks = ticks;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public String getTooltipString() {
+		return I18n.format("socketed.tooltip.effect.extraiframe", this.ticks);
 	}
 	
 	@Override
@@ -32,13 +39,6 @@ public class ExtraIframesGemEffect extends ActivatableGemEffect {
 		if(playerSource != null && effectTarget != null && !playerSource.world.isRemote) {
 			effectTarget.hurtResistantTime = effectTarget.maxHurtResistantTime + this.ticks;
 		}
-	}
-	
-	//TODO handle this better for activators/targets/conditions, add tooltip override option to gem for less bloat on complicated effects
-	@SideOnly(Side.CLIENT)
-	@Override
-	public String getTooltipString(boolean onItem) {
-		return "";
 	}
 	
 	@Override

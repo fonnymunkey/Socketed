@@ -3,6 +3,8 @@ package socketed.api.socket.gem.effect.activatable.target;
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.Socketed;
 import socketed.api.socket.gem.effect.activatable.ActivatableGemEffect;
 import socketed.api.socket.gem.effect.activatable.callback.IEffectCallback;
@@ -40,6 +42,9 @@ public abstract class GenericTarget {
 	protected boolean testCondition(@Nullable IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget) {
 		return this.condition == null || this.condition.testCondition(callback, playerSource, effectTarget);
 	}
+	
+	@SideOnly(Side.CLIENT)
+	public abstract String getTooltipString();
 	
 	/**
 	 * @return the user readable type name for the subclass used for deserialization

@@ -6,14 +6,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.Socketed;
-import socketed.api.socket.gem.effect.GenericGemEffect;
-import socketed.api.socket.gem.effect.activatable.ActivatableGemEffect;
 import socketed.api.socket.gem.effect.activatable.callback.IEffectCallback;
 import socketed.api.socket.gem.effect.activatable.condition.GenericCondition;
 
 import javax.annotation.Nullable;
-import java.util.List;
-import java.util.stream.Stream;
 
 public abstract class GenericActivator {
 	
@@ -37,7 +33,6 @@ public abstract class GenericActivator {
 		return this.condition == null || this.condition.testCondition(callback, playerSource, effectTarget);
 	}
 	
-	//TODO handle this better for activators/targets/conditions, add tooltip override option to gem for less bloat on complicated effects
 	@SideOnly(Side.CLIENT)
 	public abstract String getTooltipString();
 	

@@ -1,6 +1,7 @@
 package socketed.common.socket.gem.effect.activatable;
 
 import com.google.gson.annotations.SerializedName;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
@@ -25,10 +26,16 @@ public class ExplosionGemEffect extends ActivatableGemEffect {
 	@SerializedName("Damages Terrain")
 	private Boolean damagesTerrain;
 
-	public ExplosionGemEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets, float strength, boolean damagesTerrain) {
-		super(slotType, activator, targets);
+	public ExplosionGemEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets, float strength, boolean damagesTerrain, String tooltipKey) {
+		super(slotType, activator, targets, tooltipKey);
 		this.strength = strength;
 		this.damagesTerrain = damagesTerrain;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public String getTooltipString() {
+		return I18n.format("socketed.tooltip.effect.explosion");
 	}
 	
 	@Override
@@ -37,13 +44,6 @@ public class ExplosionGemEffect extends ActivatableGemEffect {
 			BlockPos pos = effectTarget.getPosition();
 			effectTarget.world.createExplosion(effectTarget,pos.getX(), pos.getY(), pos.getZ(), this.strength, this.damagesTerrain);
 		}
-	}
-	
-	//TODO handle this better for activators/targets/conditions, add tooltip override option to gem for less bloat on complicated effects
-	@SideOnly(Side.CLIENT)
-	@Override
-	public String getTooltipString(boolean onItem) {
-		return "";
 	}
 	
 	@Override

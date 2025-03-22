@@ -1,6 +1,7 @@
 package socketed.common.socket.gem.effect.activatable.activator;
 
 import com.google.gson.annotations.SerializedName;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -43,11 +44,10 @@ public class PassiveActivator extends GenericActivator {
 		}
 	}
 	
-	//TODO handle this better for activators/targets/conditions, add tooltip override option to gem for less bloat on complicated effects
 	@SideOnly(Side.CLIENT)
 	@Override
 	public String getTooltipString() {
-		return "";
+		return I18n.format("socketed.tooltip.activator.passive", this.activationRate);
 	}
 	
 	@Override

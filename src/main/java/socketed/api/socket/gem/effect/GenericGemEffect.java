@@ -8,6 +8,7 @@ import socketed.Socketed;
 import socketed.api.socket.gem.effect.slot.ISlotType;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public abstract class GenericGemEffect {
     
@@ -29,7 +30,7 @@ public abstract class GenericGemEffect {
     }
     
     @SideOnly(Side.CLIENT)
-    public abstract String getTooltipString(boolean onItem);
+    public abstract String getTooltip(boolean onItem);
     
     /**
      * @return the user readable type name for the subclass used for deserialization

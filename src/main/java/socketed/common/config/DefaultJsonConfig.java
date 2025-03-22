@@ -57,25 +57,33 @@ public abstract class DefaultJsonConfig {
         registerDefaultGemType("poison_potato", new GemType("socketed.tooltip.default.poison_potato", 0, TextFormatting.DARK_GREEN,
                 Collections.singletonList(new PotionGemEffect(
                         SocketedSlotTypes.HEAD, PASSIVEFAST, SELFAOE_NEAR_HITSELF,
-                        MobEffects.POISON.getRegistryName().toString(), 0, 40)),
+                        MobEffects.POISON.getRegistryName().toString(), 0, 40,
+                        null
+                )),
                 Collections.singletonList(new ItemFilter("minecraft:poisonous_potato", 0 , false))));
 
         registerDefaultGemType("spider_eye", new GemType("socketed.tooltip.default.spider_eye", 0, TextFormatting.DARK_RED,
                 Collections.singletonList(new PotionGemEffect(
                         SocketedSlotTypes.CHEST, PASSIVEFAST, SELFAOE_NEAR_HITSELF,
-                        MobEffects.WEAKNESS.getRegistryName().toString(), 0, 40)),
+                        MobEffects.WEAKNESS.getRegistryName().toString(), 0, 40,
+                        null
+                )),
                 Collections.singletonList(new ItemFilter("minecraft:spider_eye", 0 , false))));
 
         registerDefaultGemType("slimeball", new GemType("socketed.tooltip.default.slimeball", 0, TextFormatting.GREEN,
                 Collections.singletonList(new PotionGemEffect(
                         SocketedSlotTypes.LEGS, PASSIVEFAST, SELFAOE_NEAR_HITSELF,
-                        MobEffects.SLOWNESS.getRegistryName().toString(), 0, 40)),
+                        MobEffects.SLOWNESS.getRegistryName().toString(), 0, 40,
+                        null
+                )),
                 Collections.singletonList(new OreFilter("slimeball"))));
 
         registerDefaultGemType("sugar", new GemType("socketed.tooltip.default.sugar", 0, TextFormatting.WHITE,
                 Collections.singletonList(new PotionGemEffect(
                         SocketedSlotTypes.FEET, PASSIVEFAST, SELFAOE_NEAR_HITSELF,
-                        MobEffects.SPEED.getRegistryName().toString(), 0, 40)),
+                        MobEffects.SPEED.getRegistryName().toString(), 0, 40,
+                        null
+                )),
                 Collections.singletonList(new ItemFilter("minecraft:sugar", 0 , false))));
 
         registerDefaultGemType("dead_bush", new GemType("socketed.tooltip.default.dead_bush", 0, TextFormatting.GOLD,
@@ -93,7 +101,9 @@ public abstract class DefaultJsonConfig {
                         SocketedSlotTypes.HAND,
                         new AttackingActivator(new ChanceCondition(0.2F), true, AttackActivator.EventType.HURT),
                         ONLYOTHER,
-                        3)),
+                        3,
+                        null
+                )),
                 Collections.singletonList(new OreFilter("blockCoal"))));
 
         registerDefaultGemType("gunpowder", new GemType("socketed.tooltip.default.gunpowder", 0, TextFormatting.RED,
@@ -101,7 +111,9 @@ public abstract class DefaultJsonConfig {
                         SocketedSlotTypes.HAND,
                         new AttackingActivator(new ChanceCondition(0.1F), true, AttackActivator.EventType.HURT),
                         ONLYOTHER,
-                        1, false)),
+                        1, false,
+                        null
+                )),
                 Collections.singletonList(new OreFilter("gunpowder"))));
 
         //Tier 1
@@ -111,26 +123,34 @@ public abstract class DefaultJsonConfig {
                         SocketedSlotTypes.HAND,
                         new AttackingActivator(new ChanceCondition(0.5F), true, AttackActivator.EventType.HURT),
                         ONLYOTHER,
-                        6)),
+                        6,
+                        null
+                )),
                 Collections.singletonList(new ItemFilter("minecraft:blaze_rod", 0 , false))));
 
         registerDefaultGemType("glowstone", new GemType("socketed.tooltip.default.glowstone", 1, TextFormatting.YELLOW,
                 Collections.singletonList(new PotionGemEffect(
                         SocketedSlotTypes.HEAD, PASSIVEFAST, SELFAOE_NEAR,
-                        MobEffects.GLOWING.getRegistryName().toString(), 0, 40)),
+                        MobEffects.GLOWING.getRegistryName().toString(), 0, 40,
+                        null
+                )),
                 Collections.singletonList(new OreFilter("dustGlowstone"))));
 
         registerDefaultGemType("glowstone_block", new GemType("socketed.tooltip.default.glowstone_block", 1, TextFormatting.YELLOW,
                 Collections.singletonList(new PotionGemEffect(
                         SocketedSlotTypes.HEAD, PASSIVEFAST,
                         Collections.singletonList(new SelfAOETarget(null, 12)),
-                        MobEffects.GLOWING.getRegistryName().toString(), 0, 40)),
+                        MobEffects.GLOWING.getRegistryName().toString(), 0, 40,
+                        null
+                )),
                 Collections.singletonList(new OreFilter("glowstone"))));
 
         registerDefaultGemType("redstone", new GemType("socketed.tooltip.default.redstone", 1, TextFormatting.RED,
                 Collections.singletonList(new PotionGemEffect(
                         SocketedSlotTypes.CHEST, PASSIVEFAST, ONLYSELF,
-                        MobEffects.HASTE.getRegistryName().toString(), 0, 40)),
+                        MobEffects.HASTE.getRegistryName().toString(), 0, 40,
+                        null
+                )),
                 Collections.singletonList(new OreFilter("blockRedstone"))));
 
         registerDefaultGemType("cobweb", new GemType("socketed.tooltip.default.cobweb", 1,
@@ -139,13 +159,17 @@ public abstract class DefaultJsonConfig {
                         SocketedSlotTypes.LEGS,
                         new AttackedActivator(new ChanceCondition(0.2F), false, AttackActivator.EventType.HURT),
                         Collections.singletonList(new SelfAOETarget(null, 6)),
-                        MobEffects.SLOWNESS.getRegistryName().toString(), 0, 80)),
+                        MobEffects.SLOWNESS.getRegistryName().toString(), 0, 80,
+                        null
+                )),
                 Collections.singletonList(new ItemFilter("minecraft:web", 0, false))));
 
         registerDefaultGemType("emerald", new GemType("socketed.tooltip.default.emerald", 1, TextFormatting.GREEN,
                 Collections.singletonList(new PotionGemEffect(
                         SocketedSlotTypes.BODY, PASSIVEFAST, ONLYSELF,
-                        MobEffects.LUCK.getRegistryName().toString(), 0, 40)),
+                        MobEffects.LUCK.getRegistryName().toString(), 0, 40,
+                        null
+                )),
                 Collections.singletonList(new OreFilter("gemEmerald"))));
 
         registerDefaultGemType("gold_carrot", new GemType("socketed.tooltip.default.gold_carrot", 1, TextFormatting.YELLOW,
@@ -157,7 +181,9 @@ public abstract class DefaultJsonConfig {
                                         new LightLevelCondition(7, ComparingCondition.ConditionComparisonType.LESS, true))),
                                 40),
                         ONLYSELF,
-                        MobEffects.NIGHT_VISION.getRegistryName().toString(), 0, 40)),
+                        MobEffects.NIGHT_VISION.getRegistryName().toString(), 0, 40,
+                        null
+                )),
                 Collections.singletonList(new ItemFilter("minecraft:golden_carrot",0,false))));
 
         registerDefaultGemType("piston", new GemType("socketed.tooltip.default.piston", 1, TextFormatting.AQUA,
@@ -165,7 +191,9 @@ public abstract class DefaultJsonConfig {
                         SocketedSlotTypes.HAND,
                         new AttackingActivator(null, true, AttackActivator.EventType.HURT),
                         ONLYOTHER,
-                        2.0F, false)),
+                        2.0F, false,
+                        null
+                )),
                 Collections.singletonList(new ItemFilter("minecraft:piston", 0, false))));
 
         registerDefaultGemType("sticky_piston", new GemType("socketed.tooltip.default.sticky_piston", 1, TextFormatting.GREEN,
@@ -173,7 +201,9 @@ public abstract class DefaultJsonConfig {
                         SocketedSlotTypes.HAND,
                         new AttackingActivator(null, true, AttackActivator.EventType.HURT),
                         ONLYOTHER,
-                        2.0F, true)),
+                        2.0F, true,
+                        null
+                )),
                 Collections.singletonList(new ItemFilter("minecraft:sticky_piston", 0, false))));
 
         registerDefaultGemType("diamond", new GemType("socketed.tooltip.default.diamond", 1,
@@ -195,7 +225,9 @@ public abstract class DefaultJsonConfig {
                         new AttributeGemEffect(SocketedSlotTypes.FEET, SharedMonsterAttributes.LUCK.getName(), new RandomValueRange(1, false), 0),
                         new PotionGemEffect(
                                 SocketedSlotTypes.FEET, PASSIVEFAST, ONLYSELF,
-                                MobEffects.JUMP_BOOST.getRegistryName().toString(), 0, 40)),
+                                MobEffects.JUMP_BOOST.getRegistryName().toString(), 0, 40,
+                                null
+                        )),
                 Collections.singletonList(new ItemFilter("minecraft:rabbit_foot", 0, false))));
 
         //Tier 2
@@ -205,13 +237,17 @@ public abstract class DefaultJsonConfig {
                         SocketedSlotTypes.ALL,
                         new PassiveActivator(new ChanceCondition(0.2F), 200),
                         ONLYSELF,
-                        MobEffects.ABSORPTION.getRegistryName().toString(), 0, 200)),
+                        MobEffects.ABSORPTION.getRegistryName().toString(), 0, 200,
+                        null
+                )),
                 Collections.singletonList(new ItemFilter("minecraft:golden_apple", 0, true))));
 
         registerDefaultGemType("sponge", new GemType("socketed.tooltip.default.sponge", 2, TextFormatting.AQUA,
                 Collections.singletonList(new PotionGemEffect(
                         SocketedSlotTypes.HEAD, PASSIVEFAST, ONLYSELF,
-                        MobEffects.WATER_BREATHING.getRegistryName().toString(), 0, 40)),
+                        MobEffects.WATER_BREATHING.getRegistryName().toString(), 0, 40,
+                        null
+                )),
                 Collections.singletonList(new ItemFilter("minecraft:sponge", 0, true))));
 
         registerDefaultGemType("anvil", new GemType("socketed.tooltip.default.anvil", 2, TextFormatting.GRAY,
@@ -219,7 +255,9 @@ public abstract class DefaultJsonConfig {
                         SocketedSlotTypes.CHEST,
                         new AttackedActivator(null, false, AttackActivator.EventType.HURT),
                         ONLYOTHER,
-                        4.0F, false)),
+                        4.0F, false,
+                        null
+                )),
                 Collections.singletonList(new ItemFilter("minecraft:anvil", 0, true))));
 
         registerDefaultGemType("witherskull", new GemType("socketed.tooltip.default.witherskull", 2, TextFormatting.DARK_GRAY,
@@ -227,7 +265,9 @@ public abstract class DefaultJsonConfig {
                         SocketedSlotTypes.BODY,
                         new AttackedActivator(new HealthPercentCondition(0.5F, ComparingCondition.ConditionComparisonType.LESS_EQUAL, true), false, AttackActivator.EventType.HURT),
                         SELFAOE_NEAR,
-                        MobEffects.WITHER.getRegistryName().toString(), 0, 100)),
+                        MobEffects.WITHER.getRegistryName().toString(), 0, 100,
+                        null
+                )),
                 Collections.singletonList(new ItemFilter("minecraft:skull", 1, true))));
 
         registerDefaultGemType("pufferfish", new GemType("socketed.tooltip.default.pufferfish", 2, TextFormatting.GREEN,
@@ -235,7 +275,9 @@ public abstract class DefaultJsonConfig {
                         SocketedSlotTypes.BODY,
                         new AttackedActivator(new HealthPercentCondition(0.5F, ComparingCondition.ConditionComparisonType.LESS_EQUAL, true), false, AttackActivator.EventType.HURT),
                         SELFAOE_NEAR,
-                        MobEffects.POISON.getRegistryName().toString(), 0, 100)),
+                        MobEffects.POISON.getRegistryName().toString(), 0, 100,
+                        null
+                )),
                 Collections.singletonList(new ItemFilter("minecraft:fish", 3, true))));
 
         registerDefaultGemType("sealantern", new GemType("socketed.tooltip.default.sealantern", 2, TextFormatting.AQUA,
@@ -243,7 +285,9 @@ public abstract class DefaultJsonConfig {
                         SocketedSlotTypes.BODY,
                         new AttackedActivator(new HealthPercentCondition(0.5F, ComparingCondition.ConditionComparisonType.LESS_EQUAL, true), false, AttackActivator.EventType.HURT),
                         SELFAOE_NEAR,
-                        MobEffects.BLINDNESS.getRegistryName().toString(), 0, 100)),
+                        MobEffects.BLINDNESS.getRegistryName().toString(), 0, 100,
+                        null
+                )),
                 Collections.singletonList(new ItemFilter("minecraft:sea_lantern", 0, false))));
 
         registerDefaultGemType("tropicalfish", new GemType("socketed.tooltip.default.tropicalfish", 2, TextFormatting.AQUA,
@@ -256,7 +300,9 @@ public abstract class DefaultJsonConfig {
                                 SocketedSlotTypes.HAND,
                                 new AttackingActivator(new ChanceCondition(0.2F), true, AttackActivator.EventType.HURT),
                                 ONLYSELF,
-                                MobEffects.STRENGTH.getRegistryName().toString(), 0, 100),
+                                MobEffects.STRENGTH.getRegistryName().toString(), 0, 100,
+                                null
+                        ),
                         new AttributeGemEffect(SocketedSlotTypes.BODY, SocketedAttributes.DURABILITY.getName(), new RandomValueRange(0.08F, false), 1)),
                 Collections.singletonList(new OreFilter("obsidian"))));
 
@@ -265,7 +311,9 @@ public abstract class DefaultJsonConfig {
                         SocketedSlotTypes.HAND,
                         new AttackingActivator(new ChanceCondition(0.2F), true, AttackActivator.EventType.HURT),
                         ONLYOTHER,
-                        2, false)),
+                        2, false,
+                        null
+                )),
                 Collections.singletonList(new ItemFilter("minecraft:tnt", 0, false))));
 
         registerDefaultGemType("quartz", new GemType("socketed.tooltip.default.quartz", 2, TextFormatting.WHITE,
@@ -284,11 +332,17 @@ public abstract class DefaultJsonConfig {
                         Arrays.asList(
                                 new PotionGemEffect(
                                         SocketedSlotTypes.ALL, MULTIACT, ONLYSELF,
-                                        MobEffects.REGENERATION.getRegistryName().toString(), 0, 40),
+                                        MobEffects.REGENERATION.getRegistryName().toString(), 0, 40,
+                                        null
+                                ),
                                 new PotionGemEffect(
                                         SocketedSlotTypes.ALL, MULTIACT, ONLYSELF,
-                                        MobEffects.HEALTH_BOOST.getRegistryName().toString(), 0, 40)
-                        )
+                                        MobEffects.HEALTH_BOOST.getRegistryName().toString(), 0, 40,
+                                        null
+                                )
+                        ),
+                        null
+                
                 )),
                 Collections.singletonList(new ItemFilter("minecraft:ghast_tear", 0, false))));
 
@@ -298,9 +352,15 @@ public abstract class DefaultJsonConfig {
                             new DeathTotemCheckActivator(new ChanceCondition(0.2F)),
                             ONLYSELF,
                             Arrays.asList(
-                                    new UndyingTotemGemEffect(SocketedSlotTypes.ALL, MULTIACT, ONLYSELF),
-                                    new CancelEventGemEffect(SocketedSlotTypes.ALL, MULTIACT, ONLYSELF)
-                            )
+                                    new UndyingTotemGemEffect(SocketedSlotTypes.ALL, MULTIACT, ONLYSELF,
+                                                              null
+                                    ),
+                                    new CancelEventGemEffect(SocketedSlotTypes.ALL, MULTIACT, ONLYSELF,
+                                                             null
+                                    )
+                            ),
+                            null
+                
                 )),
                 Collections.singletonList(new ItemFilter("minecraft:totem_of_undying", 0, false))));
 
@@ -310,19 +370,33 @@ public abstract class DefaultJsonConfig {
                         new AttackingActivator(new MultiCondition(MultiCondition.ConditionLogicType.AND, Arrays.asList(new ChanceCondition(0.05F), new InvertedCondition(new IsBossCondition()))), true, AttackActivator.EventType.ATTACK),
                         ONLYOTHER,
                         Arrays.asList(
-                                new UndyingTotemGemEffect(SocketedSlotTypes.ALL, MULTIACT, ONLYOTHER),
-                                new CancelEventGemEffect(SocketedSlotTypes.ALL, MULTIACT, ONLYOTHER)
-                        )
+                                new UndyingTotemGemEffect(SocketedSlotTypes.ALL, MULTIACT, ONLYOTHER,
+                                                          null
+                                ),
+                                new CancelEventGemEffect(SocketedSlotTypes.ALL, MULTIACT, ONLYOTHER,
+                                                         null
+                                )
+                        ),
+                        null
+                
                 )),
                 Collections.singletonList(new ItemFilter("minecraft:end_crystal", 0, false))));
 
         registerDefaultGemType("beacon", new GemType("socketed.tooltip.default.beacon", 3, TextFormatting.WHITE,
                 Arrays.asList(
                         new MultiEffectGemEffect(SocketedSlotTypes.HEAD, new PassiveActivator(new LightLevelCondition(15, ComparingCondition.ConditionComparisonType.EQUAL, true), 9), Collections.singletonList(new SelfTarget(null)), Arrays.asList(
-                                new PotionGemEffect(SocketedSlotTypes.ALL, MULTIACT, Collections.singletonList(new SelfAOETarget(null, 32)), MobEffects.INVISIBILITY.getRegistryName().toString(), 0, 10),
-                                new PotionGemEffect(SocketedSlotTypes.ALL, MULTIACT, Collections.singletonList(new SelfAOETarget(null, 32)), MobEffects.GLOWING.getRegistryName().toString(), 0, 10)
-                        )),
-                        new PotionGemEffect(SocketedSlotTypes.HEAD, new PassiveActivator(new LightLevelCondition(7, ComparingCondition.ConditionComparisonType.LESS_EQUAL, true), 9), ONLYSELF, MobEffects.INVISIBILITY.getRegistryName().toString(), 0, 10)
+                                new PotionGemEffect(SocketedSlotTypes.ALL, MULTIACT, Collections.singletonList(new SelfAOETarget(null, 32)), MobEffects.INVISIBILITY.getRegistryName().toString(), 0, 10,
+                                                    null
+                                ),
+                                new PotionGemEffect(SocketedSlotTypes.ALL, MULTIACT, Collections.singletonList(new SelfAOETarget(null, 32)), MobEffects.GLOWING.getRegistryName().toString(), 0, 10,
+                                                    null
+                                )
+                        ),
+                                                 null
+                        ),
+                        new PotionGemEffect(SocketedSlotTypes.HEAD, new PassiveActivator(new LightLevelCondition(7, ComparingCondition.ConditionComparisonType.LESS_EQUAL, true), 9), ONLYSELF, MobEffects.INVISIBILITY.getRegistryName().toString(), 0, 10,
+                                            null
+                        )
                 ),
                 Collections.singletonList(new ItemFilter("minecraft:beacon", 0, false))));
 
@@ -332,12 +406,16 @@ public abstract class DefaultJsonConfig {
                             SocketedSlotTypes.ALL,
                             new PassiveActivator(null, 400),
                             ONLYSELF,
-                            MobEffects.ABSORPTION.getRegistryName().toString(), 1, 200),
+                            MobEffects.ABSORPTION.getRegistryName().toString(), 1, 200,
+                            null
+                        ),
                         new PotionGemEffect(
                             SocketedSlotTypes.ALL,
                             new PassiveActivator(new HealthPercentCondition(0.25F, ComparingCondition.ConditionComparisonType.LESS_EQUAL, true), 400),
                             ONLYSELF,
-                            MobEffects.FIRE_RESISTANCE.getRegistryName().toString(), 0, 400)),
+                            MobEffects.FIRE_RESISTANCE.getRegistryName().toString(), 0, 400,
+                            null
+                        )),
                 Collections.singletonList(new ItemFilter("minecraft:golden_apple", 1, true))));
 
         registerDefaultGemType("netherstar", new GemType("socketed.tooltip.default.netherstar", 3,
@@ -347,7 +425,9 @@ public abstract class DefaultJsonConfig {
                                 SocketedSlotTypes.BODY,
                                 new AttackedActivator(null, false, AttackActivator.EventType.HURT),
                                 OTHERAOE_NEAR,
-                                MobEffects.WITHER.getRegistryName().toString(), 0, 200),
+                                MobEffects.WITHER.getRegistryName().toString(), 0, 200,
+                                null
+                        ),
                         new AttributeGemEffect(SocketedSlotTypes.HAND, SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new RandomValueRange(5, false), 0)),
                 Collections.singletonList(new ItemFilter("minecraft:nether_star", 0, false))));
 
@@ -355,21 +435,27 @@ public abstract class DefaultJsonConfig {
                 Collections.singletonList(new RemoveTargetGemEffect(
                         SocketedSlotTypes.BODY,
                         new TargetedActivator(new IsSpecificEntityCondition("minecraft:zombie")),
-                        ONLYOTHER)),
+                        ONLYOTHER,
+                        null
+                )),
                 Collections.singletonList(new ItemFilter("minecraft:skull", 2, true))));
 
         registerDefaultGemType("skullcreeper", new GemType("socketed.tooltip.default.skullcreeper", 3, TextFormatting.GREEN,
                 Collections.singletonList(new RemoveTargetGemEffect(
                         SocketedSlotTypes.BODY,
                         new TargetedActivator(new IsSpecificEntityCondition("minecraft:creeper")),
-                        ONLYOTHER)),
+                        ONLYOTHER,
+                        null
+                )),
                 Collections.singletonList(new ItemFilter("minecraft:skull", 4, true))));
 
         registerDefaultGemType("skullskeleton", new GemType("socketed.tooltip.default.skullskeleton", 3, TextFormatting.WHITE,
                 Collections.singletonList(new RemoveTargetGemEffect(
                         SocketedSlotTypes.BODY,
                         new TargetedActivator(new IsSpecificEntityCondition("minecraft:skeleton")),
-                        ONLYOTHER)),
+                        ONLYOTHER,
+                        null
+                )),
                 Collections.singletonList(new ItemFilter("minecraft:skull", 0, true))));
 
         //Combinations
@@ -384,17 +470,26 @@ public abstract class DefaultJsonConfig {
                 Arrays.asList(
                     new PotionGemEffect(
                         SocketedSlotTypes.ALL, MULTIACT, SELFAOE_NEAR,
-                        MobEffects.POISON.getRegistryName().toString(), 0, 40),
+                        MobEffects.POISON.getRegistryName().toString(), 0, 40,
+                        null
+                    ),
                     new PotionGemEffect(
                         SocketedSlotTypes.ALL, MULTIACT, SELFAOE_NEAR,
-                        MobEffects.WEAKNESS.getRegistryName().toString(), 0, 40),
+                        MobEffects.WEAKNESS.getRegistryName().toString(), 0, 40,
+                        null
+                    ),
                     new PotionGemEffect(
                         SocketedSlotTypes.ALL, MULTIACT,SELFAOE_NEAR,
-                        MobEffects.SLOWNESS.getRegistryName().toString(), 0, 40),
+                        MobEffects.SLOWNESS.getRegistryName().toString(), 0, 40,
+                        null
+                    ),
                     new PotionGemEffect(
                         SocketedSlotTypes.ALL, MULTIACT, ONLYSELF,
-                        MobEffects.SPEED.getRegistryName().toString(), 0, 40)
-                )
+                        MobEffects.SPEED.getRegistryName().toString(), 0, 40,
+                        null
+                    )
+                ),
+                null
             ))
         ));
 
@@ -408,14 +503,21 @@ public abstract class DefaultJsonConfig {
                 Arrays.asList(
                     new PotionGemEffect(
                         SocketedSlotTypes.ALL, MULTIACT, SELFAOE_NEAR,
-                        MobEffects.POISON.getRegistryName().toString(), 1, 200),
+                        MobEffects.POISON.getRegistryName().toString(), 1, 200,
+                        null
+                    ),
                     new PotionGemEffect(
                         SocketedSlotTypes.ALL, MULTIACT, SELFAOE_NEAR,
-                        MobEffects.WITHER.getRegistryName().toString(), 1, 200),
+                        MobEffects.WITHER.getRegistryName().toString(), 1, 200,
+                        null
+                    ),
                     new PotionGemEffect(
                         SocketedSlotTypes.ALL, MULTIACT,SELFAOE_NEAR,
-                        MobEffects.BLINDNESS.getRegistryName().toString(), 0, 200)
-                )
+                        MobEffects.BLINDNESS.getRegistryName().toString(), 0, 200,
+                        null
+                    )
+                ),
+                null
             ))
         ));
     }

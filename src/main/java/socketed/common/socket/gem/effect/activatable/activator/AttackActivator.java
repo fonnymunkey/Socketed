@@ -28,7 +28,8 @@ import socketed.api.socket.gem.effect.slot.SocketedSlotTypes;
 import javax.annotation.Nullable;
 
 public abstract class AttackActivator extends GenericActivator {
-	public enum EventType{
+	
+	public enum EventType {
 		ATTACK,
 		HURT,
 		DAMAGE
@@ -58,7 +59,7 @@ public abstract class AttackActivator extends GenericActivator {
 	}
 	
 	/**
-	 * Called during LivingHurtEvent
+	 * Called during LivingAttackEvent/LivingHurtEvent/LivingDamageEvent
 	 * Target and attacker can not be the same entity
 	 * If the callback is cancelled, cancels the LivingHurtEvent
 	 * @param effect the effect parent of this activator
@@ -87,10 +88,12 @@ public abstract class AttackActivator extends GenericActivator {
 		public static void onLivingAttack(LivingAttackEvent event) {
 			handleEvent(event, event.getSource(), EventType.ATTACK, new GenericEventCallback<>(event));
 		}
+		
 		@SubscribeEvent(priority = EventPriority.LOW)
 		public static void onLivingHurt(LivingHurtEvent event) {
 			handleEvent(event, event.getSource(), EventType.HURT, new GenericEventCallback<>(event));
 		}
+		
 		@SubscribeEvent(priority = EventPriority.LOW)
 		public static void onLivingDamage(LivingDamageEvent event) {
 			handleEvent(event, event.getSource(), EventType.DAMAGE, new GenericEventCallback<>(event));
@@ -141,7 +144,7 @@ public abstract class AttackActivator extends GenericActivator {
 						activator.attemptAttackActivation(effect, callback, player, attacker, false, type);
 					});
 
-			//can't do direct activation via first aid since that is only calculated right before living damage
+			//TODO: FirstAid directlyActivated compat
 			//TODO: could do direct activation of active shield
 		}
 		

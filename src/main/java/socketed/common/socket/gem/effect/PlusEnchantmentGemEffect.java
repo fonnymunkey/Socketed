@@ -1,7 +1,10 @@
 package socketed.common.socket.gem.effect;
 
 import com.google.gson.annotations.SerializedName;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.Socketed;
 import socketed.api.socket.gem.effect.GenericGemEffect;
 import socketed.api.socket.gem.effect.slot.ISlotType;
@@ -9,6 +12,7 @@ import socketed.api.socket.gem.effect.slot.ISlotType;
 import javax.annotation.Nullable;
 
 public class PlusEnchantmentGemEffect extends GenericGemEffect {
+    
     public static final String TYPE_NAME = "Enchantment";
 
     @SerializedName("Enchantment Name")
@@ -33,10 +37,11 @@ public class PlusEnchantmentGemEffect extends GenericGemEffect {
     public int getAmount() {
         return this.amount;
     }
-
+    
+    @SideOnly(Side.CLIENT)
     @Override
-    public String getTooltipString(boolean onItem) {
-        return "";
+    public String getTooltip(boolean onItem) {
+        return I18n.format("socketed.tooltip.effect.plusenchantment", I18n.format(this.enchantment.getName()), this.amount);
     }
 
     @Override
