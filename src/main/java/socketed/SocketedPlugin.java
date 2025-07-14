@@ -1,6 +1,7 @@
 package socketed;
 
 import fermiumbooter.FermiumRegistryAPI;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import org.spongepowered.asm.launch.MixinBootstrap;
 
@@ -12,6 +13,7 @@ public class SocketedPlugin implements IFMLLoadingPlugin {
     public SocketedPlugin() {
         MixinBootstrap.init();
         FermiumRegistryAPI.enqueueMixin(false, "mixins.socketed.vanilla.json");
+        FermiumRegistryAPI.enqueueMixin(true, "mixins.socketed.firstaid.json", () -> Loader.isModLoaded("firstaid"));
     }
 
     @Override

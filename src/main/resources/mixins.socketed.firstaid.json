@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "package": "socketed.mixin.firstaid",
+  "refmap": "mixins.socketed.refmap.json",
+  "compatibilityLevel": "JAVA_8",
+  "target": "@env(DEFAULT)",
+  "minVersion": "0.8",
+  "injectors": {
+    "maxShiftBy": 10
+  },
+  "client": [
+    "ClientEventHandlerMixin"
+  ],
+  "mixins": [
+    "ArmorUtilsMixin"
+  ]
+}
