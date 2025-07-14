@@ -109,14 +109,14 @@ public abstract class SocketedUtil {
      */
     public static boolean stackIsGem(ItemStack stack) {
         if(stack.isEmpty()) return false;
-        if(!SocketedUtil.hasCompletedLoading()) return false;
+        if(!SocketedUtil.hasCompletedLoading(true)) return false;
         return SocketedUtil.getGemTypeFromItemStack(stack) != null;
     }
     
     @Nullable
     public static GemType getGemTypeFromItemStack(ItemStack itemStack) {
         if(itemStack.isEmpty()) return null;
-        if(!SocketedUtil.hasCompletedLoading()) return null;
+        if(!SocketedUtil.hasCompletedLoading(true)) return null;
         for(GemType gemType : JsonConfig.getSortedGemDataList()) {
             if(gemType.matches(itemStack)) return gemType;
         }
@@ -126,14 +126,14 @@ public abstract class SocketedUtil {
     @Nullable
     public static GemType getGemTypeFromName(String gemTypeName) {
         if(gemTypeName == null || gemTypeName.isEmpty()) return null;
-        if(!SocketedUtil.hasCompletedLoading()) return null;
+        if(!SocketedUtil.hasCompletedLoading(false)) return null;
         return JsonConfig.getGemData().get(gemTypeName);
     }
     
     @Nullable
     public static GemCombinationType getGemCombinationTypeFromName(String gemCombinationTypeName) {
         if(gemCombinationTypeName == null || gemCombinationTypeName.isEmpty()) return null;
-        if(!SocketedUtil.hasCompletedLoading()) return null;
+        if(!SocketedUtil.hasCompletedLoading(true)) return null;
         return JsonConfig.getGemCombinationData().get(gemCombinationTypeName);
     }
     
@@ -163,19 +163,19 @@ public abstract class SocketedUtil {
     }
     
     public static void addSocketsToStack(ItemStack stack, IItemCreationContext context) {
-        if(SocketedUtil.hasCompletedLoading()) {
+        if(SocketedUtil.hasCompletedLoading(true)) {
             DefaultSocketsGenerator.addSockets(stack, context);
         }
     }
     
     public static void addSocketsToStackRandomly(ItemStack stack, int maxSockets, int rollAmount, float rollChance) {
-        if(SocketedUtil.hasCompletedLoading()) {
+        if(SocketedUtil.hasCompletedLoading(true)) {
             DefaultSocketsGenerator.addSocketsRandomly(stack, maxSockets, rollAmount, rollChance);
         }
     }
     
     public static boolean canStackHaveSockets(ItemStack stack) {
-        if(SocketedUtil.hasCompletedLoading()) {
+        if(SocketedUtil.hasCompletedLoading(true)) {
             return ForgeConfig.SOCKETABLES.canSocket(stack);
         }
         return false;
@@ -183,8 +183,8 @@ public abstract class SocketedUtil {
     
     //Some ItemStacks/tooltips are created during loading causing data to be read before loading is finished
     //These ItemStacks would not involve sockets anyways so ignore them if accessed during loading
-    public static boolean hasCompletedLoading() {
-        return JsonConfig.completedLoading;
+    public static boolean hasCompletedLoading(boolean fully) {
+        return fully ? JsonConfig.completedLoadingCombinations : JsonConfig.completedLoadingGems;
     }
 
     /**

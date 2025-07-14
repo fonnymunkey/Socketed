@@ -40,7 +40,7 @@ public class CapabilitySocketableHandler {
             ItemStack stack = event.getObject();
             if(stack.isEmpty()) return;
             if(stack.getMaxStackSize() > 1) return;
-            if(!SocketedUtil.hasCompletedLoading()) return;
+            if(!SocketedUtil.hasCompletedLoading(true)) return;
             if(stack.hasCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null)) return;
 
             //Allowed item types that can get sockets

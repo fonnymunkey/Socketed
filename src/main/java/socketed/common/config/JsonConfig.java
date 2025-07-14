@@ -56,7 +56,8 @@ public class JsonConfig {
     public static final Map<String, Class<? extends ISlotType>> slotTypeDeserializerMap = new HashMap<>();
     public static final Map<String, Function<NBTTagCompound, ? extends GenericSocket>> socketNBTDeserializerMap = new HashMap<>();
     
-    public static boolean completedLoading = false;
+    public static boolean completedLoadingGems = false;
+    public static boolean completedLoadingCombinations = false;
 
     public static void preInit(File file) {
         File modFolder = new File(file, Socketed.MODID);
@@ -137,8 +138,9 @@ public class JsonConfig {
 
     public static void postInit() {
         loadGemTypeData();
+        completedLoadingGems = true;
         loadGemCombinationData();
-        completedLoading = true;
+        completedLoadingCombinations = true;
     }
 
     public static Map<String, GemType> getGemData() {

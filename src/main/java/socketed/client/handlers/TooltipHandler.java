@@ -38,7 +38,7 @@ public class TooltipHandler {
         ItemStack stack = event.getItemStack();
         if(stack.isEmpty()) return;
         
-        if(!SocketedUtil.hasCompletedLoading()) return;
+        if(!SocketedUtil.hasCompletedLoading(true)) return;
         
         ICapabilitySocketable sockets = stack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
         GemType gemType = null;
