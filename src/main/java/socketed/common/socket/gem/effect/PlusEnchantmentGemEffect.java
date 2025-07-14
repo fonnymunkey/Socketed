@@ -41,7 +41,7 @@ public class PlusEnchantmentGemEffect extends GenericGemEffect {
     @SideOnly(Side.CLIENT)
     @Override
     public String getTooltip(boolean onItem) {
-        return I18n.format("socketed.tooltip.effect.plusenchantment", I18n.format(this.enchantment.getName()), this.amount);
+        return I18n.format("socketed.tooltip.effect.plusenchantment", this.amount, I18n.format(this.enchantment.getName()));
     }
 
     @Override

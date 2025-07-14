@@ -1,10 +1,16 @@
 package socketed.api.socket.gem.util;
 
 import com.google.gson.*;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.lang.reflect.Type;
+import java.text.DecimalFormat;
 import java.util.Random;
 
 public class RandomValueRange {
@@ -69,6 +75,24 @@ public class RandomValueRange {
                 return new JsonPrimitive(randomValueRange.getMin());
             else
                 return new JsonPrimitive("["+randomValueRange.getMin()+" : "+randomValueRange.getMax()+"] "+ (randomValueRange.isInteger?"int":""));
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public String getTooltip(int operation) {
+        DecimalFormat format = this.getIsInteger() ? new DecimalFormat("#") : ItemStack.DECIMALFORMAT;
+        if(this.getMax() == this.getMin()) {
+            double amount = this.getMin() * (operation == 0 ? 1.0D : 100.0D);
+            if(amount > 0.0D) return I18n.format("attribute.modifier.plus." + operation, format.format(amount), "");
+            else if(amount < 0.0D) return I18n.format("attribute.modifier.take." + operation, format.format(-amount), "");
+            else return "";
+        } else {
+            double min = this.getMin() * (operation == 0 ? 1.0D : 100.0D);
+            double max = this.getMax() * (operation == 0 ? 1.0D : 100.0D);
+            if(min >= 0.0D) return I18n.format("socketed.modifier.plus.plus." + operation, format.format(min), format.format(max), "");
+            else if(min < 0.0D && max >=0.0D) return I18n.format("socketed.modifier.take.plus." + operation, format.format(-min), format.format(max), "");
+            else if(min < 0.0D && max < 0.0D) return I18n.format("socketed.modifier.take.take." + operation, format.format(-min), format.format(-max), "");
+            return "";
         }
     }
 }

@@ -58,7 +58,7 @@ socketed.tooltip.effect.knockback.inverted=Pull
 socketed.tooltip.effect.removetarget=Remove Target
 socketed.tooltip.effect.undyingtotem=Undying Totem
 
-socketed.tooltip.effect.plusenchantment=%s + %d
+socketed.tooltip.effect.plusenchantment=+%d %s
 
 socketed.modifier.plus.plus.0=+%s to +%s %s
 socketed.modifier.take.plus.0=-%s to +%s %s
@@ -82,49 +82,129 @@ socketed.tooltip.target.selfaoe=Self AOE
 socketed.tooltip.target.self=Self
 
 # Tier 0
-socketed.tooltip.default.poison_potato=Radiate Poison
-socketed.tooltip.default.spider_eye=Radiate Weakness
-socketed.tooltip.default.slimeball=Radiate Slowness
+
+socketed.tooltip.default.poison_potato=Purple drank
+socketed.tooltip.default.poison_potato.desc=Radiate Poison I
+
+socketed.tooltip.default.spider_eye=Feeling weak
+socketed.tooltip.default.spider_eye.desc=Radiate Weakness I
+
+socketed.tooltip.default.slimeball=Sticky situation
+socketed.tooltip.default.slimeball.desc=Radiate Slowness I
+
 socketed.tooltip.default.sugar=Speedy
+socketed.tooltip.default.sugar.desc=Radiate Speed I
+
 socketed.tooltip.default.dead_bush=Thorny
+
 socketed.tooltip.default.iron=Iron plated
+
 socketed.tooltip.default.coal=Ignite
+socketed.tooltip.default.coal.desc=Attack has chance to set on fire
+
 socketed.tooltip.default.gunpowder=Explosion!
+socketed.tooltip.default.gunpowder.desc=Attack has chance to explode
+
 # Tier 1
+
 socketed.tooltip.default.blazerod=Ignite
+socketed.tooltip.default.blazerod.desc=Attack has chance to set on fire
+
 socketed.tooltip.default.glowstone=+4 Light Radius
+socketed.tooltip.default.glowstone.desc=Glowing on mobs nearby
+
 socketed.tooltip.default.glowstone_block=+12 Light Radius
+socketed.tooltip.default.glowstone_block.desc=Glowing on mobs in area
+
 socketed.tooltip.default.redstone=Hasty
+socketed.tooltip.default.redstone.desc=Haste 1 passively
+
 socketed.tooltip.default.cobweb=Slow them!
+socketed.tooltip.default.cobweb.desc=Getting hit has chance to radiate Slowness I
+
 socketed.tooltip.default.emerald=So Lucky
-socketed.tooltip.default.gold_carrot=Night Vision underground
+socketed.tooltip.default.emerald.desc=Haste 1 passively
+
+socketed.tooltip.default.gold_carrot=Carrots are good for your eyes!
+socketed.tooltip.default.gold_carrot.desc=Night Vision passively underground
+
 socketed.tooltip.default.piston=Knockback!
+socketed.tooltip.default.piston.desc=Attacking knocks mobs back
+
 socketed.tooltip.default.sticky_piston=Pull!
+socketed.tooltip.default.sticky_piston.desc=Attacking pulls mobs to you
+
 socketed.tooltip.default.diamond=Diamond reinforced
 socketed.tooltip.default.flint=Pew pew
+
 # Tier 2
-socketed.tooltip.default.gapple=It's a Gold Apple
-socketed.tooltip.default.sponge=Menger Sponge
-socketed.tooltip.default.witherskull=Wither them!
-socketed.tooltip.default.anvil=Anvil to the face
+
 socketed.tooltip.default.rabbitfoot=Uppies
+socketed.tooltip.default.rabbitfoot.desc=Jump Boost I passively
+
+socketed.tooltip.default.gapple=It's a Gold Apple
+socketed.tooltip.default.gapple.desc=Passive chance for Absorption I
+
+socketed.tooltip.default.sponge=Menger Sponge
+socketed.tooltip.default.sponge.desc=Water Breathing passively
+
+socketed.tooltip.default.witherskull=Wither them!
+socketed.tooltip.default.witherskull.desc=Getting hit on low health radiates Wither I
+
+socketed.tooltip.default.anvil=Anvil to the face
+socketed.tooltip.default.anvil.desc=Strong knockback on hit
+
 socketed.tooltip.default.pufferfish=Poison them!
+socketed.tooltip.default.pufferfish.desc=Getting hit on low health radiates Poison I
+
 socketed.tooltip.default.sealantern=Blind them!
+socketed.tooltip.default.sealantern.desc=Getting hit on low health radiates Blindness I
+
 socketed.tooltip.default.tropicalfish=Don't bonk your head
+
 socketed.tooltip.default.obsidian=Obsidian tipped
+socketed.tooltip.default.obsidian.desc=Attacking has chance to give Strength I
+
 socketed.tooltip.default.tnt=Explosions!
+socketed.tooltip.default.tnt.desc=Attacking has chance to create Explosions
+
 socketed.tooltip.default.quartz=XP Farm
 socketed.tooltip.default.emeraldblock=So cheap!
 # Tier 3
 socketed.tooltip.default.ghasttear=Pretty Healthy for a Ghast
+socketed.tooltip.default.ghasttear.desc.1=Regeneration I passively
+socketed.tooltip.default.ghasttear.desc.2=Health Boost I passively
+
 socketed.tooltip.default.totem=Just don't get hit
+socketed.tooltip.default.totem.desc=Chance to survive deadly hits
+
 socketed.tooltip.default.endcrystal=Crystal PvP
+socketed.tooltip.default.endcrystal.desc=Low chance to bring non bosses down to half a heart
+
 socketed.tooltip.default.beacon=Blinding Lights
-socketed.tooltip.default.godapple=They call him Notch
-socketed.tooltip.default.netherstar=Wither them
+socketed.tooltip.default.beacon.desc.1=Skylight gives glowing and invis
+socketed.tooltip.default.beacon.desc.2=Invisible in dark areas
+
+socketed.tooltip.default.godapple=They called him Notch
+socketed.tooltip.default.godapple.desc.1=Absorption I for half the time
+socketed.tooltip.default.godapple.desc.2=Fire Resistance on low health
+
+socketed.tooltip.default.netherstar=Wither them more!
+socketed.tooltip.default.netherstar.desc=Getting hit radiates Wither
+
 socketed.tooltip.default.skullzombie=Bad Zombie!
+socketed.tooltip.default.skullzombie.desc=Can't get targeted by Zombies
+
 socketed.tooltip.default.skullcreeper=Bad Creeper!
+socketed.tooltip.default.skullcreeper.desc=Can't get targeted by Creepers
+
 socketed.tooltip.default.skullskeleton=Bad Skeleton!
+socketed.tooltip.default.skullskeleton.desc=Can't get targeted by Skeletons
+
 # Combination
-socketed.tooltip.default.three_diamonds=Could've been a diamond pick
-socketed.tooltip.default.rgb=RGB Effects
+
+socketed.tooltip.default.combination0=Common gaming
+socketed.tooltip.default.combination0.desc=Poison! Weakness! Slowness! Speed!
+
+socketed.tooltip.default.combination2=Rare gaming
+socketed.tooltip.default.combination2.desc=Poison! Wither! Blindness!

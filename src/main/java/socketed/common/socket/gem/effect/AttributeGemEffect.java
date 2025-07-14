@@ -70,27 +70,28 @@ public class AttributeGemEffect extends GenericGemEffect {
     @SideOnly(Side.CLIENT)
     @Override
     public String getTooltip(boolean onItem) {
+        //TODO: merge with RandomValueRange.getTooltip(operation)
         if(onItem) {
             AttributeModifier modifier = this.getModifier();
             if(modifier == null) return "";
             double amount = modifier.getAmount() * (modifier.getOperation() == 0 ? 1.0D : 100.0D);
             if(amount > 0.0D) return I18n.format("attribute.modifier.plus." + modifier.getOperation(), ItemStack.DECIMALFORMAT.format(amount), I18n.format("attribute.name." + this.getAttribute()));
-            else if (amount < 0.0D) return I18n.format("attribute.modifier.take." + modifier.getOperation(), ItemStack.DECIMALFORMAT.format(amount), I18n.format("attribute.name." + this.getAttribute()));
+            else if (amount < 0.0D) return I18n.format("attribute.modifier.take." + modifier.getOperation(), ItemStack.DECIMALFORMAT.format(-amount), I18n.format("attribute.name." + this.getAttribute()));
             else return "";
         }
         else {
             if(this.getAmountRange().getMax() == this.getAmountRange().getMin()) {
                 double amount = this.getAmountRange().getMin() * (this.getOperation() == 0 ? 1.0D : 100.0D);
                 if(amount > 0.0D) return I18n.format("attribute.modifier.plus." + this.getOperation(), ItemStack.DECIMALFORMAT.format(amount), I18n.format("attribute.name." + this.getAttribute()));
-                else if(amount < 0.0D) return I18n.format("attribute.modifier.take." + this.getOperation(), ItemStack.DECIMALFORMAT.format(amount), I18n.format("attribute.name." + this.getAttribute()));
+                else if(amount < 0.0D) return I18n.format("attribute.modifier.take." + this.getOperation(), ItemStack.DECIMALFORMAT.format(-amount), I18n.format("attribute.name." + this.getAttribute()));
                 else return "";
             }
             else {
                 double min = this.getAmountRange().getMin() * (this.getOperation() == 0 ? 1.0D : 100.0D);
                 double max = this.getAmountRange().getMax() * (this.getOperation() == 0 ? 1.0D : 100.0D);
                 if(min >= 0.0D) return I18n.format("socketed.modifier.plus.plus." + this.getOperation(), ItemStack.DECIMALFORMAT.format(min), ItemStack.DECIMALFORMAT.format(max), I18n.format("attribute.name." + this.getAttribute()));
-                else if(min < 0.0D && max >=0.0D) return I18n.format("socketed.modifier.take.plus." + this.getOperation(), ItemStack.DECIMALFORMAT.format(min), ItemStack.DECIMALFORMAT.format(max), I18n.format("attribute.name." + this.getAttribute()));
-                else if(min < 0.0D && max < 0.0D) return I18n.format("socketed.modifier.take.take." + this.getOperation(), ItemStack.DECIMALFORMAT.format(min), ItemStack.DECIMALFORMAT.format(max), I18n.format("attribute.name." + this.getAttribute()));
+                else if(min < 0.0D && max >=0.0D) return I18n.format("socketed.modifier.take.plus." + this.getOperation(), ItemStack.DECIMALFORMAT.format(-min), ItemStack.DECIMALFORMAT.format(max), I18n.format("attribute.name." + this.getAttribute()));
+                else if(min < 0.0D && max < 0.0D) return I18n.format("socketed.modifier.take.take." + this.getOperation(), ItemStack.DECIMALFORMAT.format(-min), ItemStack.DECIMALFORMAT.format(-max), I18n.format("attribute.name." + this.getAttribute()));
                 return "";
             }
         }
