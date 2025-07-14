@@ -432,7 +432,7 @@ public abstract class DefaultJsonConfig {
                 Collections.singletonList(new ItemFilter("minecraft:nether_star", 0, false))));
 
         registerDefaultGemType("skullzombie", new GemType("socketed.tooltip.default.skullzombie", 3, TextFormatting.DARK_GREEN,
-                Collections.singletonList(new RemoveTargetGemEffect(
+                Collections.singletonList(new LoseTargetGemEffect(
                         SocketedSlotTypes.BODY,
                         new TargetedActivator(new IsSpecificEntityCondition("minecraft:zombie")),
                         ONLYOTHER,
@@ -441,7 +441,7 @@ public abstract class DefaultJsonConfig {
                 Collections.singletonList(new ItemFilter("minecraft:skull", 2, true))));
 
         registerDefaultGemType("skullcreeper", new GemType("socketed.tooltip.default.skullcreeper", 3, TextFormatting.GREEN,
-                Collections.singletonList(new RemoveTargetGemEffect(
+                Collections.singletonList(new LoseTargetGemEffect(
                         SocketedSlotTypes.BODY,
                         new TargetedActivator(new IsSpecificEntityCondition("minecraft:creeper")),
                         ONLYOTHER,
@@ -450,7 +450,7 @@ public abstract class DefaultJsonConfig {
                 Collections.singletonList(new ItemFilter("minecraft:skull", 4, true))));
 
         registerDefaultGemType("skullskeleton", new GemType("socketed.tooltip.default.skullskeleton", 3, TextFormatting.WHITE,
-                Collections.singletonList(new RemoveTargetGemEffect(
+                Collections.singletonList(new LoseTargetGemEffect(
                         SocketedSlotTypes.BODY,
                         new TargetedActivator(new IsSpecificEntityCondition("minecraft:skeleton")),
                         ONLYOTHER,

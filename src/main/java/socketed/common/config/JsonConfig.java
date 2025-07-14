@@ -96,7 +96,7 @@ public class JsonConfig {
         SocketedUtil.registerEffectType(ExtraIFrameGemEffect.TYPE_NAME, ExtraIFrameGemEffect.class, Socketed.MODID);
         SocketedUtil.registerEffectType(BypassIFrameGemEffect.TYPE_NAME, BypassIFrameGemEffect.class, Socketed.MODID);
         SocketedUtil.registerEffectType(ExplosionGemEffect.TYPE_NAME, ExplosionGemEffect.class, Socketed.MODID);
-        SocketedUtil.registerEffectType(RemoveTargetGemEffect.TYPE_NAME, RemoveTargetGemEffect.class, Socketed.MODID);
+        SocketedUtil.registerEffectType(LoseTargetGemEffect.TYPE_NAME, LoseTargetGemEffect.class, Socketed.MODID);
         SocketedUtil.registerEffectType(PlusEnchantmentGemEffect.TYPE_NAME, PlusEnchantmentGemEffect.class, Socketed.MODID);
         
         SocketedUtil.registerActivator(PassiveActivator.TYPE_NAME, PassiveActivator.class, Socketed.MODID);

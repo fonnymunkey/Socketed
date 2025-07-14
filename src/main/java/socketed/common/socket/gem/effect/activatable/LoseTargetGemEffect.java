@@ -15,11 +15,11 @@ import socketed.api.socket.gem.effect.slot.ISlotType;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class RemoveTargetGemEffect extends ActivatableGemEffect {
+public class LoseTargetGemEffect extends ActivatableGemEffect {
 
-	public static final String TYPE_NAME = "Remove Target";
+	public static final String TYPE_NAME = "Lose Target";
 
-	public RemoveTargetGemEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets, String tooltipKey) {
+	public LoseTargetGemEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets, String tooltipKey) {
 		super(slotType, activator, targets, tooltipKey);
 	}
 	
